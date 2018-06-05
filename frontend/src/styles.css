@@ -1,1 +1,32 @@
-/* You can add global styles to this file, and also import other style files */
+@import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
+@import "../node_modules/font-awesome/css/font-awesome.min.css";
+@import url('https://fonts.googleapis.com/css?family=Hind');
+:root {
+    --color-bg-global: rgb(235, 235, 235);
+    --color-blue-1: #4875df;
+    --color-blue-1-hover: #3063d8;
+    --color-blue-1-active: #2452bb;
+    --color-lightblue-1: rgb(219, 219, 231);
+    --reduced-width: 1240px;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+    max-width: 100%;
+    background-color: var(--color-bg-global);
+}
+
+app-footer {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: fit-content;
+}
+
+.reduced-width {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: var(--reduced-width);
+}

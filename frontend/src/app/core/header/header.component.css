@@ -1,0 +1,37 @@
+.header {
+    background-color: var(--color-blue-1);
+    color: var(--color-lightblue-1);
+    font-weight: 300;
+    margin: 0;
+    padding: 0;
+}
+
+.img-logo {
+    max-width: 3.3rem;
+    max-height: 3.3rem;
+}
+
+.header-title {
+    font-size: 20pt;
+}
+
+.nav-button {
+    color: var(--color-lightblue-1);
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    padding-top: 0;
+    padding-bottom: 0;
+    height: 100%;
+}
+
+.nav-button:active, .nav-button:hover, .nav-button:focus {
+    text-decoration: none;
+}
+
+.nav-button:hover {
+    background-color: var(--color-blue-1-hover);
+}
+
+.nav-button-active {
+    background-color: var(--color-blue-1-active);
+}
