@@ -6,15 +6,22 @@
     --color-blue-1: #4875df;
     --color-blue-1-hover: #3063d8;
     --color-blue-1-active: #2452bb;
-    --color-lightblue-1: rgb(219, 219, 231);
+    --color-blue-1-text: rgb(219, 219, 231);
+    --color-dark-1: #2e2e2e;
+    --color-dark-1-text: #eeeeee;
     --reduced-width: 1240px;
 }
 
 html {
     position: relative;
-    min-height: 100%;
     max-width: 100%;
-    background-color: var(--color-bg-global);
+    height: 100%;
+}
+
+body {
+    /* background-color: var(--color-bg-global); */
+    background-color: white;
+    height: 100vh;
 }
 
 app-footer {
@@ -25,8 +32,64 @@ app-footer {
     height: fit-content;
 }
 
-.reduced-width {
-    margin-left: auto;
-    margin-right: auto;
-    max-width: var(--reduced-width);
+main {
+    height: inherit;
+}
+
+.row {
+    margin: 0;
+}
+
+.col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-10, .col-11, .col-12 {
+    padding: 0;
+}
+
+/* Custom elements */
+
+.default-wrapper {
+    position: relative;
+}
+
+/* Window header */
+
+.b-window-header {
+    position: relative;
+    width: 100%;
+    background-color: white;
+    box-shadow: 0 .4rem 2.5rem -1rem black;
+    z-index: 25;
+}
+
+.b-window-title, .b-window-ongoing {
+    display: inline-block;
+    font-size: 16pt;
+    font-weight: 300;
+    padding: .65rem;
+}
+
+.b-window-title {
+    background-color: var(--color-blue-1-hover);
+    color: var(--color-blue-1-text);
+    padding-left: 2.5rem;
+}
+
+/* Card */
+
+.b-card-wrapper {
+    position: relative;
+    height: auto;
+    min-height: 100%;
+    background-color: white;
+}
+
+.b-card-header {
+    background-color: var(--color-dark-1);
+    color: var(--color-dark-1-text);
+    padding: .25rem .4rem;
+}
+
+.b-card-body {
+    padding: .4rem;
+    background-color: white;
+    color: black;
 }

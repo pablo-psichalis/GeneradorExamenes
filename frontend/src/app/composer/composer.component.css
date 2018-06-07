@@ -1,0 +1,40 @@
+.preview-container {
+    box-shadow: inset 0 0 2.5rem -1rem black;
+    background-color: var(--color-bg-global);
+    overflow-y: scroll;
+    overflow-x: auto;
+    height: 100%;
+}
+
+.page-container {
+    box-shadow: 0 0 2.5rem -1rem black;
+    background-color: white;
+    margin: 7rem auto;
+}
+
+.menu-section {
+    position: absolute;
+    width: 15%;
+    min-width: 15rem;
+    z-index: 2;
+}
+
+.b-card-wrapper {
+    width: 100%;
+}
+
+.section-left {
+    left: 0;
+}
+
+.section-right {
+    right: 0;
+}
+
+.section-main {
+    position: relative;
+    height: 100%;
+    z-index: 1;
+    margin-left: auto;
+    margin-right: auto;
+}

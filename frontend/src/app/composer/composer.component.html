@@ -1,3 +1,49 @@
-<p>
-  composer works!
-</p>
+<div (window:resize)="onResize($event)" [style.height.px]="previewDimensions.height">
+  <div class="b-window-header">
+    <span class="b-window-title">Compositor</span>
+    <span class="b-window-ongoing">Editando
+      <span class="font-weight-bold">Examen Seguridad 1</span>
+    </span>
+  </div>
+
+  <!-- Left Menu -->
+
+  <div class="menu-section section-left">
+    <div class="b-card-wrapper">
+      <div class="b-card">
+        <div class="b-card-header">
+          Menu Left 1
+        </div>
+        <div class="b-card-body">
+          asdasdas
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Menu -->
+
+  <div class="menu-section section-right">
+    <div class="b-card-wrapper">
+      <div class="b-card">
+        <div class="b-card-header">
+          Menu Right 1
+        </div>
+        <div class="b-card-body">
+          asdasdas
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Main -->
+
+  <div class="section-main" [style.width.px]="previewDimensions.width">
+    <div class="preview-container">
+      <div class="page-container" [style.width.px]="paperDimensions.width" [style.height.px]="paperDimensions.height">
+        asdf
+      </div>
+    </div>
+  </div>
+</div>

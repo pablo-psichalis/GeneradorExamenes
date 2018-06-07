@@ -1,12 +1,17 @@
-.footer {
+.footer-wrapper {
+    height: 3.3rem;
     padding: .4rem 3rem;
+    background-color: white;
+    box-shadow: 0 0 2.5rem -1rem black;
 }
 
-.footer-hr {
-    margin: 0;
+.footer {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: var(--reduced-width);
 }
 
 .img-logo {
-    max-width: 4rem;
-    max-height: 4rem;
+    max-width: 2.5rem;
+    max-height: 2.5rem;
 }
