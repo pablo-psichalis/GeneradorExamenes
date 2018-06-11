@@ -11,11 +11,125 @@
   <div class="menu-section section-left">
     <div class="b-card-wrapper">
       <div class="b-card">
+        <!-- Generation -->
         <div class="b-card-header">
-          Menu Left 1
+          Generación
         </div>
-        <div class="b-card-body">
-          asdasdas
+        <div class="b-card-subheader d-flex justify-content-between">
+          <span class="subheader-text">Colecciónes</span>
+          <div class="subheader-button">
+            <i class="fa fa-plus"></i>
+            <span> Añadir</span>
+          </div>
+        </div>
+        <div class="collection-list">
+          <div *ngFor="let collection of collectionItems" class="collection-item d-flex justify-content-between">
+            <div class="collection-left">
+              <p class="collection-name">{{ collection }}</p>
+              <small class="collection-details">10 test, 5 cortas, 2 largas</small>
+            </div>
+            <span class="collection-controls">
+              <i class="fa fa-times collection-controls-delete"></i>
+            </span>
+          </div>
+        </div>
+        <div class="b-card-subheader d-flex justify-content-between">
+          <span class="subheader-text">Opciónes</span>
+        </div>
+        <div class="p-1">
+          <table class="table">
+            <thead>
+              <tr style="text-align: center;">
+                <th scope="col">Tipo</th>
+                <th scope="col">Cantidad</th>
+                <th scope="col">Valoración</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Test</th>
+                <td>
+                  <div class="input-group">
+                    <input type="number" class="form-control" aria-describedby="helpId">
+                    <div class="input-group-append">
+                      <span class="input-group-text">/46</span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="input-group">
+                    <input type="number" class="form-control" aria-describedby="helpId">
+                    <div class="input-group-append">
+                      <span class="input-group-text">/10</span>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Ejericios</th>
+                <td>
+                  <div class="input-group">
+                    <input type="number" class="form-control" aria-describedby="helpId">
+                    <div class="input-group-append">
+                      <span class="input-group-text">/20</span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="input-group">
+                    <input type="number" class="form-control" aria-describedby="helpId">
+                    <div class="input-group-append">
+                      <span class="input-group-text">/10</span>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Problemas</th>
+                <td>
+                  <div class="input-group">
+                    <input type="number" class="form-control" aria-describedby="helpId">
+                    <div class="input-group-append">
+                      <span class="input-group-text">/6</span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="input-group">
+                    <input type="number" class="form-control" aria-describedby="helpId">
+                    <div class="input-group-append">
+                      <span class="input-group-text">/10</span>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <p style="font-weight: 500;">Dificultad:</p>
+          <div class="d-flex justify-content-between">
+            <span>Facil</span>
+            <span>Intermedio</span>
+            <span>Dificil</span>
+          </div>
+          <div class="slidecontainer">
+            <input type="range" min="1" max="3" value="2" class="slider">
+          </div>
+        </div>
+        <div class="fullwidth-button button-green">
+          Generar
+        </div>
+        <!-- Controls -->
+        <div class="b-card-header mt-2">
+          Acciones
+        </div>
+        <div class="fullwidth-button-small button-blue">
+          <i class="fa fa-check"></i> Guardar cambios
+        </div>
+        <div class="fullwidth-button-small button-blue2">
+          <i class="fa fa-save"></i> Guardar como...
+        </div>
+        <div class="fullwidth-button-small button-teal">
+          <i class="fa fa-cloud-download"></i> Descargar como .pdf
         </div>
       </div>
     </div>
@@ -27,10 +141,47 @@
     <div class="b-card-wrapper">
       <div class="b-card">
         <div class="b-card-header">
-          Menu Right 1
+          Estructura
         </div>
         <div class="b-card-body">
-          asdasdas
+          <div *ngFor="let q of examItems; let i = index" class="ap-container">
+            <div class="ap-header d-flex justify-content-between">
+              <div class="ap-header-left">
+                <span class="ap-header-diff">
+                  <span class="ml-1">
+                    <i class="fa fa-circle"></i>
+                  </span>
+                  <span *ngIf="q.difficulty >= 2" class="ml-1">
+                    <i class="fa fa-circle"></i>
+                  </span>
+                  <span *ngIf="q.difficulty == 3" class="ml-1">
+                    <i class="fa fa-circle"></i>
+                  </span>
+                </span>
+                <span class="ap-header-name"> Pregunta {{ i + 1 }}</span>
+                <span class="ap-header-points"> {{ q.points }} puntos</span>
+              </div>
+              <div class="ap-header-right">
+                <span>Test</span>
+              </div>
+            </div>
+            <div (click)="expandQuestion(i)" [class.expanded]="q.expanded" class="ap-body">
+              {{ q.content }}
+            </div>
+            <div (click)="expandQuestion(i)" class="ap-footer">
+              <span class="d-flex justify-content-center">
+                <i class="fa" [class.fa-sort-down]="!q.expanded" [class.fa-sort-up]="q.expanded"></i>
+              </span>
+            </div>
+            <div class="ap-controls row">
+              <div class="col-6">
+                <div class="fullwidth-button-small button-blue2">Editar</div>
+              </div>
+              <div class="col-6">
+                <div class="fullwidth-button-small button-red">Borrar</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -42,7 +193,7 @@
   <div class="section-main" [style.width.px]="previewDimensions.width">
     <div class="preview-container">
       <div class="page-container" [style.width.px]="paperDimensions.width" [style.height.px]="paperDimensions.height">
-        asdf
+        [placeholder]
       </div>
     </div>
   </div>
