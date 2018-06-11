@@ -5,10 +5,18 @@
     --color-bg-global: rgb(235, 235, 235);
     --color-blue-1: #4875df;
     --color-blue-1-hover: #3063d8;
+    --color-blue-1-lighthover: #80a1e7;
     --color-blue-1-active: #2452bb;
     --color-blue-1-text: rgb(219, 219, 231);
     --color-dark-1: #2e2e2e;
     --color-dark-1-text: #eeeeee;
+    --color-red-1: rgb(233, 60, 60);
+    --color-red-1-hover: rgb(197, 39, 39);
+    --color-green-1: rgb(40, 216, 40);
+    --color-green-1-hover: rgb(57, 224, 57);
+    --color-blue-2: #668eee;
+    --color-teal-1: rgb(74, 228, 190);
+    --color-teal-1-hover: rgb(131, 243, 215);
     --reduced-width: 1240px;
 }
 
@@ -36,12 +44,39 @@ main {
     height: inherit;
 }
 
+p {
+    margin-bottom: 0;
+}
+
+input[type="number"], input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button {
+    appearance: none;
+    margin: 0;
+}
+
 .row {
     margin: 0;
 }
 
 .col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-10, .col-11, .col-12 {
     padding: 0;
+}
+
+/* Scrollbar */
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--color-bg-global);
+}
+
+::-webkit-scrollbar-thumb {
+    background: #818181;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #9c9c9c;
 }
 
 /* Custom elements */
@@ -88,8 +123,12 @@ main {
     padding: .25rem .4rem;
 }
 
+.b-card-subheader {
+    background-color: var(--color-blue-1);
+    color: white;
+}
+
 .b-card-body {
-    padding: .4rem;
     background-color: white;
     color: black;
 }
