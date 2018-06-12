@@ -1,9 +1,22 @@
 <div (window:resize)="onResize($event)" [style.height.px]="previewDimensions.height">
-  <div class="b-window-header">
+  <div class="b-window-header d-flex">
     <span class="b-window-title">Compositor</span>
-    <span class="b-window-ongoing">Editando
-      <span class="font-weight-bold">Examen Seguridad 1</span>
-    </span>
+    <div class="d-flex justify-content-between w-100">
+      <span class="b-window-ongoing">Editando
+        <span class="font-weight-bold">Examen Seguridad 1</span>
+      </span>
+      <div class="d-flex">
+        <div class="control-button button-green">
+          <i class="fa fa-check"></i> Guardar cambios
+        </div>
+        <div class="control-button button-blue2">
+          <i class="fa fa-save"></i> Guardar como...
+        </div>
+        <div class="control-button button-teal">
+          <i class="fa fa-cloud-download"></i> Descargar como .pdf
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Left Menu -->
@@ -118,19 +131,6 @@
         <div class="fullwidth-button button-green">
           Generar
         </div>
-        <!-- Controls -->
-        <div class="b-card-header mt-2">
-          Acciones
-        </div>
-        <div class="fullwidth-button-small button-blue">
-          <i class="fa fa-check"></i> Guardar cambios
-        </div>
-        <div class="fullwidth-button-small button-blue2">
-          <i class="fa fa-save"></i> Guardar como...
-        </div>
-        <div class="fullwidth-button-small button-teal">
-          <i class="fa fa-cloud-download"></i> Descargar como .pdf
-        </div>
       </div>
     </div>
   </div>
@@ -142,6 +142,14 @@
       <div class="b-card">
         <div class="b-card-header">
           Estructura
+        </div>
+        <div class="row">
+          <div class="col-6 fullwidth-button-small button-green">
+            <i class="fa fa-plus"></i> Apartado
+          </div>
+          <div class="col-6 fullwidth-button-small button-blue2">
+              <i class="fa fa-share"></i> Importar
+          </div>
         </div>
         <div class="b-card-body">
           <div *ngFor="let q of examItems; let i = index" class="ap-container">
@@ -162,7 +170,7 @@
                 <span class="ap-header-points"> {{ q.points }} puntos</span>
               </div>
               <div class="ap-header-right">
-                <span>Test</span>
+                <span>{{ q.type }}</span>
               </div>
             </div>
             <div (click)="expandQuestion(i)" [class.expanded]="q.expanded" class="ap-body">
@@ -193,7 +201,9 @@
   <div class="section-main" [style.width.px]="previewDimensions.width">
     <div class="preview-container">
       <div class="page-container" [style.width.px]="paperDimensions.width" [style.height.px]="paperDimensions.height">
-        [placeholder]
+        <div *ngFor="let q of examItems; let i = index">
+          {{ i }}
+        </div>
       </div>
     </div>
   </div>

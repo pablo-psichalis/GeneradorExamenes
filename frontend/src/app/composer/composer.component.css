@@ -160,9 +160,18 @@ table {
     cursor: pointer;
 }
 
+.control-button {
+    padding: 0.9rem 1.5rem;
+    font-size: 13pt;
+    font-weight: 400;
+    text-align: center;
+    cursor: pointer;
+    height: inherit;
+    vertical-align: middle;
+}
+
 .fullwidth-button-small {
-    width: 100%;
-    padding: .5rem 2rem;
+    padding: 0.2rem 1.5rem;
     font-size: 13pt;
     font-weight: 400;
     text-align: center;
@@ -193,7 +202,7 @@ table {
 }
 
 .button-blue2:hover {
-    background-color: var(--color-blue-1-hover);
+    background-color: var(--color-blue-2-hover);
 }
 
 .button-teal {

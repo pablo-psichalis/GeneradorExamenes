@@ -1,0 +1,25 @@
+<div (window:resize)="onResize($event)" [style.height.px]="pageHeight" class="wrapper d-flex justify-content-center">
+  <div class="container">
+    <div class="main">
+      <p class="title">Iniciar Sesión</p>
+      <div class="form-group">
+        <div class="input-container">
+          <label for="username">Usuario</label>
+          <input type="text" class="form-control" name="username" id="username" placeholder="Nombre de usuario">
+        </div>
+        <div class="input-container">
+          <label for="password">Contraseña</label>
+          <input type="password" class="form-control" name="password" id="password" placeholder="Contraseña">
+        </div>
+        <div class="login-container">
+          <div class="button-container w-50 mx-auto">
+            <button type="button" class="btn btn-link login-button">Iniciar sesión</button>
+          </div>
+        </div>
+      </div>
+      <span class="login-register">No tienes cuenta?&nbsp;
+        <button routerLink="/register" type="button" class="btn btn-link register-button">Regístrate</button>
+      </span>
+    </div>
+  </div>
+</div>

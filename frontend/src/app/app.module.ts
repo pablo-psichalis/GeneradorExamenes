@@ -9,6 +9,8 @@ import { HomeModule } from './home/home.module';
 import { CollectionsModule } from './collections/collections.module';
 import { ComposerModule } from './composer/composer.module';
 import { ExamsModule } from './exams/exams.module';
+import { LoginModule } from './login/login.module';
+import { RegisterModule } from './register/register.module';
 
 @NgModule({
   declarations: [
@@ -23,6 +25,8 @@ import { ExamsModule } from './exams/exams.module';
     ComposerModule,
     CollectionsModule,
     ExamsModule,
+    LoginModule,
+    RegisterModule,
   ],
   providers: [],
   bootstrap: [
