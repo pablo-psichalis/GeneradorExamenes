@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const config = require('./config');
+const config = require('../config/config');
 const createError = require('http-errors');
 
 const hoursToExpire = 3; // 3
@@ -10,9 +10,9 @@ function createToken(user) {
 
 function protected(req, res, next) {
   var token = req.headers['x-access-token'];
-  if (!token) return next(createError(401, 'Login necesario'));
+  if (!token) return next(createError(401, 'Login required'));
   jwt.verify(token, config.TOKEN_SECRET, function (err, decoded) {
-    if (err) return next(createError(401, 'Login necesario'));
+    if (err) return next(createError(401, 'Login required'));
     req.verified = true;
     req.token = decoded;
     next();

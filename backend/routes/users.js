@@ -1,20 +1,22 @@
 const express = require('express');
 const createError = require('http-errors');
 
+const usersController = require('../controllers/users.controller');
+
 const router = express.Router();
 
 /* GET users listing. */
-router.route('/').post(express.json(), (req, res, next) => {
-  const user = req.body;
-  if (!user.nombre) return next(createError(400, 'Nombre obligatorio.'));
-  if (!user.correo) return next(createError(400, 'Correo obligatorio.'));
-  if (!user.password) return next(createError(400, 'Password obligatoria.'));
+router.route('/register').post((req, res, next) => {
+  const { user } = req.body;
+  if (!user.username) return next(createError(400, 'Username required.'));
+  if (!user.password) return next(createError(400, 'Password required.'));
+  // if (!user.email) return next(createError(400, 'Email obligatorio.'));
   usersController.create(user)
     .then((response) => {
       res.json(response);
       res.status = 201;
     }).catch((err) => {
-      if (err.code === 11000) { return next(createError(409, 'Correo ya registrado')); }
+      if (err.code === 11000) { return next(createError(409, 'Email already registered')); }
       return next();
     });
 });

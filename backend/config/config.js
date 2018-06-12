@@ -1,3 +1,6 @@
+require('dotenv').config({ path: './.env' });
+
 module.exports = {
-  DB_URI: `mongodb+srv://${process.env.MONGO_ATLAS_USER}:${process.env.MONGO_ATLAS_PASSWORD}@cluster-ono9y.mongodb.net/test`,
+  TOKEN_SECRET: process.env.TOKEN_SECRET || 'GeXam',
+  DB_URI: `mongodb+srv://${process.env.MONGO_ATLAS_USER}:mongolia@cluster-ono9y.mongodb.net/Test`,
 };
