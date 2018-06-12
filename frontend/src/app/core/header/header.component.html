@@ -21,12 +21,19 @@
 
   <!-- Right -->
 
-  <div class="col-4 my-auto">
-    <div class="d-flex justify-content-end">
+  <div *ngIf="isLogged else notlogged" class="col-4 my-auto">
+    <div class="d-flex justify-content-end h-100">
       <span>Logeado como
         <span class="font-weight-bold">Jorge Ramió</span>
       </span>
     </div>
   </div>
+  <ng-template #notlogged>
+    <div class="col-4">
+      <div class="d-flex justify-content-end h-100">
+        <button routerLink="/login" type="button" class="btn btn-link nav-button">Iniciar Sesión</button>
+      </div>
+    </div>
+  </ng-template>
 
 </div>

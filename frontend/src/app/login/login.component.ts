@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../services/shared.service';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
 })
-export class HomeComponent implements OnInit {
+export class LoginComponent implements OnInit {
 
   public isLogged: boolean;
   public isAdmin: boolean;
@@ -39,5 +39,4 @@ export class HomeComponent implements OnInit {
       - document.querySelector('app-header div').clientHeight
       - document.querySelector('app-footer div').clientHeight;
   }
-
 }

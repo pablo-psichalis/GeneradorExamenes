@@ -1,3 +1,45 @@
-<p>
-  home works!
-</p>
+<div (window:resize)="onResize($event)" [style.height.px]="pageHeight" class="wrapper d-flex justify-content-center">
+  <div class="container">
+    <div class="info">
+      <img class="img-app-logo" src="../../assets/img/logo_proto1.png">
+      <p class="app-name">Generador de Exámenes</p>
+      <p class="text-1">Aplicación realizada como parte del Trabajo de Fin de Grado de la convocatoria de 2018 de la Escuela Técnica Superior
+        de Ingeniería de Sistemas Informáticos (ETSISI) de la Universidad Politécnica de Madrid.</p>
+      <div *ngIf="!isLogged else logoutdiv" class="login-container row">
+        <div class="button-container col-6">
+          <button routerLink="/login" type="button" class="btn btn-link login-button">Iniciar Sesión</button>
+        </div>
+        <div class="button-container col-6">
+          <button type="button" class="btn btn-link login-button">Registrarse</button>
+        </div>
+      </div>
+      <ng-template #logoutdiv>
+        <div class="login-container">
+          <p class="login-loggedas">Logeado como
+            <span class="font-weight-bold">Jorge Ramió</span>
+          </p>
+          <div class="button-container w-50 mx-auto">
+            <button type="button" class="btn btn-link login-button">Cerrar Sesión</button>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+    <div class="authors">
+      <p class="authors-header text-center">Autores</p>
+      <div class="row">
+        <div class="col-6 d-flex justify-content-end">
+          <div class="author-container text-right">
+            <p class="author-name">Pablo Psichalis Ruiz</p>
+            <p class="author-detail">pablo.psichalisr@alumnos.upm.es</p>
+          </div>
+        </div>
+        <div class="col-6 d-flex justify-content-start">
+          <div class="author-container text-left">
+            <p class="author-name">Catalin Beniamin Santa</p>
+            <p class="author-detail">bc.santa@alumnos.upm.es</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
