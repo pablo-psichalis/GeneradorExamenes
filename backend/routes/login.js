@@ -6,7 +6,7 @@ const tokenAuth = require('../middleware/auth.tokens');
 const router = express.Router();
 
 router.route('/').post((req, res, next) => {
-  const { user } = req.body;
+  const user = req.body;
   if (!user.username) return next(createError(400, 'Username required.'));
   if (!user.password) return next(createError(400, 'Password required.'));
 

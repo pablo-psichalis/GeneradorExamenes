@@ -7,7 +7,7 @@ const router = express.Router();
 
 /* GET users listing. */
 router.route('/register').post((req, res, next) => {
-  const { user } = req.body;
+  const user = req.body;
   if (!user.username) return next(createError(400, 'Username required.'));
   if (!user.password) return next(createError(400, 'Password required.'));
   // if (!user.email) return next(createError(400, 'Email obligatorio.'));
