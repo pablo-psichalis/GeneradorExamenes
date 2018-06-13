@@ -10,7 +10,6 @@ router.route('/').post((req, res, next) => {
   if (!user.username) return next(createError(400, 'Username required.'));
   if (!user.password) return next(createError(400, 'Password required.'));
 
-  console.log('Login...');
   loginController.auth(user)
     .then((response) => {
       if (response.length <= 0) return next(createError(401, 'Invalid credentials.'));
@@ -24,6 +23,10 @@ router.route('/').post((req, res, next) => {
     .catch(() => {
       next(createError(401, 'Invalid credentials.'));
     });
+});
+
+router.route('/validToken', tokenAuth.protected).get((req, res) => {
+  res.send('Authenticated');
 });
 
 module.exports = router;
