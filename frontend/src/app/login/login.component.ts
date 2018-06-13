@@ -2,6 +2,8 @@ import * as sha1 from 'sha1';
 import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../services/shared.service';
 import { LoginService } from '../services/login.service';
+import { ErrorService } from '../services/error.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -25,10 +27,19 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private loginService: LoginService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private errorService: ErrorService,
+    private router: Router,
   ) { }
 
   ngOnInit() {
+    this.formDetails = {
+      username: '',
+      password: ''
+    };
+    this.pageHeight = 0;
+    this.onResize(null);
+
     this.sharedService.loginEmitted.subscribe(data => {
       if (data !== 'NOT_INIT') {
         this.sharedService.emitStatus('UNLOADED');
@@ -40,15 +51,8 @@ export class LoginComponent implements OnInit {
   }
 
   private loadComponent() {
-    this.formDetails = {
-      username: '',
-      password: ''
-    };
     this.error = '';
     this.loading = false;
-
-    this.pageHeight = 0;
-    this.onResize(null);
     this.sharedService.emitStatus('LOADED');
   }
 
@@ -72,10 +76,12 @@ export class LoginComponent implements OnInit {
             this.error = 'Credenciales inválidas';
           } else if (res === 'SERVER_ERROR') {
             this.error = 'Sin conexión';
+          } else {
+
           }
           this.loading = false;
         })
-        .catch();
+        .catch(err => this.errorService.throwError(err, this));
     } else if (!this.formDetails.username && !this.formDetails.password) {
       this.error = 'Usuario y contraseña no pueden estar vacíos';
     } else if (!this.formDetails.username) {

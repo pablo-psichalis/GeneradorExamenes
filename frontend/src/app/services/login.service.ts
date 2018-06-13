@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { environment } from '../../environments/environment';
 import { SharedService } from '../services/shared.service';
+import { ErrorService } from './error.service';
 
 const URLAPI = `http://${environment.dbip ? environment.dbip : 'localhost'}:3000/`;
 const token_key = 'genEx_tkn';
@@ -32,7 +33,7 @@ export class LoginService {
         localStorage.setItem(admin_key, response.user.role);
         this.sharedService.emitLogin({
           isLogged: true,
-          isAdmin: response.user.role ? true : false
+          isAdmin: response.user.role ? true : false,
         });
       }).catch(err => {
         if (err.status === 401) {
@@ -77,12 +78,12 @@ export class LoginService {
 
   public isLogged() {
     const httpOptions = this.getHttpOptions();
-    return this.http.get(URLAPI + 'validToken', httpOptions).toPromise()
+    return this.http.get(URLAPI + 'login/validToken', httpOptions).toPromise()
       .then((res: any) => {
         if (res.status === 200) { return true; }
         return false;
       })
-      .catch((res) => {
+      .catch((res: any) => {
         if (res.status === 200) { return true; }
         return false;
       });

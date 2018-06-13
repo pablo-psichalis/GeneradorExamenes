@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../../services/shared.service';
+import { UsersService } from '../../services/users.service';
+import { ErrorService } from '../../services/error.service';
 
 @Component({
   selector: 'app-header',
@@ -11,8 +13,15 @@ export class HeaderComponent implements OnInit {
   public isLogged: boolean;
   public isAdmin: boolean;
 
+  public loggedUser: {
+    _id: string,
+    username: string
+  };
+
   constructor(
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private usersSerivice: UsersService,
+    private errorService: ErrorService,
   ) { }
 
   ngOnInit() {
@@ -26,6 +35,17 @@ export class HeaderComponent implements OnInit {
     });
   }
 
-  private loadComponent() { }
+  private loadComponent() {
+    this.loggedUser = {
+      _id: '',
+      username: ''
+    };
+
+    this.usersSerivice.getUser()
+      .then(res => {
+        this.loggedUser = res;
+      })
+      .catch(err => this.errorService.throwError(err, this));
+  }
 
 }

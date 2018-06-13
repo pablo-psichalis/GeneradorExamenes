@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  dbip: 'localhost'
+  dbip: '92.191.95.4'
 };
 
 /*

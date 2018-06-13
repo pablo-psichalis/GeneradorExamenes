@@ -14,6 +14,8 @@ import { RegisterModule } from './register/register.module';
 import { SharedService } from './services/shared.service';
 import { LoginService } from './services/login.service';
 import { HttpClientModule } from '@angular/common/http';
+import { UsersService } from './services/users.service';
+import { ErrorService } from './services/error.service';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,9 @@ import { HttpClientModule } from '@angular/common/http';
   ],
   providers: [
     SharedService,
+    ErrorService,
     LoginService,
+    UsersService,
   ],
   bootstrap: [
     AppComponent,

@@ -24,7 +24,7 @@
   <div *ngIf="isLogged else notlogged" class="col-4 my-auto">
     <div class="d-flex justify-content-end h-100">
       <span>Logeado como
-        <span class="font-weight-bold">Jorge Ramió</span>
+        <span class="font-weight-bold">{{ loggedUser.username }}</span>
       </span>
     </div>
   </div>
