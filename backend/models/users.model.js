@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { ObjectId } = require('mongoose').Types;
 
 const User = mongoose.model('users', {
   username: String,
@@ -19,8 +20,13 @@ function auth(user) {
   return User.findOne(queryObj);
 }
 
+function getUser(userId) {
+  return User.findOne({ _id: new ObjectId(userId) }, { password: 0 });
+}
+
 module.exports = {
   create,
   auth,
+  getUser,
 };
 

@@ -5,6 +5,7 @@ Endpoints del backend y si requieren autenticación (PROTECTED = SI) o no (PROTE
 
 | MÉTODO | ENDPOINT                | PROTECTED |
 |--------|-------------------------|-----------|
+| GET | /users/:id | SI
 | POST | /users/register | NO
 | POST | /login | NO
 | GET | /collections | SI

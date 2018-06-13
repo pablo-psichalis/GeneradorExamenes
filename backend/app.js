@@ -3,10 +3,11 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const tokensMw = require('./middleware/auth.tokens');
 
+// Routers
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
-
 const loginRouter = require('./routes/login');
 
 require('dotenv').config({ path: './.env' });
@@ -26,13 +27,13 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Access-Token, X-Requested-With, Content-Type, Accept');
   next();
 });
 
+app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/login', loginRouter);
-app.use('/', indexRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
