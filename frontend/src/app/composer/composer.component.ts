@@ -42,14 +42,14 @@ export class ComposerComponent implements OnInit {
   private loadComponent() {
 
     this.collectionItems = [
-      'Colección 1',
-      'Colección 2',
-      'Colección 3',
-      'Colección 4',
-      'Colección 5',
-      'Colección 6',
-      'Colección 7',
-      'Colección 8'
+      'Coleccion 1',
+      'Coleccion 2',
+      'Coleccion 3',
+      'Coleccion 4',
+      'Coleccion 5',
+      'Coleccion 6',
+      'Coleccion 7',
+      'Coleccion 8'
     ];
     // tslint:disable:max-line-length
     this.examItems = [{
