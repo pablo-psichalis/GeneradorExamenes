@@ -1,3 +1,4 @@
+import * as sha1 from 'sha1';
 import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../services/shared.service';
 import { LoginService } from '../services/login.service';
@@ -61,7 +62,11 @@ export class LoginComponent implements OnInit {
     this.error = '';
     if (this.formDetails.username && this.formDetails.password) {
       this.loading = true;
-      this.loginService.login(this.formDetails)
+      const data = {
+        username: this.formDetails.username,
+        password: sha1(this.formDetails.password)
+      };
+      this.loginService.login(data)
         .then(res => {
           if (res === 'INCORRECT') {
             this.error = 'Credenciales inválidas';

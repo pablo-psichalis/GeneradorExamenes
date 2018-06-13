@@ -1,3 +1,4 @@
+import * as sha1 from 'sha1';
 import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../services/shared.service';
 import { LoginService } from '../services/login.service';
@@ -15,12 +16,12 @@ export class RegisterComponent implements OnInit {
   public pageHeight: number;
 
   public formDetails: {
-    username: String;
-    password: String;
-    password2: String;
+    username: string;
+    password: string;
+    password2: string;
   };
 
-  public error: String;
+  public error: string;
   public loading: boolean;
 
   constructor(
@@ -63,7 +64,12 @@ export class RegisterComponent implements OnInit {
     this.error = '';
     if (this.formDetails.username && this.formDetails.password && this.formDetails.password === this.formDetails.password2) {
       this.loading = true;
-      this.loginService.register(this.formDetails)
+      const data = {
+        username: this.formDetails.username,
+        password: sha1(this.formDetails.password)
+      };
+      console.log(data);
+      this.loginService.register(data)
         .then(res => {
           if (res === 'USER_TAKEN') {
             this.error = 'Este nombre de usuario ya está registrado';
