@@ -10,7 +10,7 @@
     --color-blue-1-text: rgb(219, 219, 231);
     --color-dark-1: #2e2e2e;
     --color-dark-1-text: #eeeeee;
-    --color-red-1: rgb(233, 60, 60);
+    --color-red-1: rgb(241, 79, 79);
     --color-red-1-hover: rgb(230, 120, 120);
     --color-green-1: rgb(40, 216, 40);
     --color-green-1-hover: rgb(57, 224, 57);
@@ -18,6 +18,7 @@
     --color-blue-2-hover: #8babf7;
     --color-teal-1: rgb(74, 228, 190);
     --color-teal-1-hover: rgb(131, 243, 215);
+    --color-dark-2: rgb(92, 92, 92);
     --reduced-width: 1240px;
 }
 

@@ -1,6 +1,7 @@
 .wrapper {
     background-color: var(--color-blue-2);
     padding-top: 4rem;
+    overflow-y: auto;
 }
 
 .container {
@@ -69,5 +70,17 @@ label {
     padding: 0;
     border: 0;
     vertical-align: 0;
+    color: white;
+}
+
+.login-error {
+    background-color: var(--color-dark-2);
+    color: white;
+    padding: .5rem .7rem;
+}
+
+.login-loading {
+    text-align: center;
+    padding: .5rem .7rem;
     color: white;
 }

@@ -18,7 +18,7 @@ export class TrimPipe implements PipeTransform {
         const lastSpace = trimmedText.lastIndexOf(' ');
         out = trimmedText.substr(0, Math.min(trimmedText.length, lastSpace !== -1 ? lastSpace : limit)) + '...';
       } else {
-        out = trimmedText;
+        out = trimmedText + '...';
       }
     } else {
       out = text;

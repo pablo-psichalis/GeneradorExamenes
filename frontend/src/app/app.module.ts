@@ -11,12 +11,16 @@ import { ComposerModule } from './composer/composer.module';
 import { ExamsModule } from './exams/exams.module';
 import { LoginModule } from './login/login.module';
 import { RegisterModule } from './register/register.module';
+import { SharedService } from './services/shared.service';
+import { LoginService } from './services/login.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
     AppComponent,
   ],
   imports: [
+    HttpClientModule,
     BrowserModule,
     AppRoutingModule,
     PipesModule,
@@ -28,7 +32,10 @@ import { RegisterModule } from './register/register.module';
     LoginModule,
     RegisterModule,
   ],
-  providers: [],
+  providers: [
+    SharedService,
+    LoginService,
+  ],
   bootstrap: [
     AppComponent,
   ]

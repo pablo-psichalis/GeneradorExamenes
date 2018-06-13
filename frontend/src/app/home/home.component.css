@@ -1,6 +1,7 @@
 .wrapper {
     background-color: var(--color-blue-2);
     padding-top: 2rem;
+    overflow-y: auto;
 }
 
 .container {

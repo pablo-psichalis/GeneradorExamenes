@@ -51,12 +51,6 @@
     padding: .2rem .4rem;
     width: 100%;
     background-color: white;
-    transition: background-color .2s;
-}
-
-.collection-item:hover {
-    background-color: var(--color-blue-1-lighthover);
-    color: white;
 }
 
 .collection-left {
@@ -80,10 +74,12 @@
 .collection-controls-delete {
     color: var(--color-red-1);
     padding: .2rem;
+    transition: color .2s, background-color .2s;
 }
 
 .collection-controls-delete:hover {
     color: white;
+    background-color: var(--color-red-1);
 }
 
 .subheader-text {
@@ -92,13 +88,13 @@
 
 .subheader-button {
     padding: .2rem .4rem;
-    background-color: var(--color-green-1);
+    background-color: var(--color-blue-2);
     transition: background-color .2s;
     cursor: pointer;
 }
 
 .subheader-button:hover {
-    background-color: var(--color-green-1-hover);
+    background-color: var(--color-blue-2-hover);
 }
 
 table th, td {
@@ -161,21 +157,57 @@ table {
 }
 
 .control-button {
-    padding: 0.9rem 1.5rem;
+    padding: 0.4rem 1.5rem;
     font-size: 13pt;
     font-weight: 400;
     text-align: center;
     cursor: pointer;
     height: inherit;
     vertical-align: middle;
+    border-radius: .3rem;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-right: .5rem;
+    transition: background-color .2s;
 }
 
 .fullwidth-button-small {
+    margin: 0.2rem;
     padding: 0.2rem 1.5rem;
     font-size: 13pt;
     font-weight: 400;
     text-align: center;
     cursor: pointer;
+    transition: background-color .2s;
+}
+
+.edit-button {
+    text-decoration: none;
+    padding: .1rem .3rem;
+    margin: 0;
+    line-height: 1;
+}
+
+.linkbutton-blue {
+    color: var(--color-blue-1);
+}
+
+.linkbutton-blue:hover {
+    color: var(--color-blue-1-hover);
+}
+
+.linkbutton-red {
+    color: var(--color-red-1);
+}
+
+.linkbutton-red:hover {
+    color: var(--color-red-1-hover);
+}
+
+.expand-arrow {
+    margin-right: 0.3rem;
+    font-size: 20pt;
+    color: var(--color-blue-1-hover);
 }
 
 .button-green {
@@ -251,11 +283,12 @@ table {
 }
 
 .ap-body {
-    padding: .3rem;
+    padding: .1rem .3rem;
     background-color: white;
-    height: 5rem;
+    max-height: 4.7rem;
     overflow: hidden;
     transition: height .3s ease;
+    transition: background-color .2s, color .2s;
 }
 
 .ap-body:hover {
@@ -264,5 +297,6 @@ table {
 }
 
 .expanded {
+    max-height: unset;
     height: auto !important;
 }

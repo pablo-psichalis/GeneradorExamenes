@@ -6,7 +6,7 @@
         <span class="font-weight-bold">Examen Seguridad 1</span>
       </span>
       <div class="d-flex">
-        <div class="control-button button-green">
+        <div class="control-button button-blue2">
           <i class="fa fa-check"></i> Guardar cambios
         </div>
         <div class="control-button button-blue2">
@@ -144,11 +144,15 @@
           Estructura
         </div>
         <div class="row">
-          <div class="col-6 fullwidth-button-small button-green">
-            <i class="fa fa-plus"></i> Apartado
+          <div class="col-6">
+            <div class="fullwidth-button-small button-blue2">
+              <i class="fa fa-plus"></i> Apartado
+            </div>
           </div>
-          <div class="col-6 fullwidth-button-small button-blue2">
+          <div class="col-6">
+            <div class="fullwidth-button-small button-blue2">
               <i class="fa fa-share"></i> Importar
+            </div>
           </div>
         </div>
         <div class="b-card-body">
@@ -174,20 +178,18 @@
               </div>
             </div>
             <div (click)="expandQuestion(i)" [class.expanded]="q.expanded" class="ap-body">
-              {{ q.content }}
+              {{ q.expanded ? q.content : q.content | trim:110:true }}
             </div>
-            <div (click)="expandQuestion(i)" class="ap-footer">
-              <span class="d-flex justify-content-center">
-                <i class="fa" [class.fa-sort-down]="!q.expanded" [class.fa-sort-up]="q.expanded"></i>
+            <div class="ap-footer">
+              <span class="d-flex justify-content-between">
+                <div>
+                  <button type="button" class="btn btn-link edit-button linkbutton-blue">
+                    <i class="fa fa-edit"></i>&nbsp;Editar</button>
+                  <button type="button" class="btn btn-link edit-button linkbutton-red">
+                    <i class="fa fa-trash"></i>&nbsp;Descartar</button>
+                </div>
+                <i *ngIf="q.content.length > 110" class="fa expand-arrow" [class.fa-sort-down]="!q.expanded" [class.fa-sort-up]="q.expanded"></i>
               </span>
-            </div>
-            <div class="ap-controls row">
-              <div class="col-6">
-                <div class="fullwidth-button-small button-blue2">Editar</div>
-              </div>
-              <div class="col-6">
-                <div class="fullwidth-button-small button-red">Borrar</div>
-              </div>
             </div>
           </div>
         </div>

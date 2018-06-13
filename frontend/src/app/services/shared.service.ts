@@ -13,8 +13,6 @@ export class SharedService {
   public statusEmitted = this.emitStatusSource.asObservable();
   public loginEmitted = this.emitLoginSource.asObservable();
 
-  public loginErr: boolean;
-
   public emitStatus(data: any) {
     this.emitStatusSource.next(data);
   }
