@@ -117,9 +117,10 @@ Nota: La puntuación de cada pregunta/apartado se añade al objeto Examen ya que
                     "statement": "Argumente a favor o en contra de la paella como desayuno regular",
                     "content": 
                         {
-                            "text": ""
+                            "text": "",
+                            "solution": "Texto con la posible solución por aquí, bla bla bla bla bla bla bla."
                         },
-                    "solution": "Texto con la posible solución por aquí, bla bla bla bla bla bla bla.",
+
                     "max_points": 4    
                 },                    
                 {
