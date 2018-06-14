@@ -19,7 +19,7 @@
             <span class="font-weight-bold">{{ loggedUser.username }}</span>
           </p>
           <div class="button-container w-50 mx-auto">
-            <button type="button" class="btn btn-link login-button">Cerrar Sesión</button>
+            <button (click)="logout()" type="button" class="btn btn-link login-button">Cerrar Sesión</button>
           </div>
         </div>
       </ng-template>

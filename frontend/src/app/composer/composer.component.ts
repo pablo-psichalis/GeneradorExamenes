@@ -86,12 +86,6 @@ export class ComposerComponent implements OnInit {
       width: 0
     };
 
-    const baseDimension = window.innerWidth * 0.55;
-    this.paperDimensions = {
-      width: baseDimension,
-      height: baseDimension * Math.sqrt(2)
-    };
-
     this.onResize(null);
 
   }
@@ -104,6 +98,10 @@ export class ComposerComponent implements OnInit {
         - document.querySelector('div.b-window-header').clientHeight,
       width: window.innerWidth
         - document.querySelector('div.section-left').clientWidth * 2
+    };
+    this.paperDimensions = {
+      width: this.previewDimensions.width * 0.8,
+      height: this.previewDimensions.width * 0.8 * Math.sqrt(2)
     };
   }
 

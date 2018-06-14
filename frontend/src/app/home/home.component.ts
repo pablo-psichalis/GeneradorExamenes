@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../services/shared.service';
 import { UsersService } from '../services/users.service';
 import { ErrorService } from '../services/error.service';
+import { LoginService } from '../services/login.service';
 
 @Component({
   selector: 'app-home',
@@ -23,6 +24,7 @@ export class HomeComponent implements OnInit {
   constructor(
     private sharedService: SharedService,
     private usersSerivice: UsersService,
+    private loginService: LoginService,
     private errorService: ErrorService,
   ) { }
 
@@ -44,18 +46,24 @@ export class HomeComponent implements OnInit {
       _id: '',
       username: ''
     };
-    this.usersSerivice.getUser()
-      .then(res => {
-        this.loggedUser = res;
-        this.sharedService.emitStatus('LOADED');
-      })
-      .catch(err => this.errorService.throwError(err, this));
+    if (this.isLogged) {
+      this.usersSerivice.getUser()
+        .then(res => {
+          this.loggedUser = res;
+          this.sharedService.emitStatus('LOADED');
+        })
+        .catch(err => this.errorService.throwError(err, this));
+    }
   }
 
   public onResize(event) {
     this.pageHeight = window.innerHeight
       - document.querySelector('app-header div').clientHeight
       - document.querySelector('app-footer div').clientHeight;
+  }
+
+  public logout() {
+    this.loginService.logout();
   }
 
 }

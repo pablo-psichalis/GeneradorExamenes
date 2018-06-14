@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../../services/shared.service';
 import { UsersService } from '../../services/users.service';
 import { ErrorService } from '../../services/error.service';
+import { LoginService } from '../../services/login.service';
 
 @Component({
   selector: 'app-header',
@@ -18,10 +19,13 @@ export class HeaderComponent implements OnInit {
     username: string
   };
 
+  public showMenu: boolean;
+
   constructor(
     private sharedService: SharedService,
     private usersSerivice: UsersService,
     private errorService: ErrorService,
+    private loginService: LoginService,
   ) { }
 
   ngOnInit() {
@@ -40,12 +44,19 @@ export class HeaderComponent implements OnInit {
       _id: '',
       username: ''
     };
+    this.showMenu = false;
 
-    this.usersSerivice.getUser()
-      .then(res => {
-        this.loggedUser = res;
-      })
-      .catch(err => this.errorService.throwError(err, this));
+    if (this.isLogged) {
+      this.usersSerivice.getUser()
+        .then(res => {
+          this.loggedUser = res;
+        })
+        .catch(err => this.errorService.throwError(err, this));
+    }
+  }
+
+  public logout() {
+    this.loginService.logout();
   }
 
 }

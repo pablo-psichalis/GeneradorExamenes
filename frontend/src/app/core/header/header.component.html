@@ -21,11 +21,19 @@
 
   <!-- Right -->
 
-  <div *ngIf="isLogged else notlogged" class="col-4 my-auto">
-    <div class="d-flex justify-content-end h-100">
-      <span>Logeado como
-        <span class="font-weight-bold">{{ loggedUser.username }}</span>
-      </span>
+  <div *ngIf="isLogged else notlogged" (mouseleave)="showMenu = false" class="col-4">
+    <div class="dropdown-button d-flex justify-content-end h-100">
+      <button #showMenuB (click)="showMenu ? showMenu = false : showMenu = true" class="font-weight-light btn btn-link nav-button">Logeado como
+        <span class="font-weight-bold">{{ loggedUser.username }}&nbsp;
+        </span>
+        <i class="fa fa-caret-down"></i>
+      </button>
+    </div>
+    <div *ngIf="showMenu" [style.width.px]="showMenuB.offsetWidth" class="user-dropdown">
+      <div class="user-dropdown-item">
+        <button (click)="showMenu = false; logout()" class="btn btn-link nav-button">
+          <i class="fa fa-sign-out"></i>&nbsp;Cerrar sesión</button>
+      </div>
     </div>
   </div>
   <ng-template #notlogged>

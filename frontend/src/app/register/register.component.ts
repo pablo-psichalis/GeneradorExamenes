@@ -2,6 +2,7 @@ import * as sha1 from 'sha1';
 import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../services/shared.service';
 import { LoginService } from '../services/login.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -26,16 +27,19 @@ export class RegisterComponent implements OnInit {
 
   constructor(
     private loginService: LoginService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private router: Router,
   ) { }
 
   ngOnInit() {
     this.sharedService.loginEmitted.subscribe(data => {
       if (data !== 'NOT_INIT') {
         this.sharedService.emitStatus('UNLOADED');
-        this.isLogged = data.isLogged;
-        this.isAdmin = data.isAdmin;
-        this.loadComponent();
+        if (data.isLogged) {
+          this.router.navigate(['/']);
+        } else {
+          this.loadComponent();
+        }
       }
     });
   }
@@ -68,13 +72,16 @@ export class RegisterComponent implements OnInit {
         username: this.formDetails.username,
         password: sha1(this.formDetails.password)
       };
-      console.log(data);
       this.loginService.register(data)
         .then(res => {
-          if (res === 'USER_TAKEN') {
+          if (res.status === 409) {
             this.error = 'Este nombre de usuario ya está registrado';
-          } else if (res === 'SERVER_ERROR') {
+          } else if (res.status === 500) {
+            this.error = 'Error de servidor';
+          } else if (res.status !== 201) {
             this.error = 'Sin conexión';
+          } else {
+            this.router.navigate(['/login']);
           }
           this.loading = false;
         })

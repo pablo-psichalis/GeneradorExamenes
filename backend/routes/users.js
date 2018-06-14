@@ -25,7 +25,7 @@ router.route('/register').post((req, res, next) => {
       res.json(response);
       res.status = 201;
     }).catch((err) => {
-      if (err.code === 11000) { return next(createError(409, 'Email already registered')); }
+      if (err.code === 11000) { return next(createError(409, 'User already exists')); }
       return next();
     });
 });

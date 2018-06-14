@@ -44,3 +44,22 @@
 .nav-button-active {
     background-color: var(--color-blue-1-active);
 }
+
+.user-dropdown {
+    position: absolute;
+    z-index: 999;
+    right: 0;
+    left: auto;
+    background-color: var(--color-blue-1);
+}
+
+.user-dropdown-item, .user-dropdown-item button {
+    width: 100%;
+    border-radius: 0;
+    border: 0;
+}
+
+.user-dropdown-item button {
+    display: block;
+    padding: 0.3rem 0.5rem;
+}

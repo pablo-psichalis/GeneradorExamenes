@@ -12,9 +12,6 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
 
-  public isLogged: boolean;
-  public isAdmin: boolean;
-
   public pageHeight: number;
 
   public formDetails: {
@@ -43,9 +40,11 @@ export class LoginComponent implements OnInit {
     this.sharedService.loginEmitted.subscribe(data => {
       if (data !== 'NOT_INIT') {
         this.sharedService.emitStatus('UNLOADED');
-        this.isLogged = data.isLogged;
-        this.isAdmin = data.isAdmin;
-        this.loadComponent();
+        if (data.isLogged) {
+          this.router.navigate(['/']);
+        } else {
+          this.loadComponent();
+        }
       }
     });
   }
@@ -72,12 +71,14 @@ export class LoginComponent implements OnInit {
       };
       this.loginService.login(data)
         .then(res => {
-          if (res === 'INCORRECT') {
+          if (res.status === 401) {
             this.error = 'Credenciales inválidas';
-          } else if (res === 'SERVER_ERROR') {
+          } else if (res.status === 500) {
+            this.error = 'Error de servidor';
+          } else if (res.status !== 201) {
             this.error = 'Sin conexión';
           } else {
-
+            this.router.navigate(['/']);
           }
           this.loading = false;
         })

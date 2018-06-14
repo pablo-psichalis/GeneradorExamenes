@@ -35,27 +35,15 @@ export class LoginService {
           isLogged: true,
           isAdmin: response.user.role ? true : false,
         });
-      }).catch(err => {
-        if (err.status === 401) {
-          return 'INCORRECT';
-        } else {
-          return 'SERVER_ERROR';
-        }
-      });
+        return response;
+      }).catch(err => err);
   }
 
   public register(data): Promise<any> {
     return this.http.post(URLAPI + 'users/register', data).toPromise()
       .then((response: any) => {
         return response;
-      }).catch(err => {
-        console.error(err);
-        if (err.status === 409) {
-          return 'USERNAME_TAKEN';
-        } else {
-          return 'SERVER_ERROR';
-        }
-      });
+      }).catch(err => err);
   }
 
   public logout() {
