@@ -3,17 +3,20 @@
 ## URLs y protección
 Endpoints del backend y si requieren autenticación (PROTECTED = SI) o no (PROTECTED = NO).
 
-| MÉTODO | ENDPOINT                | PROTECTED |
-|--------|-------------------------|-----------|
-| GET | /users/:id | SI
+| MÉTODO | ENDPOINT                | PROTECTED | NOTAS                 |
+|--------|-------------------------|-----------|---------------------------------|
+| GET | /users/:id | SI | Utilizar _id de Mongo
 | POST | /users/register | NO
-| POST | /login | NO
-| GET | /collections | SI
-| POST | /collections | SI
-| PUT | /collections | SI
+| POST | /login | NO 
 | GET | /exams | SI
 | POST | /exams | SI
 | PUT | /exams | SI
+| GET | /collections | SI | Get todas las colecciones
+| GET | /collections/:id | SI | Utilizar _id de Mongo
+| POST | /collections | SI 
+| DELETE | /collections/:id | SI | Utilizar _id de Mongo
+| PUT | /collections/:id | SI | Utilizar _id de Mongo
+
 
 ### Login
 Para loguearse es necesario hacer un POST /login con un body que siga el siguiente patrón: 
