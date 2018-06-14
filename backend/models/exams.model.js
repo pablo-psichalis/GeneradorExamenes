@@ -11,7 +11,7 @@ const Exam = mongoose.model('exams', {
   questions: Array,
 });
 
-exports.saveExams = exam => Exam.create(exam);
+exports.saveExam = exam => Exam.create(exam);
 
 exports.getAllExams = () => Exam.find({});
 

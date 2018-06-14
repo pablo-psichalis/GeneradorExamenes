@@ -9,6 +9,7 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const loginRouter = require('./routes/login');
 const collectionsRouter = require('./routes/collections');
+const examsRouter = require('./routes/exams');
 
 require('dotenv').config({ path: './.env' });
 
@@ -33,6 +34,7 @@ app.use((req, res, next) => {
 
 app.use('/', indexRouter);
 app.use('/collections', collectionsRouter);
+app.use('/exams', examsRouter);
 app.use('/users', usersRouter);
 app.use('/login', loginRouter);
 
