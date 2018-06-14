@@ -3,7 +3,8 @@ const { ObjectId } = require('mongoose').Types;
 
 
 const Collection = mongoose.model('collections', {
-  name: String,
+  title: String,
+  description: String, // opcional
   questions: Array,
 });
 
