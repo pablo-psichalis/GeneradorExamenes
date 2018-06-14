@@ -23,6 +23,8 @@
     "bootstrap": "^4.1.1",
     "core-js": "^2.5.4",
     "font-awesome": "^4.7.0",
+    "ng-quill": "^3.7.1",
+    "ngx-quill": "^3.2.0",
     "rxjs": "^6.0.0",
     "sha1": "^1.1.1",
     "zone.js": "^0.8.26"
