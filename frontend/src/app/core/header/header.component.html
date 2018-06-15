@@ -12,7 +12,7 @@
   <!-- Center -->
 
   <div class="col-4">
-    <div class="d-flex justify-content-center h-100">
+    <div *ngIf="isLogged" class="d-flex justify-content-center h-100">
       <button routerLink="/composer" type="button" class="btn btn-link nav-button" routerLinkActive="nav-button-active">Compositor</button>
       <button routerLink="/collections" type="button" class="btn btn-link nav-button" routerLinkActive="nav-button-active">Colecciones</button>
       <button routerLink="/exams" type="button" class="btn btn-link nav-button" routerLinkActive="nav-button-active">Exámenes</button>

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
 import { SharedService } from '../services/shared.service';
 
 @Component({
@@ -29,6 +28,15 @@ export class ComposerComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.previewDimensions = {
+      height: 0,
+      width: 0
+    };
+    this.paperDimensions = {
+      height: 0,
+      width: 0
+    };
+
     this.sharedService.loginEmitted.subscribe(data => {
       if (data !== 'NOT_INIT') {
         this.sharedService.emitStatus('UNLOADED');
@@ -80,11 +88,6 @@ export class ComposerComponent implements OnInit {
       content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
       expanded: false
     }];
-
-    this.previewDimensions = {
-      height: 0,
-      width: 0
-    };
 
     this.onResize(null);
 
