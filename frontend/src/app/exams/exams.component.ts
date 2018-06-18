@@ -11,12 +11,13 @@ export class ExamsComponent implements OnInit {
   public isLogged: boolean;
   public isAdmin: boolean;
 
-  public pageWidth: number;
+  public pageHeight: number;
   constructor(
     private sharedService: SharedService
   ) { }
 
   ngOnInit() {
+    this.pageHeight = 0;
     this.sharedService.loginEmitted.subscribe(data => {
       if (data !== 'NOT_INIT') {
         this.sharedService.emitStatus('UNLOADED');
@@ -32,7 +33,7 @@ export class ExamsComponent implements OnInit {
   }
 
   public onResize(event) {
-    this.pageWidth = window.innerHeight
+    this.pageHeight = window.innerHeight
       - document.querySelector('app-header div').clientHeight
       - document.querySelector('app-footer div').clientHeight
       - document.querySelector('div.b-window-header').clientHeight;

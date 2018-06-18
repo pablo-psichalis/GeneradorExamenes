@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-
 import { environment } from '../../environments/environment';
-import { SharedService } from '../services/shared.service';
+
+import { SharedService } from './shared.service';
 import { ErrorService } from './error.service';
 
 const URLAPI = `http://${environment.dbip ? environment.dbip : 'localhost'}:3000/`;

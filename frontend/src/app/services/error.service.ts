@@ -7,18 +7,13 @@ export class ErrorService {
 
   constructor(
     private loginService: LoginService,
-    private sharedService: SharedService,
   ) { }
 
   public throwError(error: any, place: any) {
     if (error.status) {
       switch (error.status) {
         case 401:
-          /* this.loginService.logout();
-          this.sharedService.emitStatus({
-            isLogged: false,
-            isAdmin: false
-          }); */
+          /* this.loginService.logout(); */
           break;
         default:
           this.logError('HTTP Error', error, place);

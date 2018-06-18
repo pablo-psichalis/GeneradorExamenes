@@ -1,6 +1,9 @@
-<div (window:resize)="onResize($event)" [style.height.px]="pageWidth">
+<div (window:resize)="onResize($event)">
   <div class="b-window-header d-flex">
     <span class="b-window-title">Exámenes</span>
     <span class="b-window-ongoing">Explorando exámenes</span>
+  </div>
+  <div class="page-body" [style.height.px]="pageHeight">
+
   </div>
 </div>
