@@ -166,9 +166,11 @@ Endpoints del backend y si requieren autenticación (PROTECTED = SI) o no (PROTE
 | GET | /users/:id | SI | Utilizar _id de Mongo
 | POST | /users/register | NO
 | POST | /login | NO 
-| GET | /exams | SI
-| POST | /exams | SI
-| PUT | /exams | SI
+| GET | /exams | SI | Get todas las colecciones
+| GET | /exams/:id | SI | Utilizar _id de Mongo
+| POST | /exams | SI 
+| DELETE | /exams/:id | SI | Utilizar _id de Mongo
+| PUT | /exams/:id | SI | Utilizar _id de Mongo
 | GET | /collections | SI | Get todas las colecciones
 | GET | /collections/:id | SI | Utilizar _id de Mongo
 | POST | /collections | SI 
