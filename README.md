@@ -32,7 +32,7 @@ Cada una de los apartados/secciones que forman el examen.
     {
         title: String,
         statement: String,  // enunciado
-        questions: Object,  // contenido (libre)
+        questions: Array,   // preguntas
     }
 
 #### Questions (preguntas)
@@ -40,31 +40,31 @@ Se trata de un objeto con el contenido de la sección, es decir, las preguntas d
 
 Para las preguntas tipo Test, se almacena un array de objetos opción: `{ content: String }` y el id de la opción correcta.
 
-    questions: {
-        test: 
-            [
-                {
-                    statement: String,      // enunciado de la pregunta
-                    options: Array 
-                        [
-                            { option: String },    // opción 0
-                            { option: String },    // opción 1
-                                ...
-                        ],
-                    correct_option: Number
-                } ,
-                { otra pregunta },
-                { otra pregunta },
-                    ...
-            ]
+    {
+        test: [
+            {
+                statement: String,      // enunciado de la pregunta
+                options: Array 
+                    [
+                        { option: String },    // opción 0
+                        { option: String },    // opción 1
+                            ...
+                    ],
+                correct_option: Number
+            } ,
+            { otra pregunta },
+            { otra pregunta },
+                        ...
+        ],
+        type: 'test'
     }
 
 Para las preguntas de tipo short o long, simplemente se almacena el texto insertado a través del editor.
-    
-    short/long: 
+
         {
             text: String,       // texto de la pregunta
             solution: String    // texto con la solución 
+            type: 'short' / 'long'
         }
 
 ### Ejemplos
@@ -72,7 +72,7 @@ Examen de ejemplo.
 
 Nota: La puntuación de cada pregunta/apartado se añade al objeto Examen ya que el peso que se le asigne depende del examen; de esta forma, la puntuación no forma parte de los objetos Pregunta de la base de datos.
 
-    {
+        {
         "title": "Examen sobre arroces",
         "date": "1/07/2018",
         "description": 
@@ -85,74 +85,72 @@ Nota: La puntuación de cada pregunta/apartado se añade al objeto Examen ya que
                     "title": "Parte de Test",
                     "statement": "Parte de test. Una única opción correcta",
                     "questions":
-                        {               
-                            "test":
-                                [
-                                    {
-                                        "statement": "El mejor arroz es...",
-                                        "options": 
-                                            [
-                                                { "option": "Arroz blanco" },    
-                                                { "option": "Arroz negro" },    
-                                                { "option": "Ninguno de esos" }
-                                            ],
-                                        "correct_option": 2
-                                    },
-                                    {
-                                        "statement": "Tiempo de cocción de la paella",
-                                        "options": 
-                                            [
-                                                { "option": "Depende" },        
-                                                { "option": "50 parsecs" },      
-                                                { "option": "99 nanosegundos" } 
-                                            ],
-                                        "correct_option": 0
-                                    },   
-                                    {
-                                        "statement": "De donde es originaria la paella?",
-                                        "options": 
-                                            [
-                                                { "option": "Zamora" },
-                                                { "option": "Valencia" },
-                                                { "option": "Shandong" }
-                                            ],
-                                        "correct_option": 1
-                                    }
-                                ],
-                            "max_points": 3
-                        }
-                },
-                {
-                    "title": "Parte de Disertación" ,
-                    "statement": "Argumente a favor o en contra de la paella como desayuno regular",
-                    "questions": { 
-                        "long": {
-                            "text": "",
-                            "solution": "Texto con la posible solución por aquí, bla bla bla bla bla bla bla."
-                        }
-                    },
+                        [               
+                            {
+                                "statement": "El mejor arroz es...",
+                                "options": 
+                                    [
+                                        { "option": "Arroz blanco" },    
+                                        { "option": "Arroz negro" },    
+                                        { "option": "Ninguno de esos" }
+                                    ],
+                                "correct_option": 2
+                            },
+                            {
+                                "statement": "Tiempo de cocción de la paella",
+                                "options": 
+                                    [
+                                        { "option": "Depende" },        
+                                        { "option": "50 parsecs" },      
+                                        { "option": "99 nanosegundos" } 
+                                    ],
+                                "correct_option": 0
+                            },   
+                            {
+                                "statement": "De donde es originaria la paella?",
+                                "options": 
+                                    [
+                                        { "option": "Zamora" },
+                                        { "option": "Valencia" },
+                                        { "option": "Shandong" }
+                                    ],
+                                "correct_option": 1
+                            }
+                        ],
+	                            "max_points": 3
+                            },
+				{
+					"title": "Parte de Disertación" ,
+					"statement": "Argumente a favor o en contra de la paella como desayuno regular",
+					"questions": [ 
+						{
+							"text": "",
+							"solution": "Texto con la posible solución por aquí, bla bla bla bla bla bla bla.",
+							"type": "long"
+						}
+					],
 
-                    "max_points": 4
-                },                    
-                {
-                    "title": "Parte de Problemas",
-                    "statement": "Si tenemos una rica paella de 16 bits: 0111 0100 0010 0101" ,
-                    "questions": {
-                        "short": {
-                            "text":
-                                "a) Calcular el tiempo estimado de deglución. Dato: Masa atómica del Hidrógeno = 1,00794u b) Estimar el tiempo perfecto de cocción. c) Si una comadreja camina sobre la paellera a fuego lento, calcular gráficamente la masa del Sol.",
-                            "solution":"a) ~30 min   b) Depende    c) [imagen]"  
-                        }
-                    },
-                    "max_points": 3
-                }
-            ],
+					"max_points": 4
+				},                    
+				{
+					"title": "Parte de Problemas",
+					"statement": "Si tenemos una rica paella de 16 bits: 0111 0100 0010 0101" ,
+					"questions": {
+						"short": {
+							"text":
+								"a) Calcular el tiempo estimado de deglución. Dato: Masa atómica del Hidrógeno = 1,00794u b) Estimar el tiempo perfecto de cocción. c) Si una comadreja camina sobre la paellera a fuego lento, calcular gráficamente la masa del Sol.",
+							"solution":"a) ~30 min   b) Depende    c) [imagen]"  
+						}
+					},
+					"max_points": 3
+				}
+			],
         "count": 
-        {
+			{
                 "test": 1,   
                 "short": 1,
                 "long": 1
-        }
+			}
     }
 
 
