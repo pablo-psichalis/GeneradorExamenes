@@ -6,6 +6,11 @@ const Collection = mongoose.model('collections', {
   title: String,
   description: String, // opcional
   questions: Array,
+  count: {
+    test: Number,
+    short: Number,
+    long: Number,
+  },
 });
 
 exports.saveCollection = collection => Collection.create(collection);

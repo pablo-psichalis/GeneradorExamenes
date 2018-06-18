@@ -9,6 +9,11 @@ const Exam = mongoose.model('exams', {
   subject: String,
   school_name: String,
   questions: Array,
+  count: {
+    test: Number,
+    short: Number,
+    long: Number,
+  },
 });
 
 exports.saveExam = exam => Exam.create(exam);

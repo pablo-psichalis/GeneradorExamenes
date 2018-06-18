@@ -5,7 +5,12 @@
         {
             title: String,
             description: String,
-            questions: Array
+            questions: Array,
+            count: {
+                test: Number,   // preguntas de tipo Test
+                short: Number,  // preguntas cortas
+                long: Number,   // preguntas largas
+            }
         }
 ### Examen
         {
@@ -15,6 +20,11 @@
             subject: String,
             school_name: String,
             questions: Array
+            count: {
+                test: Number,   // preguntas de tipo Test
+                short: Number,  // preguntas cortas
+                long: Number,   // preguntas largas
+            }
         }
 #### Pregunta de examen (question)
 Cada una de las preguntas (apartados) que forman el examen.
@@ -23,6 +33,7 @@ Cada una de las preguntas (apartados) que forman el examen.
             title: String,
             statement: String,  // enunciado
             content: Object,    // contenido (libre)
+            type: String        // 'test', 'long' o 'short'
         }
 
 #### Contenido (content)
@@ -49,11 +60,11 @@ Para las preguntas tipo Test, se almacena un array de objetos opción: `{ conten
             ]
     }
 
-Para las preguntas de tipo libre, simplemente se almacena el texto insertado a través del editor.
+Para las preguntas de tipo short o long, simplemente se almacena el texto insertado a través del editor.
     
     content: 
         {
-            text: String,        // texto de la pregunta
+            text: String,       // texto de la pregunta
             solution: String    // texto con la solución 
         }
 
@@ -77,41 +88,42 @@ Nota: La puntuación de cada pregunta/apartado se añade al objeto Examen ya que
                     "content":
                         {               
                             "test":
-								[
-									{
-										"statement": "El mejor arroz es...",
-										"options": 
-											[
-												{ "option": "Arroz blanco" },    
-												{ "option": "Arroz negro" },    
-												{ "option": "Ninguno de esos" }
-											],
-										"correct_option": 2
-									},
-									{
-										"statement": "Tiempo de cocción de la paella",
-										"options": 
-											[
-												{ "option": "Depende" },        
-												{ "option": "50 parsecs" },      
-												{ "option": "99 nanosegundos" } 
-											],
-										"correct_option": 0
-									},   
-									{
-										"statement": "De donde es originaria la paella?",
-										"options": 
-											[
-												{ "option": "Zamora" },
-												{ "option": "Valencia" },
-												{ "option": "Shandong" }
-											],
-										"correct_option": 1
-									}
-								],
-							"max_points": 3
-						}
-				},
+                                [
+                                    {
+                                        "statement": "El mejor arroz es...",
+                                        "options": 
+                                            [
+                                                { "option": "Arroz blanco" },    
+                                                { "option": "Arroz negro" },    
+                                                { "option": "Ninguno de esos" }
+                                            ],
+                                        "correct_option": 2
+                                    },
+                                    {
+                                        "statement": "Tiempo de cocción de la paella",
+                                        "options": 
+                                            [
+                                                { "option": "Depende" },        
+                                                { "option": "50 parsecs" },      
+                                                { "option": "99 nanosegundos" } 
+                                            ],
+                                        "correct_option": 0
+                                    },   
+                                    {
+                                        "statement": "De donde es originaria la paella?",
+                                        "options": 
+                                            [
+                                                { "option": "Zamora" },
+                                                { "option": "Valencia" },
+                                                { "option": "Shandong" }
+                                            ],
+                                        "correct_option": 1
+                                    }
+                                ],
+                            "max_points": 3
+                        },
+                    "type":"test"
+                },
                 {
                     "title": "Parte de Disertación" ,
                     "statement": "Argumente a favor o en contra de la paella como desayuno regular",
@@ -121,7 +133,8 @@ Nota: La puntuación de cada pregunta/apartado se añade al objeto Examen ya que
                             "solution": "Texto con la posible solución por aquí, bla bla bla bla bla bla bla."
                         },
 
-                    "max_points": 4    
+                    "max_points": 4,
+                    "type":"long"
                 },                    
                 {
                     "title": "Parte de Problemas",
@@ -132,9 +145,16 @@ Nota: La puntuación de cada pregunta/apartado se añade al objeto Examen ya que
                                 "a) Calcular el tiempo estimado de deglución. Dato: Masa atómica del Hidrógeno = 1,00794u b) Estimar el tiempo perfecto de cocción. c) Si una comadreja camina sobre la paellera a fuego lento, calcular gráficamente la masa del Sol.",
                             "solution":"a) ~30 min   b) Depende    c) [imagen]"  
                         },
-                    "max_points": 3
+                    "max_points": 3,
+                    "type":"short"
                 }
-            ]
+            ],
+        "count": 
+        {
+                "test": 1,   
+                "short": 1,
+                "long": 1
+        }
     }
 
 
