@@ -19,29 +19,28 @@
             description: String,
             subject: String,
             school_name: String,
-            questions: Array
+            sections: Array
             count: {
                 test: Number,   // preguntas de tipo Test
                 short: Number,  // preguntas cortas
                 long: Number,   // preguntas largas
             }
         }
-#### Pregunta de examen (question)
-Cada una de las preguntas (apartados) que forman el examen.
+#### Apartado de examen (section)
+Cada una de los apartados/secciones que forman el examen.
 
-        {
-            title: String,
-            statement: String,  // enunciado
-            content: Object,    // contenido (libre)
-            type: String        // 'test', 'long' o 'short'
-        }
+    {
+        title: String,
+        statement: String,  // enunciado
+        questions: Object,  // contenido (libre)
+    }
 
-#### Contenido (content)
-Se trata del texto que complementa al enunciado de cada una de las preguntas de examen (opcional).
+#### Questions (preguntas)
+Se trata de un objeto con el contenido de la sección, es decir, las preguntas de examen.
 
 Para las preguntas tipo Test, se almacena un array de objetos opción: `{ content: String }` y el id de la opción correcta.
 
-    content: {
+    questions: {
         test: 
             [
                 {
@@ -62,7 +61,7 @@ Para las preguntas tipo Test, se almacena un array de objetos opción: `{ conten
 
 Para las preguntas de tipo short o long, simplemente se almacena el texto insertado a través del editor.
     
-    content: 
+    short/long: 
         {
             text: String,       // texto de la pregunta
             solution: String    // texto con la solución 
@@ -80,12 +79,12 @@ Nota: La puntuación de cada pregunta/apartado se añade al objeto Examen ya que
             "En esta primera parte del examen (Test) que se entrega en una hoja aparte y se recogerá transcurridos 30 minutos del comienzo del examen. No está permitido el uso de apuntes ni libros. En la segunda parte (Ejercicios) con una duración de 100 minutos, sí podrás utilizar libros, soluciones de exámenes, apuntes y una calculadora. La duración máxima del examen es de 3 horas",
         "subject": "Paella orientada a objetos (POO)",
         "school_name": "E.T.N.O.N.O. - UPM",
-        "questions": 
+        "sections": 
             [
                 {
                     "title": "Parte de Test",
                     "statement": "Parte de test. Una única opción correcta",
-                    "content":
+                    "questions":
                         {               
                             "test":
                                 [
@@ -121,32 +120,31 @@ Nota: La puntuación de cada pregunta/apartado se añade al objeto Examen ya que
                                     }
                                 ],
                             "max_points": 3
-                        },
-                    "type":"test"
+                        }
                 },
                 {
                     "title": "Parte de Disertación" ,
                     "statement": "Argumente a favor o en contra de la paella como desayuno regular",
-                    "content": 
-                        {
+                    "questions": { 
+                        "long": {
                             "text": "",
                             "solution": "Texto con la posible solución por aquí, bla bla bla bla bla bla bla."
-                        },
+                        }
+                    },
 
-                    "max_points": 4,
-                    "type":"long"
+                    "max_points": 4
                 },                    
                 {
                     "title": "Parte de Problemas",
                     "statement": "Si tenemos una rica paella de 16 bits: 0111 0100 0010 0101" ,
-                    "content":
-                        {
+                    "questions": {
+                        "short": {
                             "text":
                                 "a) Calcular el tiempo estimado de deglución. Dato: Masa atómica del Hidrógeno = 1,00794u b) Estimar el tiempo perfecto de cocción. c) Si una comadreja camina sobre la paellera a fuego lento, calcular gráficamente la masa del Sol.",
                             "solution":"a) ~30 min   b) Depende    c) [imagen]"  
-                        },
-                    "max_points": 3,
-                    "type":"short"
+                        }
+                    },
+                    "max_points": 3
                 }
             ],
         "count": 

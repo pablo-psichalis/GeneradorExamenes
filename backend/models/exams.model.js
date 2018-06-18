@@ -8,7 +8,7 @@ const Exam = mongoose.model('exams', {
   description: String,
   subject: String,
   school_name: String,
-  questions: Array,
+  sections: Array,
   count: {
     test: Number,
     short: Number,
