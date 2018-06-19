@@ -36,9 +36,9 @@ Cada una de los apartados/secciones que forman el examen.
     }
 
 #### Questions (preguntas)
-Se trata de un objeto con el contenido de la sección, es decir, las preguntas de examen.
+Se trata de un objeto con el contenido de la sección, es decir, las preguntas de examen. Todas las preguntas contienen los campos difficulty (dificultad de la pregunta) y type (tipo de pregunta: test, short, o long).
 
-Para las preguntas tipo Test, se almacena un array de objetos opción: `{ content: String }` y el id de la opción correcta.
+Para las preguntas tipo Test, se almacena un array de objetos opción: `{ option: String }` y el id de la opción correcta (correct_option).
 
     {
         test: [
@@ -56,14 +56,16 @@ Para las preguntas tipo Test, se almacena un array de objetos opción: `{ conten
             { otra pregunta },
                         ...
         ],
+        difficulty: Number,
         type: 'test'
     }
 
 Para las preguntas de tipo short o long, simplemente se almacena el texto insertado a través del editor.
 
         {
-            text: String,       // texto de la pregunta
-            solution: String    // texto con la solución 
+            text: String,        // texto de la pregunta
+            solution: String,    // texto con la solución
+            difficulty: Number,
             type: 'short' / 'long'
         }
 
