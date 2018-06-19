@@ -134,3 +134,64 @@ input[type="number"], input[type="number"]::-webkit-outer-spin-button, input[typ
     background-color: white;
     color: black;
 }
+
+/* Subheader buttons */
+
+.control-button {
+    padding: 0.4rem 1.5rem;
+    font-size: 13pt;
+    font-weight: 400;
+    text-align: center;
+    cursor: pointer;
+    height: inherit;
+    vertical-align: middle;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-right: .5rem;
+    transition: background-color .2s;
+}
+
+.button-green {
+    background-color: var(--color-green-1);
+    color: white;
+}
+
+.button-green:hover {
+    background-color: var(--color-green-1-hover);
+}
+
+.button-blue {
+    background-color: var(--color-blue-1);
+    color: white;
+}
+
+.button-blue:hover {
+    background-color: var(--color-blue-1-hover);
+}
+
+.button-blue2 {
+    background-color: var(--color-blue-2);
+    color: white;
+}
+
+.button-blue2:hover {
+    background-color: var(--color-blue-2-hover);
+}
+
+.button-teal {
+    background-color: var(--color-teal-1);
+    color: black;
+}
+
+.button-teal:hover {
+    background-color: var(--color-teal-1-hover);
+}
+
+.button-red {
+    background-color: var(--color-red-1);
+    color: white;
+}
+
+.button-red:hover {
+    background-color: var(--color-red-1-hover);
+}

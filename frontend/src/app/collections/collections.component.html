@@ -1,7 +1,29 @@
 <div (window:resize)="onResize($event)">
     <div class="b-window-header d-flex">
         <span class="b-window-title">Colecciones</span>
-        <span class="b-window-ongoing">Explorando colecciones</span>
+        <div *ngIf="selectedId === -1 else viewing" class="d-flex justify-content-between w-100">
+            <span class="b-window-ongoing">Explorando colecciones</span>
+            <div class="d-flex">
+                <div class="control-button button-blue2">
+                    <i class="fa fa-plus"></i> Nueva coleccion
+                </div>
+            </div>
+        </div>
+        <ng-template #viewing>
+            <div class="d-flex justify-content-between w-100">
+                <span *ngIf="selectedId !== -1 else viewing" class="b-window-ongoing">Editando
+                    <span class="font-weight-bold">{{ oCollections[selectedId].title }}</span>
+                </span>
+                <div class="d-flex">
+                    <div class="control-button button-blue2">
+                        <i class="fa fa-check"></i> Guardar cambios
+                    </div>
+                    <div class="control-button button-blue2">
+                        <i class="fa fa-plus"></i> Añadir pregunta
+                    </div>
+                </div>
+            </div>
+        </ng-template>
     </div>
     <div class="page-body" [style.height.px]="pageHeight">
         <div class="menu-left">
@@ -15,16 +37,85 @@
             </div>
             <div class="collections-list">
                 <div *ngFor="let collection of oCollections; let i = index" class="collection-container" (click)="selectedId = i">
-                    <div class="collection-title" [class.title-selected]="selectedId === i">{{ collection.name ? collection.name : 'Coleccion sin nombre' }}</div>
+                    <div class="collection-title" [class.title-selected]="selectedId === i">{{ collection.title ? collection.title : 'Coleccion sin nombre' }}</div>
                     <div class="collection-body" [class.body-selected]="selectedId === i">
                         <p>{{ collection.description ? collection.description : 'Sin descripcion' }}</p>
-                        <p class="collection-content">{{ collection.questions.length ? collection.questions.length + ' preguntas' : 'Coleccion vacía' }}</p>
+                        <p class="collection-content">{{ collection.questions.length ? collection.questions.length + ' preguntas (' + collection.count.test
+                            + ' test, ' + collection.count.short + ' ejercicios, ' + collection.count.long + ' problemas)'
+                            : 'Coleccion vacía' }}</p>
+                    </div>
+                    <div class="pl-1" *ngIf="deletingCId !== i">
+                        <button type="button" class="btn btn-link edit-button linkbutton-blue">
+                            <i class="fa fa-edit"></i>&nbsp;Editar detalles</button>
+                        <button (click)="deleteCollection(i)" type="button" class="btn btn-link edit-button linkbutton-red">
+                            <i class="fa fa-trash"></i>&nbsp;Borrar</button>
+                    </div>
+                    <div class="pl-1" *ngIf="deletingCId === i">
+                        <span class="deleting-msg">Estás seguro?</span>
+                        <button (click)="deleteCollection(i)" type="button" class="btn btn-link edit-button linkbutton-red">
+                            <i class="fa fa-check"></i>&nbsp;Confirmar</button>
+                        <button (click)="deletingCId = -1" type="button" class="btn btn-link edit-button linkbutton-blue">
+                            <i class="fa fa-times"></i>&nbsp;Cancelar</button>
                     </div>
                 </div>
             </div>
         </div>
         <div class="collection-view" [style.width.px]="previewWidth">
-            ae
+            <div *ngIf="selectedId === -1" class="p-2">
+                <p>Haz click en una colección para visualizarla</p>
+            </div>
+            <div *ngIf="selectedId !== -1" class="view-body">
+                <div *ngFor="let question of oCollections[selectedId].questions; let qi = index" class="view-question">
+                    <div class="view-col-statement d-flex justify-content-between">
+                        <span>
+                            <span class="ap-header-diff">
+                                <span class="ml-1">
+                                    <i class="fa fa-circle"></i>
+                                </span>
+                                <span *ngIf="question.difficulty >= 2" class="ml-1">
+                                    <i class="fa fa-circle"></i>
+                                </span>
+                                <span *ngIf="question.difficulty == 3" class="ml-1">
+                                    <i class="fa fa-circle"></i>
+                                </span>
+                            </span>
+                            <span>Pregunta {{ qi + 1 }}</span>
+                        </span>
+                        <span *ngIf="question.type === 'test'" class="view-col-type">Test</span>
+                        <span *ngIf="question.type === 'short'" class="view-col-type">Ejercicio</span>
+                        <span *ngIf="question.type === 'long'" class="view-col-type">Problema</span>
+                    </div>
+                    <div class="view-col-content">
+                        <div *ngIf="question.type === 'test'">
+                            <p [innerHTML]=question.statement></p>
+                            <p *ngFor="let option of question.options; let i = index">
+                                &nbsp;&nbsp;{{ i + 1 }}.
+                                <span [innerHTML]=option></span>&nbsp;
+                                <i *ngIf="i === question.correct_option" class="fa fa-check"></i>
+                            </p>
+                        </div>
+                        <div *ngIf="question.type !== 'test'">
+                            <p [innerHTML]=question.statement></p>
+                            <p>
+                                <span class="font-weight-bold">Solución: </span>{{ question.solution ? question.solution : 'Sin solucion' }}
+                            </p>
+                        </div>
+                        <div *ngIf="deletingQId !== qi">
+                            <button type="button" class="btn btn-link edit-button linkbutton-blue">
+                                <i class="fa fa-edit"></i>&nbsp;Editar</button>
+                            <button (click)="deleteQuestion(qi)" type="button" class="btn btn-link edit-button linkbutton-red">
+                                <i class="fa fa-trash"></i>&nbsp;Descartar</button>
+                        </div>
+                        <div *ngIf="deletingQId === qi">
+                            <span class="deleting-msg">Estás seguro?</span>
+                            <button (click)="deleteQuestion(qi)" type="button" class="btn btn-link edit-button linkbutton-red">
+                                <i class="fa fa-check"></i>&nbsp;Confirmar</button>
+                            <button (click)="deletingQId = -1" type="button" class="btn btn-link edit-button linkbutton-blue">
+                                <i class="fa fa-times"></i>&nbsp;Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

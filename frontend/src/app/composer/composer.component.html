@@ -1,4 +1,4 @@
-<div (window:resize)="onResize($event)" [style.height.px]="previewDimensions.height">
+<div class="container-page" (window:resize)="onResize($event)" [style.height.px]="previewDimensions.height">
   <div class="b-window-header d-flex">
     <span class="b-window-title">Compositor</span>
     <div class="d-flex justify-content-between w-100">
@@ -12,7 +12,7 @@
         <div class="control-button button-blue2">
           <i class="fa fa-save"></i> Guardar como...
         </div>
-        <div class="control-button button-teal">
+        <div class="control-button button-blue2">
           <i class="fa fa-cloud-download"></i> Descargar como .pdf
         </div>
       </div>
@@ -21,7 +21,7 @@
 
   <!-- Left Menu -->
 
-  <div class="menu-section section-left">
+  <div class="menu-section section-left" [style.overflow-y]="previewDimensions.height ? 'auto' : 'hidden'">
     <div class="b-card-wrapper">
       <div class="b-card">
         <!-- Generation -->
@@ -137,7 +137,7 @@
 
   <!-- Right Menu -->
 
-  <div class="menu-section section-right">
+  <div class="menu-section section-right" [style.overflow-y]="previewDimensions.height ? 'auto' : 'hidden'">
     <div class="b-card-wrapper">
       <div class="b-card">
         <div class="b-card-header">
@@ -200,7 +200,7 @@
 
   <!-- Main -->
 
-  <div class="section-main" [style.width.px]="previewDimensions.width">
+  <div class="section-main" [style.width.px]="previewDimensions.width" [style.overflow-y]="previewDimensions.height ? 'auto' : 'hidden'">
     <div class="preview-container">
       <div class="page-container" [style.width.px]="paperDimensions.width" [style.height.px]="paperDimensions.height">
         <div *ngFor="let q of examItems; let i = index">

@@ -1,9 +1,11 @@
 .menu-left {
     width: 25rem;
-    height: 100%;
+    height: inherit;
     overflow: hidden;
     position: absolute;
     left: 0;
+    z-index: 2;
+    box-shadow: 0 0 2.5rem -1rem black;
 }
 
 .searchbar {
@@ -14,10 +16,12 @@
 
 .collections-list {
     background-color: white;
-    overflow-y: visible;
+    overflow-y: auto;
 }
 
-.collection-container {}
+.collection-container {
+    cursor: pointer;
+}
 
 .collection-title {
     padding: .15rem .5rem;
@@ -26,12 +30,20 @@
 }
 
 .collection-body {
-    padding: .15rem .5rem;
+    padding: .25rem .5rem;
+}
+
+.collection-content {
+    font-size: 10pt;
 }
 
 .collection-view {
     position: absolute;
     right: 0;
+    height: inherit;
+    overflow-y: auto;
+    background-color: var(--color-bg-global);
+    z-index: 1;
 }
 
 .title-selected {
@@ -42,4 +54,54 @@
 .body-selected {
     background-color: var(--color-blue-2);
     color: white;
+}
+
+.button-blue2:hover {
+    background-color: var(--color-blue-2-hover);
+}
+
+.view-col-statement {
+    background-color: var(--color-blue-1);
+    color: white;
+    padding: .25rem .5rem
+}
+
+.ap-header-diff {
+    display: inline-block;
+    font-size: 7pt;
+    width: 2.3rem;
+    margin-right: .4rem;
+    text-align: end;
+}
+
+.view-col-content {
+    padding: .3rem 1rem;
+    background-color: white;
+}
+
+.edit-button {
+    text-decoration: none;
+    padding: .1rem .3rem;
+    margin: 0;
+    line-height: 1;
+}
+
+.linkbutton-blue {
+    color: var(--color-blue-1);
+}
+
+.linkbutton-blue:hover {
+    color: var(--color-blue-1-hover);
+}
+
+.linkbutton-red {
+    color: var(--color-red-1);
+}
+
+.linkbutton-red:hover {
+    color: var(--color-red-1-hover);
+}
+
+.deleting-msg {
+    color: var(--color-red-1);
 }
