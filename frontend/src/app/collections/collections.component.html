@@ -4,7 +4,7 @@
         <div *ngIf="selectedId === -1 else viewing" class="d-flex justify-content-between w-100">
             <span class="b-window-ongoing">Explorando colecciones</span>
             <div class="d-flex">
-                <div class="control-button button-blue2">
+                <div class="control-button button-blue">
                     <i class="fa fa-plus"></i> Nueva coleccion
                 </div>
             </div>
@@ -15,11 +15,11 @@
                     <span class="font-weight-bold">{{ oCollections[selectedId].title }}</span>
                 </span>
                 <div class="d-flex">
-                    <div class="control-button button-blue2">
-                        <i class="fa fa-check"></i> Guardar cambios
+                    <div class="control-button button-blue">
+                        <i class="fa fa-plus"></i> Añadir pregunta
                     </div>
                     <div class="control-button button-blue2">
-                        <i class="fa fa-plus"></i> Añadir pregunta
+                        <i class="fa fa-plus"></i> Nueva coleccion
                     </div>
                 </div>
             </div>
@@ -87,21 +87,21 @@
                     </div>
                     <div class="view-col-content">
                         <div *ngIf="question.type === 'test'">
-                            <p [innerHTML]=question.statement></p>
-                            <p *ngFor="let option of question.options; let i = index">
-                                &nbsp;&nbsp;{{ i + 1 }}.
-                                <span [innerHTML]=option></span>&nbsp;
-                                <i *ngIf="i === question.correct_option" class="fa fa-check"></i>
-                            </p>
+                            <div [innerHTML]=question.statement></div>
+                            <div *ngFor="let option of question.options; let i = index">
+                                <span class="view-options-number" [class.font-weight-bold]="i === question.correct_option">{{ i + 1 }})</span>
+                                <span [innerHTML]=option [class.font-weight-bold]="i === question.correct_option" class="view-options-text"></span>
+                            </div>
                         </div>
                         <div *ngIf="question.type !== 'test'">
                             <p [innerHTML]=question.statement></p>
                             <p>
-                                <span class="font-weight-bold">Solución: </span>{{ question.solution ? question.solution : 'Sin solucion' }}
+                                <span class="font-weight-bold view-options-number">Solución: </span>
+                                <span [innerHTML]="question.solution ? question.solution : 'Sin solucion'" class="view-options-text"></span>
                             </p>
                         </div>
                         <div *ngIf="deletingQId !== qi">
-                            <button type="button" class="btn btn-link edit-button linkbutton-blue">
+                            <button (click)="editQuestion(qi, true)" type="button" class="btn btn-link edit-button linkbutton-blue">
                                 <i class="fa fa-edit"></i>&nbsp;Editar</button>
                             <button (click)="deleteQuestion(qi)" type="button" class="btn btn-link edit-button linkbutton-red">
                                 <i class="fa fa-trash"></i>&nbsp;Descartar</button>
@@ -114,6 +114,94 @@
                                 <i class="fa fa-times"></i>&nbsp;Cancelar</button>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit overlay -->
+
+    <div *ngIf="editingQId !== -1" class="edit-overlay">
+        <div class="edit-editor">
+            <div class="editor-header">Coleccion
+                <span class="font-weight-bold">{{ oCollections[selectedId].title }}</span>
+                / Pregunta
+                <span class="font-weight-bold">{{ editingQId + 1 }}</span>
+            </div>
+            <div class="editor-options">
+                <p class="editor-label">Tipo</p>
+                <div class="form-check">
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                        <label class="btn btn-light" [class.active]="editingQ.type === 'test'">
+                            <input (click)="editingQ.type = 'test'" type="radio" name="options" id="option1" autocomplete="off"> Test
+                        </label>
+                        <label class="btn btn-light" [class.active]="editingQ.type === 'short'">
+                            <input (click)="editingQ.type = 'short'" type="radio" name="options" id="option2" autocomplete="off"> Ejercicio
+                        </label>
+                        <label class="btn btn-light" [class.active]="editingQ.type === 'long'">
+                            <input (click)="editingQ.type = 'long'" type="radio" name="options" id="option3" autocomplete="off"> Problema
+                        </label>
+                    </div>
+                </div>
+                <br>
+                <p class="editor-label">Dificultad</p>
+                <div class="slidecontainer">
+                    <input type="range" min="1" max="3" value="2" class="slider" [(ngModel)]="editingQ.difficulty">
+                    <div class="d-flex justify-content-between">
+                        <span>Facil</span>
+                        <span>Intermedio</span>
+                        <span>Dificil</span>
+                    </div>
+                </div>
+            </div>
+            <div class="collection-title">Enunciado</div>
+            <quill-editor [style]="quillStyle" [(ngModel)]="editingQ.statement" [modules]="quillModules" [placeholder]="'Escribe aquí...'"></quill-editor>
+            <div *ngIf="editingQ.type !== 'test'">
+                <div class="collection-title">Solución</div>
+                <quill-editor [style]="quillStyle" [(ngModel)]="editingQ.solution" [modules]="quillModules" [placeholder]="'Escribe aquí...'"></quill-editor>
+            </div>
+            <div *ngIf="editingQ.type === 'test'">
+                <div class="collection-title row">
+                    <div class="col-4 d-flex justify-content-between">
+                        <span>Opciones</span>
+                        <button (click)="editingQ.options.push('Nueva opción')" type="button" class="btn btn-link edit-button button-newoption">
+                            <i class="fa fa-plus"></i>&nbsp;Nueva opción</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="editor-options-container col-4">
+                        <div (click)="editingOId = io" [class.option-active]="editingOId === io" class="d-flex editor-option" *ngFor="let o of editingQ.options; let io = index">
+                            <div [class.option-id-active]="editingOId === io" class="option-id">{{ io + 1 }}</div>
+                            <div [innerHTML]="o" class="option-text my-auto"></div>
+                            <div *ngIf="editingQ.correct_option === io" class="option-correct my-auto">
+                                <i class="fa fa-check"></i>
+                            </div>
+                            <button (click)="editingQ.correct_option = io" *ngIf="editingQ.correct_option !== io" [class.button-changeoption]="editingOId !== io"
+                                [class.button-changeoption-invert]="editingOId === io" type="button" class="btn btn-link edit-button">
+                                <i class="fa fa-check"></i>
+                            </button>
+                            <span (click)="editingQ.correct_option === io ? editingQ.correct_option = 0 : false; editingOId === io ? editingOId = -1 : false; editingQ.options.splice(io, 1);"
+                                class="option-remove">
+                                <i class="fa fa-times"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="quill-optionedit col-8">
+                        <quill-editor [(ngModel)]="editingQ.options[editingOId]" [style]="quillStyle" [modules]="quillModules" [placeholder]="'Escribe aquí...'"></quill-editor>
+                        <div *ngIf="editingOId === -1" class="editor-cover">
+                            <span class="editor-cover-text">
+                                Seleccione una opcion para editarla
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="editor-options d-flex justify-content-end w-100">
+                <div (click)="saveQuestion()" class="control-button button-green">
+                    <i class="fa fa-check"></i> Guardar
+                </div>
+                <div (click)="editQuestion(null, false)" class="control-button button-blue">
+                    <i class="fa fa-times"></i> Descartar
                 </div>
             </div>
         </div>
