@@ -16,6 +16,7 @@ export class CollectionsComponent implements OnInit {
 
   public pageHeight: number;
   public previewWidth: number;
+  public collectionsHeight: number;
 
   public oCollections: Array<any>;
   public quillModules: {};
@@ -65,6 +66,7 @@ export class CollectionsComponent implements OnInit {
 
     this.pageHeight = 0;
     this.previewWidth = 0;
+    this.collectionsHeight = 0;
 
     this.initializeValues();
 
@@ -106,6 +108,8 @@ export class CollectionsComponent implements OnInit {
       - document.querySelector('div.b-window-header').clientHeight;
     this.previewWidth = window.innerWidth
       - document.querySelector('div.menu-left').clientWidth;
+    this.collectionsHeight = this.pageHeight
+      - document.querySelector('div.searchbar').clientHeight;
   }
 
   public editQuestion(id, status: boolean = true) {
@@ -137,6 +141,7 @@ export class CollectionsComponent implements OnInit {
 
   public saveQuestion() {
     this.oCollections[this.selectedId].questions[this.editingQId] = JSON.parse(JSON.stringify(this.editingQ));
+    this.oCollections[this.selectedId].count = this.countQuestions(this.oCollections[this.selectedId]);
     this.collectionsService.putCollection(this.oCollections[this.selectedId]);
     this.editQuestion(null, false);
   }
@@ -146,8 +151,17 @@ export class CollectionsComponent implements OnInit {
       this.deletingQId = id;
     } else if (this.deletingQId = id) {
       this.oCollections[this.selectedId].questions.splice(id, 1);
+      this.oCollections[this.selectedId].count = this.countQuestions(this.oCollections[this.selectedId]);
       this.collectionsService.putCollection(this.oCollections[this.selectedId]);
     }
+  }
+
+  private countQuestions(collection) {
+    return {
+      test: collection.questions.filter(x => x.type === 'test').length,
+      short: collection.questions.filter(x => x.type === 'short').length,
+      long: collection.questions.filter(x => x.type === 'long').length,
+    };
   }
 
   public editCollection(id, status: boolean = true) {
@@ -182,14 +196,23 @@ export class CollectionsComponent implements OnInit {
 
   public saveCollection() {
     if (this.oCollections[this.editingCId]) {
-      this.collectionsService.putCollection(this.editingC);
+      this.collectionsService.putCollection(this.editingC)
+        .then(() => this.collectionsService.getCollections()
+          .then(res => {
+            this.oCollections = res;
+            this.editCollection(null, false);
+          })
+        );
     } else {
-      this.collectionsService.postCollection(this.editingC).then(
-        () => this.collectionsService.getCollections()
-          .then(res => this.oCollections = res)
-      );
+      this.collectionsService.postCollection(this.editingC)
+        .then(() => this.collectionsService.getCollections()
+          .then(res => {
+            this.oCollections = res;
+            this.selectedId = this.editingCId;
+            this.editCollection(null, false);
+          })
+        );
     }
-    this.editCollection(null, false);
   }
 
   public deleteCollection(id) {

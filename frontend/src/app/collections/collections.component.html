@@ -35,7 +35,7 @@
                 </div>
                 <input type="text" class="form-control" name="search_col" id="search_col" placeholder="Buscar colecciones...">
             </div>
-            <div class="collections-list">
+            <div class="collections-list" [style.height.px]="collectionsHeight">
                 <div *ngFor="let collection of oCollections; let i = index" class="collection-container" (click)="selectedId = i">
                     <div class="collection-title" [class.title-selected]="selectedId === i">{{ collection.title ? collection.title : 'Coleccion sin nombre' }}</div>
                     <div class="collection-body" [class.body-selected]="selectedId === i">
