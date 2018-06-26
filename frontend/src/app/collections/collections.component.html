@@ -4,7 +4,7 @@
         <div *ngIf="selectedId === -1 else viewing" class="d-flex justify-content-between w-100">
             <span class="b-window-ongoing">Explorando colecciones</span>
             <div class="d-flex">
-                <div class="control-button button-blue">
+                <div (click)="editCollection(oCollections.length, true)" class="control-button button-blue">
                     <i class="fa fa-plus"></i> Nueva coleccion
                 </div>
             </div>
@@ -15,10 +15,10 @@
                     <span class="font-weight-bold">{{ oCollections[selectedId].title }}</span>
                 </span>
                 <div class="d-flex">
-                    <div class="control-button button-blue">
+                    <div (click)="editQuestion(oCollections[selectedId].questions.length, true)" class="control-button button-blue">
                         <i class="fa fa-plus"></i> Añadir pregunta
                     </div>
-                    <div class="control-button button-blue2">
+                    <div (click)="editCollection(oCollections.length, true)" class="control-button button-blue2">
                         <i class="fa fa-plus"></i> Nueva coleccion
                     </div>
                 </div>
@@ -45,7 +45,7 @@
                             : 'Coleccion vacía' }}</p>
                     </div>
                     <div class="pl-1" *ngIf="deletingCId !== i">
-                        <button type="button" class="btn btn-link edit-button linkbutton-blue">
+                        <button (click)="editCollection(i, true)" type="button" class="btn btn-link edit-button linkbutton-blue">
                             <i class="fa fa-edit"></i>&nbsp;Editar detalles</button>
                         <button (click)="deleteCollection(i)" type="button" class="btn btn-link edit-button linkbutton-red">
                             <i class="fa fa-trash"></i>&nbsp;Borrar</button>
@@ -201,6 +201,34 @@
                     <i class="fa fa-check"></i> Guardar
                 </div>
                 <div (click)="editQuestion(null, false)" class="control-button button-blue">
+                    <i class="fa fa-times"></i> Descartar
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Collection edit overlay -->
+
+    <div *ngIf="editingCId !== -1" class="edit-overlay">
+        <div class="edit-details">
+            <div class="editor-header">Editando coleccion
+                <span class="font-weight-bold">{{ oCollections[editingCId] ? oCollections[editingCId].title : 'Nueva colección' }}</span>
+            </div>
+            <div class="edit-details-form">
+                <div class="form-group">
+                    <label for="col_name">Nombre</label>
+                    <input [(ngModel)]="editingC.title" type="text" name="col_name" id="col_name" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="col_desc">Descripción</label>
+                    <textarea [(ngModel)]="editingC.description" class="form-control" name="col_desc" id="col_desc" rows="3" style="resize: none"></textarea>
+                </div>
+            </div>
+            <div class="editor-options d-flex justify-content-end w-100">
+                <div (click)="saveCollection()" class="control-button button-green">
+                    <i class="fa fa-check"></i> Guardar
+                </div>
+                <div (click)="editCollection(null, false)" class="control-button button-blue">
                     <i class="fa fa-times"></i> Descartar
                 </div>
             </div>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../services/shared.service';
 import { CollectionsService } from '../services/collections.service';
+import { TouchSequence } from 'selenium-webdriver';
 
 @Component({
   selector: 'app-collections',
@@ -21,13 +22,16 @@ export class CollectionsComponent implements OnInit {
   public quillStyle: {};
 
   public selectedId: number;
-  public deletingQId: number;
-  public deletingCId: number;
-  public editingQId: number;
-  public editingCId: number;
-  public editingOId: number;
 
+  public editingQId: number;
   public editingQ: any;
+  public deletingQId: number;
+
+  public editingCId: number;
+  public editingC: any;
+  public deletingCId: number;
+
+  public editingOId: number;
 
   constructor(
     private sharedService: SharedService,
@@ -62,14 +66,7 @@ export class CollectionsComponent implements OnInit {
     this.pageHeight = 0;
     this.previewWidth = 0;
 
-    this.selectedId = -1;
-    this.deletingQId = -1;
-    this.deletingCId = -1;
-    this.editingQId = -1;
-    this.editingCId = -1;
-    this.editingOId = -1;
-
-    this.editingQ = {};
+    this.initializeValues();
 
     this.sharedService.loginEmitted.subscribe(data => {
       if (data !== 'NOT_INIT') {
@@ -79,6 +76,20 @@ export class CollectionsComponent implements OnInit {
         this.loadComponent();
       }
     });
+  }
+
+  private initializeValues() {
+    this.oCollections = [];
+
+    this.selectedId = -1;
+    this.deletingQId = -1;
+    this.deletingCId = -1;
+    this.editingQId = -1;
+    this.editingCId = -1;
+    this.editingOId = -1;
+
+    this.editingQ = {};
+    this.editingC = {};
   }
 
   private loadComponent() {
@@ -100,7 +111,16 @@ export class CollectionsComponent implements OnInit {
   public editQuestion(id, status: boolean = true) {
     if (status) {
       this.editingQId = id;
-      this.editingQ = JSON.parse(JSON.stringify(this.oCollections[this.selectedId].questions[this.editingQId]));
+      this.editingQ = this.oCollections[this.selectedId].questions[this.editingQId] ?
+        JSON.parse(JSON.stringify(this.oCollections[this.selectedId].questions[this.editingQId])) :
+        {
+          statement: '',
+          difficulty: 0,
+          type: 'short',
+          options: [],
+          correct_option: 0,
+          solution: ''
+        };
     } else {
       this.editingQId = -1;
       this.editingOId = -1;
@@ -117,6 +137,7 @@ export class CollectionsComponent implements OnInit {
 
   public saveQuestion() {
     this.oCollections[this.selectedId].questions[this.editingQId] = JSON.parse(JSON.stringify(this.editingQ));
+    this.collectionsService.putCollection(this.oCollections[this.selectedId]);
     this.editQuestion(null, false);
   }
 
@@ -124,15 +145,63 @@ export class CollectionsComponent implements OnInit {
     if (this.deletingQId === -1) {
       this.deletingQId = id;
     } else if (this.deletingQId = id) {
-      // TODO
+      this.oCollections[this.selectedId].questions.splice(id, 1);
+      this.collectionsService.putCollection(this.oCollections[this.selectedId]);
     }
+  }
+
+  public editCollection(id, status: boolean = true) {
+    if (status) {
+      this.editingCId = id;
+      this.editingC = this.oCollections[id] ?
+        JSON.parse(JSON.stringify(this.oCollections[id])) :
+        {
+          count: {
+            test: 0,
+            short: 0,
+            long: 0
+          },
+          title: '',
+          description: '',
+          questions: []
+        };
+    } else {
+      this.editingCId = -1;
+      this.editingC = {
+        count: {
+          test: 0,
+          short: 0,
+          long: 0
+        },
+        title: '',
+        description: '',
+        questions: []
+      };
+    }
+  }
+
+  public saveCollection() {
+    if (this.oCollections[this.editingCId]) {
+      this.collectionsService.putCollection(this.editingC);
+    } else {
+      this.collectionsService.postCollection(this.editingC).then(
+        () => this.collectionsService.getCollections()
+          .then(res => this.oCollections = res)
+      );
+    }
+    this.editCollection(null, false);
   }
 
   public deleteCollection(id) {
     if (this.deletingCId === -1) {
       this.deletingCId = id;
     } else if (this.deletingCId = id) {
-      // TODO
+      const colId = this.oCollections[id]._id;
+      this.initializeValues();
+      this.collectionsService.deleteCollection(colId).then(
+        () => this.collectionsService.getCollections()
+          .then(res => this.oCollections = res)
+      );
     }
   }
 }

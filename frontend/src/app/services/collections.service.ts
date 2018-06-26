@@ -40,8 +40,8 @@ export class CollectionsService {
       .catch(error => this.errorService.throwError(error, this));
   }
 
-  public putCollection(id: String, collection: any): Promise<any> {
-    return this.http.put(this.URLAPI + 'collections/' + id, collection, this.httpOptions).toPromise()
+  public putCollection(collection: any): Promise<any> {
+    return this.http.put(this.URLAPI + 'collections/' + collection._id, collection, this.httpOptions).toPromise()
       .then(res => res)
       .catch(error => this.errorService.throwError(error, this));
   }

@@ -120,7 +120,9 @@
     margin: 2rem auto;
     min-width: 60rem;
     width: 50%;
+    max-height: 90%;
     background-color: white;
+    overflow-y: auto;
 }
 
 .editor-options {
@@ -306,4 +308,16 @@
 
 .view-options-text {
     display: inline-block;
+}
+
+.edit-details {
+    margin: 4rem auto;
+    min-width: 30rem;
+    width: 30%;
+    background-color: var(--color-blue-1);
+}
+
+.edit-details-form {
+    color: var(--color-blue-1-text);
+    padding: .4rem;
 }
