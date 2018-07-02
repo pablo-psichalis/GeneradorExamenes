@@ -19,6 +19,24 @@ exports.getAllCollections = () => Collection.find({});
 
 exports.getCollection = id => Collection.findById(new ObjectId(id));
 
-exports.updateCollection = (id, collection) => Collection.findByIdAndUpdate(new ObjectId(id), collection, { new: true });
+// exports.getCollectionQuestionCount = id => Collection.findById(new ObjectId(id), 'count');
+
+exports.updateCollection = (id, collection) =>
+  Collection.findByIdAndUpdate(new ObjectId(id), collection, { new: true });
 
 exports.deleteCollection = id => Collection.remove({ _id: new ObjectId(id) });
+
+exports.getQuestionsByType = (id, type) => Collection.aggregate([
+  { $match: { _id: new ObjectId(id) } },
+  { $project: { questions: true } },
+  { $unwind: '$questions' },
+  { $match: { 'questions.type': type } },
+]);
+
+exports.getNumberOfQuestionsByType = (id, type, num) => Collection.aggregate([
+  { $match: { _id: new ObjectId(id) } },
+  { $project: { questions: true } },
+  { $sample: { size: num } },
+  { $unwind: '$questions' },
+  { $match: { 'questions.type': type } },
+]);

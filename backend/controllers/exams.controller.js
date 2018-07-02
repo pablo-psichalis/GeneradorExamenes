@@ -38,3 +38,11 @@ exports.deleteExam = (req, res, next) => {
     })
     .catch(err => next(err));
 };
+/*
+exports.generateExam = (req, res, next) => {
+  ExamsDB.generateExam()
+    .then((exam) => {
+      res.status(200).json(exam);
+    })
+    .catch(err => next(err));
+}; */

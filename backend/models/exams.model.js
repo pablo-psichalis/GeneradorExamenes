@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const { ObjectId } = require('mongoose').Types;
 
-
 const Exam = mongoose.model('exams', {
   title: String,
   date: Date,

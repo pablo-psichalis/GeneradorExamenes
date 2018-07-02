@@ -23,6 +23,14 @@ exports.getCollection = (req, res, next) => {
     .catch(err => next(err));
 };
 
+/* exports.getCollectionQuestionCount = (req, res, next) => {
+  CollectionsDB.getCollectionQuestionCount(req.params.id)
+    .then((count) => {
+      res.status(200).json(count);
+    })
+    .catch(err => next(err));
+}; */
+
 exports.updateCollection = (req, res, next) => {
   CollectionsDB.updateCollection(req.params.id, req.body)
     .then((response) => {
@@ -38,3 +46,24 @@ exports.deleteCollection = (req, res, next) => {
     })
     .catch(err => next(err));
 };
+
+/* exports.getQuestionsByType = (req, res, next) => {
+  CollectionsDB.getQuestionsByType(req.params.id, req.params.type)
+    .then((response) => {
+      const questions = response.map(elem => elem.questions);
+      res.status(200).json(questions);
+    })
+    .catch(err => next(err));
+};
+ */
+exports.getQuestionsByType = (id, type) =>
+  CollectionsDB.getQuestionsByType(id, type)
+    .then(response => response.map(elem => elem.questions));
+
+
+// Randomly get "count" number of questions from the collection that matches the _id "id"
+exports.getNumberOfQuestionsByType = (id, type, count) =>
+  CollectionsDB.getQuestionsByType(id, type, count)
+    .then(response => response.map(elem => elem.questions));
+
+// this.getQuestionsByType('5b3a68abed273c24248af9cd', 'long').then(res => console.log(res));
