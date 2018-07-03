@@ -26,6 +26,7 @@
                 long: Number,   // preguntas largas
             }
         }
+
 #### Apartado de examen (section)
 Cada una de los apartados/secciones que forman el examen.
 
@@ -175,7 +176,6 @@ Endpoints del backend y si requieren autenticación (PROTECTED = SI) o no (PROTE
 | DELETE | /collections/:id | SI | Utilizar _id de Mongo
 | PUT | /collections/:id | SI | Utilizar _id de Mongo
 
-
 ### Login
 Para loguearse es necesario hacer un POST /login con un body que siga el siguiente patrón: 
 
@@ -217,3 +217,33 @@ Body que devuelve el método POST de la petición anterior:
         "password": "1234",
         "__v": 0
     }
+
+## Generación de exámenes
+### Petición
+Para la generación de exámenes, se envía por POST un JSON con la configuración de la generación del examen:
+
+        {
+            "collections": Array,
+            "test":
+                {
+                    "count": Number,
+                    "points": Number
+                },
+            "short":
+                {
+                    "count": Number,
+                    "points": Number
+                },
+            "long":
+                {
+                    "count": Number,
+                    "points": Number
+                },
+        }
+
+Este JSON incluirá en el campo `collections` un array con las _ids de las colecciones de las que se extraerán las preguntas para generar el examen, y un objeto cada tipo de pregunta (`test`: tipo test, `short`: preguntas cortas,`long`: preguntas largas) con sus parámetros de generación:
+* `count`: Cantidad de preguntas de ese tipo
+* `points`: Total de puntos de ese tipo, a distribuir proporcionalmente entre todas las preguntas de dicho tipo (en función de su dificultad asignada)
+
+### Respuesta
+Se devolverá como respuesta un [objeto de examen](#examen) junto con la puntuación calculada.
