@@ -1,13 +1,12 @@
 const collectionsController = require('../controllers/collections.controller');
 
-let qTest = [];
-let qShort = [];
-let qLong = [];
+const qTest = [];
+const qShort = [];
+const qLong = [];
 
 generateExam();
 
 function generateExam() {
-
   // Mock data
   const collections = [
     '5b3259f84bd13d19bc69c2ae',
@@ -17,8 +16,9 @@ function generateExam() {
 
   const objQuery = {
     test: {
-      count: 4,
-      points: 3,
+      count: 5,
+      points: 2.5,
+      // 4, 3
     },
     short: {
       count: 3,
@@ -42,7 +42,35 @@ function generateExam() {
       qLong.splice((Math.floor(Math.random() * qLong.length)), 1);
     }
 
-    // TODO: Assign points to each question
+    let sumDifficultyPointsTest = 0;
+    qTest.forEach((elem) => {
+      sumDifficultyPointsTest += (elem.question.difficulty === 0) ? 1 : elem.question.difficulty; // TODO: check after BD fix
+    });
+    let sumDifficultyPointsShort = 0;
+    qTest.forEach((elem) => {
+      sumDifficultyPointsShort += (elem.question.difficulty === 0) ? 1 : elem.question.difficulty;
+    });
+    let sumDifficultyPointsLong = 0;
+    qTest.forEach((elem) => {
+      sumDifficultyPointsLong += (elem.question.difficulty === 0) ? 1 : elem.question.difficulty;
+    });
+
+    const k = (objQuery.test.points / sumDifficultyPointsTest);
+    qTest.forEach((elem, i) => {
+      qTest[i].points =
+        ((qTest[i].question.difficulty === 0) ? 1 : qTest[i].question.difficulty) * k;
+    });
+
+    qShort.forEach((elem, i) => {
+      qShort[i].points =
+        qShort[i].question.difficulty * (objQuery.short.points / sumDifficultyPointsShort);
+    });
+
+    qLong.forEach((elem, i) => {
+      qLong[i].points =
+        qLong[i].question.difficulty * (objQuery.long.points / sumDifficultyPointsLong);
+    });
+
 
     // Generated exam
     const examen = {
@@ -50,7 +78,7 @@ function generateExam() {
       short: qShort,
       long: qLong,
     };
-    console.log(examen.test);
+    console.log(examen);
   });
 }
 
@@ -64,9 +92,9 @@ function getQuestions(collections, objQuery) {
 
     collections.forEach((id) => {
       promises = promises.concat([
-        collectionsController.getNumberOfQuestionsByType(id, 'test', numTest).then((res) => { res.map((question) => { qTest.push({ question, points: null }); }); }),
-        collectionsController.getNumberOfQuestionsByType(id, 'short', numShort).then((res) => { res.map((question) => { qShort.push({ question, points: null }); }); }),
-        collectionsController.getNumberOfQuestionsByType(id, 'long', numLong).then((res) => { res.map((question) => { qLong.push({ question, points: null }); }); }),
+        collectionsController.getNumberOfQuestionsByType(id, 'test', numTest).then((res) => { res.map((question) => { qTest.push({ question, points: 0 }); }); }),
+        collectionsController.getNumberOfQuestionsByType(id, 'short', numShort).then((res) => { res.map((question) => { qShort.push({ question, points: 0 }); }); }),
+        collectionsController.getNumberOfQuestionsByType(id, 'long', numLong).then((res) => { res.map((question) => { qLong.push({ question, points: 0 }); }); }),
       ]);
     });
     return Promise.all(promises);

@@ -4,7 +4,7 @@ exports.saveExam = (req, res, next) => {
   ExamsDB.saveExam(req.body)
     .then((response) => {
       res.status(200).json({ success: true, data: response });
-    });
+    }).catch(err => next(err));
 };
 
 exports.getAllExams = (req, res, next) => {
@@ -38,11 +38,12 @@ exports.deleteExam = (req, res, next) => {
     })
     .catch(err => next(err));
 };
-/*
+
 exports.generateExam = (req, res, next) => {
-  ExamsDB.generateExam()
+  // TODO: change generateExam with the proper service call
+  ExamsDB.generateExam(req.body)
     .then((exam) => {
       res.status(200).json(exam);
     })
     .catch(err => next(err));
-}; */
+};

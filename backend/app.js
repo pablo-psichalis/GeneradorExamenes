@@ -33,6 +33,10 @@ app.use((req, res, next) => {
   next();
 });
 
+
+require('./services/generateExams.service');
+
+
 app.use('/', indexRouter);
 app.use('/collections', collectionsRouter);
 app.use('/exams', examsRouter);
