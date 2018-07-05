@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../services/shared.service';
+import { CollectionsService } from '../services/collections.service';
+import { ExamsService } from '../services/exams.service';
 
 @Component({
   selector: 'app-composer',
@@ -11,6 +13,9 @@ export class ComposerComponent implements OnInit {
   public isLogged: boolean;
   public isAdmin: boolean;
 
+  public quillModules: any;
+  public quillStyle: any;
+
   public previewDimensions: {
     width: number,
     height: number
@@ -20,14 +25,93 @@ export class ComposerComponent implements OnInit {
     height: number
   };
 
-  public collectionItems = [];
-  public examItems = [];
+  public addingOverlay: boolean;
+
+  public oCollections: Array<any>;
+  public editingCollections: Array<any>;
+  public typesCount: {
+    test: number,
+    short: number,
+    long: number
+  };
+  public generationOptions: {
+    test: {
+      count: number,
+      points: number
+    },
+    short: {
+      count: number,
+      points: number
+    },
+    long: {
+      count: number,
+      points: number
+    },
+    difficulty: number
+  };
+  public exam: {
+    title: string,
+    date: string,
+    description: string,
+    subject: string,
+    school_name: string,
+    sections: Array<any>
+  };
 
   constructor(
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private collectionsService: CollectionsService,
+    private examsService: ExamsService,
   ) { }
 
   ngOnInit() {
+    this.quillModules = {
+      toolbar: [
+        ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+        ['blockquote', 'code-block'],
+
+        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+        [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
+        [{ 'align': [] }],
+        [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
+
+        [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+        [{ 'header': [false, 5, 4, 3, 2, 1] }],
+
+        [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+        [{ 'font': [] }],
+        ['clean'],                                         // remove formatting button
+        ['image']                         // link and image, video
+      ]
+    };
+    this.quillStyle = {
+      'height': 'auto',
+      'min-height': '5rem'
+    };
+    this.addingOverlay = false;
+    this.oCollections = [];
+    this.editingCollections = [];
+    this.typesCount = {
+      test: 0,
+      short: 0,
+      long: 0
+    };
+    this.generationOptions = {
+      test: {
+        count: 0,
+        points: 0
+      },
+      short: {
+        count: 0,
+        points: 0
+      },
+      long: {
+        count: 0,
+        points: 0
+      },
+      difficulty: 0
+    };
+
     this.previewDimensions = {
       height: 0,
       width: 0
@@ -35,6 +119,15 @@ export class ComposerComponent implements OnInit {
     this.paperDimensions = {
       height: 0,
       width: 0
+    };
+
+    this.exam = {
+      title: '',
+      date: '',
+      description: '',
+      subject: '',
+      school_name: '',
+      sections: []
     };
 
     this.sharedService.loginEmitted.subscribe(data => {
@@ -48,49 +141,44 @@ export class ComposerComponent implements OnInit {
   }
 
   private loadComponent() {
-
-    this.collectionItems = [
-      'Coleccion 1',
-      'Coleccion 2',
-      'Coleccion 3',
-      'Coleccion 4',
-      'Coleccion 5',
-      'Coleccion 6',
-      'Coleccion 7',
-      'Coleccion 8'
-    ];
-    // tslint:disable:max-line-length
-    this.examItems = [{
-      difficulty: 3,
-      points: 3,
-      type: 'Test',
-      content: 'Pregunta de test asdasdasda 1',
-      expanded: false
-    },
-    {
-      difficulty: 2,
-      points: 2,
-      type: 'Test',
-      content: 'Pregunta de test dasdajida sdajisda 2',
-      expanded: false
-    },
-    {
-      difficulty: 1,
-      points: 2,
-      type: 'Ejercicio',
-      content: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?',
-      expanded: false
-    },
-    {
-      difficulty: 3,
-      points: 2,
-      type: 'Problema',
-      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-      expanded: false
-    }];
+    this.addingOverlay = false;
+    this.oCollections = [];
+    this.editingCollections = [];
+    this.typesCount = {
+      test: 0,
+      short: 0,
+      long: 0
+    };
+    this.generationOptions = {
+      test: {
+        count: 0,
+        points: 0
+      },
+      short: {
+        count: 0,
+        points: 0
+      },
+      long: {
+        count: 0,
+        points: 0
+      },
+      difficulty: 0
+    };
+    this.exam = {
+      title: '',
+      date: '',
+      description: '',
+      subject: '',
+      school_name: '',
+      sections: []
+    };
 
     this.onResize(null);
 
+    this.collectionsService.getCollections()
+      .then(res => this.oCollections = res)
+      .then(() => this.oCollections.map(x => x.added = false))
+      .then(() => this.sharedService.emitStatus('LOADED'));
   }
 
   public onResize(event) {
@@ -109,7 +197,49 @@ export class ComposerComponent implements OnInit {
   }
 
   public expandQuestion(index: number) {
-    this.examItems[index].expanded = this.examItems[index].expanded ? false : true;
+    // this.exam[index].expanded = this.exam[index].expanded ? false : true;
+  }
+
+  public editCollections(action: boolean = true) {
+    if (!this.addingOverlay) {
+      this.addingOverlay = true;
+      this.editingCollections = JSON.parse(JSON.stringify(this.oCollections));
+    } else {
+      this.addingOverlay = false;
+      if (action) {
+        this.oCollections = JSON.parse(JSON.stringify(this.editingCollections));
+        this.typesCount = {
+          test: 0,
+          short: 0,
+          long: 0
+        };
+        this.oCollections.forEach(x => {
+          if (x.added) {
+            this.typesCount.test += x.count.test;
+            this.typesCount.short += x.count.short;
+            this.typesCount.long += x.count.long;
+          }
+        });
+      }
+      this.editingCollections = [];
+    }
+  }
+
+  public isAdded(x): boolean {
+    return x.added === true;
+  }
+
+  public generateExam() {
+    const collectionsArray = [];
+    this.oCollections.filter(x => x.added).forEach(y => { collectionsArray.push(y); });
+
+    this.examsService.generateExam({
+      collections: collectionsArray,
+      test: this.generationOptions.test,
+      short: this.generationOptions.short,
+      long: this.generationOptions.long
+    })
+      .then(res => this.exam = res);
   }
 
 }

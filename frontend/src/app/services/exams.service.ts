@@ -51,4 +51,10 @@ export class ExamsService {
       .then(res => res)
       .catch(error => this.errorService.throwError(error, this));
   }
+
+  public generateExam(data: any): Promise<any> {
+    return this.http.post(this.URLAPI + 'exams/', data, this.httpOptions).toPromise()
+      .then(res => res)
+      .catch(error => this.errorService.throwError(error, this));
+  }
 }

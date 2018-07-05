@@ -30,20 +30,20 @@
         </div>
         <div class="b-card-subheader d-flex justify-content-between">
           <span class="subheader-text">Colecciones</span>
-          <div class="subheader-button">
-            <i class="fa fa-plus"></i>
-            <span> Añadir</span>
+          <div (click)="editCollections()" class="subheader-button">
+            <i class="fa fa-pencil"></i>
+            <span> Modificar</span>
           </div>
         </div>
         <div class="collection-list">
-          <div *ngFor="let collection of collectionItems" class="collection-item d-flex justify-content-between">
+          <div *ngFor="let collection of oCollections" [hidden]="!collection.added" class="collection-item">
             <div class="collection-left">
-              <p class="collection-name">{{ collection }}</p>
-              <small class="collection-details">10 test, 5 cortas, 2 largas</small>
+              <p class="collection-name">{{ collection.title }}</p>
+              <small class="collection-details">{{ collection.count.test }} test, {{ collection.count.short }} cortas, {{ collection.count.long }} largas</small>
             </div>
-            <span class="collection-controls">
-              <i class="fa fa-times collection-controls-delete"></i>
-            </span>
+          </div>
+          <div *ngIf="oCollections.findIndex(isAdded) === -1">
+            <span class="d-flex justify-content-center">Ninguna colección seleccionada</span>
           </div>
         </div>
         <div class="b-card-subheader d-flex justify-content-between">
@@ -63,15 +63,15 @@
                 <th scope="row">Test</th>
                 <td>
                   <div class="input-group">
-                    <input type="number" class="form-control" aria-describedby="helpId">
+                    <input [(ngModel)]="generationOptions.test.count" type="number" class="form-control" aria-describedby="helpId">
                     <div class="input-group-append">
-                      <span class="input-group-text">/46</span>
+                      <span class="input-group-text">/{{ typesCount.test }}</span>
                     </div>
                   </div>
                 </td>
                 <td>
                   <div class="input-group">
-                    <input type="number" class="form-control" aria-describedby="helpId">
+                    <input [(ngModel)]="generationOptions.test.points" type="number" class="form-control" aria-describedby="helpId">
                     <div class="input-group-append">
                       <span class="input-group-text">/10</span>
                     </div>
@@ -82,15 +82,15 @@
                 <th scope="row">Ejericios</th>
                 <td>
                   <div class="input-group">
-                    <input type="number" class="form-control" aria-describedby="helpId">
+                    <input [(ngModel)]="generationOptions.short.count" type="number" class="form-control" aria-describedby="helpId">
                     <div class="input-group-append">
-                      <span class="input-group-text">/20</span>
+                      <span class="input-group-text">/{{ typesCount.short }}</span>
                     </div>
                   </div>
                 </td>
                 <td>
                   <div class="input-group">
-                    <input type="number" class="form-control" aria-describedby="helpId">
+                    <input [(ngModel)]="generationOptions.short.points" type="number" class="form-control" aria-describedby="helpId">
                     <div class="input-group-append">
                       <span class="input-group-text">/10</span>
                     </div>
@@ -101,15 +101,15 @@
                 <th scope="row">Problemas</th>
                 <td>
                   <div class="input-group">
-                    <input type="number" class="form-control" aria-describedby="helpId">
+                    <input [(ngModel)]="generationOptions.long.count" type="number" class="form-control" aria-describedby="helpId">
                     <div class="input-group-append">
-                      <span class="input-group-text">/6</span>
+                      <span class="input-group-text">/{{ typesCount.long }}</span>
                     </div>
                   </div>
                 </td>
                 <td>
                   <div class="input-group">
-                    <input type="number" class="form-control" aria-describedby="helpId">
+                    <input [(ngModel)]="generationOptions.long.points" type="number" class="form-control" aria-describedby="helpId">
                     <div class="input-group-append">
                       <span class="input-group-text">/10</span>
                     </div>
@@ -125,10 +125,10 @@
             <span>Dificil</span>
           </div>
           <div class="slidecontainer">
-            <input type="range" min="1" max="3" value="2" class="slider">
+            <input [(ngModel)]="generationOptions.difficulty" type="range" min="1" max="3" value="2" class="slider">
           </div>
         </div>
-        <div class="fullwidth-button button-green">
+        <div (click)="generateExam()" class="fullwidth-button button-green">
           Generar
         </div>
       </div>
@@ -146,50 +146,55 @@
         <div class="row">
           <div class="col-6">
             <div class="fullwidth-button-small button-blue2">
-              <i class="fa fa-plus"></i> Apartado
+              <i class="fa fa-plus"></i> Pregunta
             </div>
           </div>
           <div class="col-6">
             <div class="fullwidth-button-small button-blue2">
-              <i class="fa fa-share"></i> Importar
+              <i class="fa fa-plus"></i> Sección
             </div>
           </div>
         </div>
         <div class="b-card-body">
-          <div *ngFor="let q of examItems; let i = index" class="ap-container">
-            <div class="ap-header d-flex justify-content-between">
-              <div class="ap-header-left">
-                <span class="ap-header-diff">
-                  <span class="ml-1">
-                    <i class="fa fa-circle"></i>
-                  </span>
-                  <span *ngIf="q.difficulty >= 2" class="ml-1">
-                    <i class="fa fa-circle"></i>
-                  </span>
-                  <span *ngIf="q.difficulty == 3" class="ml-1">
-                    <i class="fa fa-circle"></i>
-                  </span>
-                </span>
-                <span class="ap-header-name"> Pregunta {{ i + 1 }}</span>
-                <span class="ap-header-points"> {{ q.points }} puntos</span>
-              </div>
-              <div class="ap-header-right">
-                <span>{{ q.type }}</span>
-              </div>
+          <div *ngFor="let s of exam; let is = index" class="ap-container">
+            <div class="sec-header d-flex justify-content-between">
+              <div class="sec-header-title">{{ s.title }}</div>
             </div>
-            <div (click)="expandQuestion(i)" [class.expanded]="q.expanded" class="ap-body">
-              {{ q.expanded ? q.content : q.content | trim:110:true }}
-            </div>
-            <div class="ap-footer">
-              <span class="d-flex justify-content-between">
-                <div>
-                  <button type="button" class="btn btn-link edit-button linkbutton-blue">
-                    <i class="fa fa-edit"></i>&nbsp;Editar</button>
-                  <button type="button" class="btn btn-link edit-button linkbutton-red">
-                    <i class="fa fa-trash"></i>&nbsp;Descartar</button>
+            <div *ngFor="let q of s.sections; let i = index">
+              <div class="ap-header d-flex justify-content-between">
+                <div class="ap-header-left">
+                  <span class="ap-header-diff">
+                    <span class="ml-1">
+                      <i class="fa fa-circle"></i>
+                    </span>
+                    <span *ngIf="q.difficulty >= 2" class="ml-1">
+                      <i class="fa fa-circle"></i>
+                    </span>
+                    <span *ngIf="q.difficulty == 3" class="ml-1">
+                      <i class="fa fa-circle"></i>
+                    </span>
+                  </span>
+                  <span class="ap-header-name"> Pregunta {{ is + 1 }}.{{i + 1 }}</span>
+                  <span class="ap-header-points"> {{ q.points }} puntos</span>
                 </div>
-                <i *ngIf="q.content.length > 110" class="fa expand-arrow" [class.fa-sort-down]="!q.expanded" [class.fa-sort-up]="q.expanded"></i>
-              </span>
+                <div class="ap-header-right">
+                  <span>{{ q.type }}</span>
+                </div>
+              </div>
+              <div (click)="expandQuestion(i)" [class.expanded]="q.expanded" class="ap-body">
+                {{ q.expanded ? q.content : q.content | trim:110:true }}
+              </div>
+              <div class="ap-footer">
+                <span class="d-flex justify-content-between">
+                  <div>
+                    <button type="button" class="btn btn-link edit-button linkbutton-blue">
+                      <i class="fa fa-edit"></i>&nbsp;Editar</button>
+                    <button type="button" class="btn btn-link edit-button linkbutton-red">
+                      <i class="fa fa-trash"></i>&nbsp;Descartar</button>
+                  </div>
+                  <i *ngIf="q.content.length > 110" class="fa expand-arrow" [class.fa-sort-down]="!q.expanded" [class.fa-sort-up]="q.expanded"></i>
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -203,10 +208,133 @@
   <div class="section-main" [style.width.px]="previewDimensions.width" [style.overflow-y]="previewDimensions.height ? 'auto' : 'hidden'">
     <div class="preview-container">
       <div class="page-container" [style.width.px]="paperDimensions.width" [style.height.px]="paperDimensions.height">
-        <div *ngFor="let q of examItems; let i = index">
+        <div *ngFor="let s of exam.sections; let i = index">
           {{ i }}
         </div>
       </div>
     </div>
   </div>
-</div>
+
+  <!-- Add collection overlay -->
+
+  <div *ngIf="addingOverlay" class="edit-overlay">
+    <div class="edit-details">
+      <div class="editor-header">Modificando colecciónes</div>
+      <div class="editor-collections">
+        <div *ngFor="let collection of editingCollections" class="editor-collection">
+          <div class="row">
+            <div class="editor-collection-checkbox col-1">
+              <label class="switch-onoff mb-0">
+                <input [checked]="collection.added" (change)="collection.added = !collection.added" type="checkbox">
+                <span class="slider-onoff round"></span>
+              </label>
+            </div>
+            <div class="col-11">
+              <div class="editor-collection-title">
+                {{ collection.title }}
+              </div>
+              <div class="editor-collection-desc">
+                {{ collection.description }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="editor-options d-flex justify-content-end w-100">
+        <div (click)="editCollections()" class="control-button button-green">
+          <i class="fa fa-check"></i> Guardar
+        </div>
+        <div (click)="editCollections(false)" class="control-button button-blue">
+          <i class="fa fa-times"></i> Cancelar
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit overlay -->
+
+  <!-- <div *ngIf="editingQId !== -1" class="edit-overlay">
+    <div class="edit-editor">
+      <div class="editor-header">Coleccion
+        <span class="font-weight-bold">{{ oCollections[selectedId].title }}</span>
+        / Pregunta
+        <span class="font-weight-bold">{{ editingQId + 1 }}</span>
+      </div>
+      <div class="editor-options">
+        <p class="editor-label">Tipo</p>
+        <div class="form-check">
+          <div class="btn-group btn-group-toggle" data-toggle="buttons">
+            <label class="btn btn-light" [class.active]="editingQ.type === 'test'">
+              <input (click)="editingQ.type = 'test'" type="radio" name="options" id="option1" autocomplete="off"> Test
+            </label>
+            <label class="btn btn-light" [class.active]="editingQ.type === 'short'">
+              <input (click)="editingQ.type = 'short'" type="radio" name="options" id="option2" autocomplete="off"> Ejercicio
+            </label>
+            <label class="btn btn-light" [class.active]="editingQ.type === 'long'">
+              <input (click)="editingQ.type = 'long'" type="radio" name="options" id="option3" autocomplete="off"> Problema
+            </label>
+          </div>
+        </div>
+        <br>
+        <p class="editor-label">Dificultad</p>
+        <div class="slidecontainer">
+          <input type="range" min="1" max="3" value="2" class="slider" [(ngModel)]="editingQ.difficulty">
+          <div class="d-flex justify-content-between">
+            <span>Facil</span>
+            <span>Intermedio</span>
+            <span>Dificil</span>
+          </div>
+        </div>
+      </div>
+      <div class="collection-title">Enunciado</div>
+      <quill-editor [style]="quillStyle" [(ngModel)]="editingQ.statement" [modules]="quillModules" [placeholder]="'Escribe aquí...'"></quill-editor>
+      <div *ngIf="editingQ.type !== 'test'">
+        <div class="collection-title">Solución</div>
+        <quill-editor [style]="quillStyle" [(ngModel)]="editingQ.solution" [modules]="quillModules" [placeholder]="'Escribe aquí...'"></quill-editor>
+      </div>
+      <div *ngIf="editingQ.type === 'test'">
+        <div class="collection-title row">
+          <div class="col-4 d-flex justify-content-between">
+            <span>Opciones</span>
+            <button (click)="editingQ.options.push('Nueva opción')" type="button" class="btn btn-link edit-button button-newoption">
+              <i class="fa fa-plus"></i>&nbsp;Nueva opción</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="editor-options-container col-4">
+            <div (click)="editingOId = io" [class.option-active]="editingOId === io" class="d-flex editor-option" *ngFor="let o of editingQ.options; let io = index">
+              <div [class.option-id-active]="editingOId === io" class="option-id">{{ io + 1 }}</div>
+              <div [innerHTML]="o" class="option-text my-auto"></div>
+              <div *ngIf="editingQ.correct_option === io" class="option-correct my-auto">
+                <i class="fa fa-check"></i>
+              </div>
+              <button (click)="editingQ.correct_option = io" *ngIf="editingQ.correct_option !== io" [class.button-changeoption]="editingOId !== io"
+                [class.button-changeoption-invert]="editingOId === io" type="button" class="btn btn-link edit-button">
+                <i class="fa fa-check"></i>
+              </button>
+              <span (click)="editingQ.correct_option === io ? editingQ.correct_option = 0 : false; editingOId === io ? editingOId = -1 : false; editingQ.options.splice(io, 1);"
+                class="option-remove">
+                <i class="fa fa-times"></i>
+              </span>
+            </div>
+          </div>
+          <div class="quill-optionedit col-8">
+            <quill-editor [(ngModel)]="editingQ.options[editingOId]" [style]="quillStyle" [modules]="quillModules" [placeholder]="'Escribe aquí...'"></quill-editor>
+            <div *ngIf="editingOId === -1" class="editor-cover">
+              <span class="editor-cover-text">
+                Seleccione una opcion para editarla
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="editor-options d-flex justify-content-end w-100">
+        <div (click)="saveQuestion()" class="control-button button-green">
+          <i class="fa fa-check"></i> Guardar
+        </div>
+        <div (click)="editQuestion(null, false)" class="control-button button-blue">
+          <i class="fa fa-times"></i> Cancelar
+        </div>
+      </div>
+    </div>
+  </div> -->

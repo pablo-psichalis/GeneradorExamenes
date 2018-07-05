@@ -42,7 +42,7 @@
     height: 10.6rem;
     width: 100%;
     background-color: var(--color-bg-global);
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .collection-item {
@@ -211,6 +211,18 @@ table {
     font-weight: 500;
 }
 
+.sec-header {
+    background-color: var(--color-dark-2);
+    color: white;
+    padding: .1rem .4rem;
+}
+
+.sec-header-name {
+    font-size: 12pt;
+    font-weight: 500;
+    color: var(--color-bg-global);
+}
+
 .ap-header-points {
     font-size: 10pt;
     font-weight: 400;
@@ -237,4 +249,123 @@ table {
 .expanded {
     max-height: unset;
     height: auto !important;
+}
+
+.switch-onoff {
+    position: relative;
+    display: block;
+    width: 30px;
+    height: 17px;
+}
+
+.switch-onoff input {
+    display: none;
+}
+
+.slider-onoff {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider-onoff:before {
+    position: absolute;
+    content: "";
+    height: 13px;
+    width: 13px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked+.slider-onoff {
+    background-color: var(--color-blue-1);
+}
+
+input:focus+.slider-onoff {
+    box-shadow: 0 0 1px var(--color-blue-1-hover);
+}
+
+input:checked+.slider-onoff:before {
+    -webkit-transform: translateX(12px);
+    -ms-transform: translateX(12px);
+    transform: translateX(12px);
+}
+
+.slider-onoff.round {
+    border-radius: 12px;
+}
+
+.slider-onoff.round:before {
+    border-radius: 50%;
+}
+
+.edit-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 1000;
+    background: linear-gradient( rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6));
+}
+
+.edit-details {
+    margin: 4rem auto;
+    min-width: 30rem;
+    width: 30%;
+    background-color: var(--color-blue-1);
+}
+
+.editor-header {
+    background-color: var(--color-dark-1);
+    color: var(--color-dark-1-text);
+    font-weight: 300;
+    font-size: 13pt;
+    padding: .2rem .5rem;
+}
+
+.editor-options {
+    text-align: center;
+    padding: .5rem 1rem;
+    background-color: var(--color-blue-2);
+    color: white;
+}
+
+.editor-collections {
+    background-color: var(--color-bg-global);
+    overflow-y: auto;
+    height: 30rem;
+}
+
+.editor-collection {
+    width: 100%;
+    background-color: white;
+}
+
+.editor-collection-checkbox {
+    padding: .4rem .1rem;
+    background-color: var(--color-dark-1-text);
+}
+
+.switch-onoff {
+    margin: auto;
+}
+
+.editor-collection-title {
+    padding: .2rem .4rem 0;
+    font-weight: bold;
+}
+
+.editor-collection-desc {
+    padding: 0 .4rem .2rem;
+    font-size: 11pt;
 }

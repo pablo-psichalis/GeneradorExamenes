@@ -119,7 +119,7 @@ export class CollectionsComponent implements OnInit {
         JSON.parse(JSON.stringify(this.oCollections[this.selectedId].questions[this.editingQId])) :
         {
           statement: '',
-          difficulty: 0,
+          difficulty: 1,
           type: 'short',
           options: [],
           correct_option: 0,
@@ -130,7 +130,7 @@ export class CollectionsComponent implements OnInit {
       this.editingOId = -1;
       this.editingQ = {
         statement: '',
-        difficulty: 0,
+        difficulty: 1,
         type: '',
         options: [],
         correct_option: 0,
@@ -177,6 +177,7 @@ export class CollectionsComponent implements OnInit {
           },
           title: '',
           description: '',
+          difficulty: 1,
           questions: []
         };
     } else {
@@ -188,6 +189,7 @@ export class CollectionsComponent implements OnInit {
           long: 0
         },
         title: '',
+        difficulty: 1,
         description: '',
         questions: []
       };
