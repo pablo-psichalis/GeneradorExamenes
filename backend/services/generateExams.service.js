@@ -1,8 +1,8 @@
 const collectionsController = require('../controllers/collections.controller');
 
-const qTest = [];
-const qShort = [];
-const qLong = [];
+let qTest = [];
+let qShort = [];
+let qLong = [];
 
 exports.generateExam = (objQuery) => {
   return new Promise((resolve, reject) => {
@@ -34,6 +34,7 @@ exports.generateExam = (objQuery) => {
   */
     getQuestions(collections, objQuery).then(() => {
       // Randomly remove excess questions from the arrays
+
       while (qTest.length > objQuery.test.count) {
         qTest.splice((Math.floor(Math.random() * qTest.length)), 1);
       }
@@ -44,55 +45,84 @@ exports.generateExam = (objQuery) => {
         qLong.splice((Math.floor(Math.random() * qLong.length)), 1);
       }
 
+      // Add max_points field
+      qTest.forEach((elem, i) => {
+        qTest[i].max_points = 0;
+      });
+      qShort.forEach((elem, i) => {
+        qShort[i].max_points = 0;
+      });
+      qLong.forEach((elem, i) => {
+        qLong[i].max_points = 0;
+      });
+
       // Shuffle test questions
       qTest.forEach((elem, i) => {
-        qTest[i].options = shuffleTestQuestionOptions(qTest[i].question.options);
+        qTest[i].options = shuffleTestQuestionOptions(qTest[i].options);
       });
 
       // Calculate points per question
       let sumDifficultyPointsTest = 0;
       qTest.forEach((elem) => {
-        sumDifficultyPointsTest += (elem.question.difficulty === 0) ? 1 : elem.question.difficulty;
+        sumDifficultyPointsTest += (elem.difficulty === 0) ? 1 : elem.difficulty;
       });
       let sumDifficultyPointsShort = 0;
       qTest.forEach((elem) => {
-        sumDifficultyPointsShort += (elem.question.difficulty === 0) ? 1 : elem.question.difficulty;
+        sumDifficultyPointsShort += (elem.difficulty === 0) ? 1 : elem.difficulty;
       });
       let sumDifficultyPointsLong = 0;
       qTest.forEach((elem) => {
-        sumDifficultyPointsLong += (elem.question.difficulty === 0) ? 1 : elem.question.difficulty;
+        sumDifficultyPointsLong += (elem.difficulty === 0) ? 1 : elem.difficulty;
       });
 
       qTest.forEach((elem, i) => {
         const k = (objQuery.test.points / sumDifficultyPointsTest);
-        qTest[i].points =
-          Math.round((qTest[i].question.difficulty * k) * 100) / 100;
+        qTest[i].max_points =
+          Math.round((qTest[i].difficulty * k) * 100) / 100;
       });
 
       qShort.forEach((elem, i) => {
         const k = (objQuery.short.points / sumDifficultyPointsShort);
-        qShort[i].points =
-          Math.round((qShort[i].question.difficulty * k) * 100) / 100;
+        qShort[i].max_points =
+          Math.round((qShort[i].difficulty * k) * 100) / 100;
       });
 
       qLong.forEach((elem, i) => {
         const k = (objQuery.long.points / sumDifficultyPointsLong);
-        qLong[i].points =
-          Math.round(((qLong[i].question.difficulty * k) * 100) / 100);
+        qLong[i].max_points =
+          Math.round(((qLong[i].difficulty * k) * 100) / 100);
       });
 
       // Generated exam data
       const examData = {
-        test: qTest,
-        short: qShort,
-        long: qLong,
+        title: 'Nuevo examen',
+        date: new Date(),
+        description: 'Descripción',
+        subject: 'Nombre de la asignatura',
+        school_name: 'Nombre de la escuela',
+        sections: [
+          {
+            title: 'Preguntas de Test',
+            statement: 'Enunciado de las preguntas de Test',
+            questions: qTest,
+          },
+          {
+            title: 'Preguntas Cortas',
+            statement: 'Enunciado de las preguntas Cortas',
+            questions: qShort,
+          },
+          {
+            title: 'Preguntas Largas',
+            statement: 'Enunciado de las preguntas de Largas',
+            questions: qLong,
+          },
+        ],
         count: {
           test: qTest.length,
           short: qShort.length,
           long: qLong.length,
         },
       };
-      console.log(examData);
       resolve(examData);
     }).catch((err) => {
       reject(err);
@@ -110,9 +140,9 @@ function getQuestions(collections, objQuery) {
 
     collections.forEach((id) => {
       promises = promises.concat([
-        collectionsController.getNumberOfQuestionsByType(id, 'test', numTest).then((res) => { res.map((question) => { qTest.push({ question, points: 0 }); }); }),
-        collectionsController.getNumberOfQuestionsByType(id, 'short', numShort).then((res) => { res.map((question) => { qShort.push({ question, points: 0 }); }); }),
-        collectionsController.getNumberOfQuestionsByType(id, 'long', numLong).then((res) => { res.map((question) => { qLong.push({ question, points: 0 }); }); }),
+        collectionsController.getNumberOfQuestionsByType(id, 'test', numTest).then(res => qTest = qTest.concat(res)),
+        collectionsController.getNumberOfQuestionsByType(id, 'short', numShort).then(res => qShort = qShort.concat(res)),
+        collectionsController.getNumberOfQuestionsByType(id, 'long', numLong).then(res => qLong = qLong.concat(res)),
       ]);
     });
     return Promise.all(promises);

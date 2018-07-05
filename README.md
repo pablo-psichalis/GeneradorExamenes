@@ -58,7 +58,8 @@ Para las preguntas tipo Test, se almacena un array de objetos opción: `{ option
                         ...
         ],
         difficulty: Number,
-        type: 'test'
+        type: 'test',
+        max_points: Number       // opcional: Se retorna al [generar exámenes](#generación-de-exámenes)
     }
 
 Para las preguntas de tipo short o long, simplemente se almacena el texto insertado a través del editor.
@@ -67,7 +68,8 @@ Para las preguntas de tipo short o long, simplemente se almacena el texto insert
             text: String,        // texto de la pregunta
             solution: String,    // texto con la solución
             difficulty: Number,
-            type: 'short' / 'long'
+            type: 'short' / 'long',
+            max_points: Number  // opcional: Se retorna al [generar exámenes](#generación-de-exámenes)
         }
 
 ### Ejemplos
@@ -97,7 +99,8 @@ Nota: La puntuación de cada pregunta/apartado se añade al objeto Examen ya que
                                         { "option": "Arroz negro" },    
                                         { "option": "Ninguno de esos" }
                                     ],
-                                "correct_option": 2
+                                "correct_option": 2,
+                                "max_points": 0.5
                             },
                             {
                                 "statement": "Tiempo de cocción de la paella",
@@ -107,7 +110,8 @@ Nota: La puntuación de cada pregunta/apartado se añade al objeto Examen ya que
                                         { "option": "50 parsecs" },      
                                         { "option": "99 nanosegundos" } 
                                     ],
-                                "correct_option": 0
+                                "correct_option": 0,
+                                "max_points": 0.5
                             },   
                             {
                                 "statement": "De donde es originaria la paella?",
@@ -117,23 +121,22 @@ Nota: La puntuación de cada pregunta/apartado se añade al objeto Examen ya que
                                         { "option": "Valencia" },
                                         { "option": "Shandong" }
                                     ],
-                                "correct_option": 1
+                                "correct_option": 1,                                "max_points": 0.5
                             }
                         ],
-	                            "max_points": 3
                             },
 				{
 					"title": "Parte de Disertación" ,
 					"statement": "Argumente a favor o en contra de la paella como desayuno regular",
 					"questions": [ 
 						{
-							"text": "",
-							"solution": "Texto con la posible solución por aquí, bla bla bla bla bla bla bla.",
-							"type": "long"
+							question: {
+                                "text": "",
+                                "solution": "Texto con la posible solución por aquí, bla bla bla bla bla bla bla.",
+                                "type": "long",
+                                "max_points": 4
 						}
 					],
-
-					"max_points": 4
 				},                    
 				{
 					"title": "Parte de Problemas",
@@ -143,9 +146,9 @@ Nota: La puntuación de cada pregunta/apartado se añade al objeto Examen ya que
 							"text":
 								"a) Calcular el tiempo estimado de deglución. Dato: Masa atómica del Hidrógeno = 1,00794u b) Estimar el tiempo perfecto de cocción. c) Si una comadreja camina sobre la paellera a fuego lento, calcular gráficamente la masa del Sol.",
 							"solution":"a) ~30 min   b) Depende    c) [imagen]"  
+                            "max_points": 3
 						}
 					},
-					"max_points": 3
 				}
 			],
         "count": 
@@ -247,24 +250,4 @@ Este JSON incluirá en el campo `collections` un array con las _ids de las colec
 * `points`: Total de puntos de ese tipo, a distribuir proporcionalmente entre todas las preguntas de dicho tipo (en función de su dificultad asignada)
 
 ### Respuesta
-Se devolverá como respuesta un objeto con la siguiente estructura:
-
-    {
-        "test": Array,
-        "short": Array,
-        "long": Array,
-        "count": {
-            "test": Number,
-            "short": Number,
-            "long": Number
-        }
-    }
-
-A su vez, cada una de las preguntas de los Arrays (test, short, long) tendrá la siguiente estructura:
-
-    {
-        "question": Object,
-        "points": Number
-    }
-
-El objeto pregunta en sí, junto con una posible puntuación asignada.
+Se devolverá como respuesta un [objeto de examen](#examen). 
