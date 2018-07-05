@@ -27,6 +27,11 @@ export class ComposerComponent implements OnInit {
 
   public addingOverlay: boolean;
 
+  public types: {
+    test: String,
+    short: String,
+    long: String
+  };
   public oCollections: Array<any>;
   public editingCollections: Array<any>;
   public typesCount: {
@@ -87,6 +92,11 @@ export class ComposerComponent implements OnInit {
     this.quillStyle = {
       'height': 'auto',
       'min-height': '5rem'
+    };
+    this.types = {
+      test: 'Test',
+      short: 'Ejercicio',
+      long: 'Problema'
     };
     this.addingOverlay = false;
     this.oCollections = [];
@@ -231,8 +241,7 @@ export class ComposerComponent implements OnInit {
 
   public generateExam() {
     const collectionsArray = [];
-    this.oCollections.filter(x => x.added).forEach(y => { collectionsArray.push(y); });
-
+    this.oCollections.filter(x => x.added).forEach(y => { collectionsArray.push(y._id); });
     this.examsService.generateExam({
       collections: collectionsArray,
       test: this.generationOptions.test,
@@ -240,6 +249,10 @@ export class ComposerComponent implements OnInit {
       long: this.generationOptions.long
     })
       .then(res => this.exam = res);
+  }
+
+  public numToLetter(x) {
+    return String.fromCharCode(x + 97);
   }
 
 }

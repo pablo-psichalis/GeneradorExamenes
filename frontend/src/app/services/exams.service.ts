@@ -53,7 +53,7 @@ export class ExamsService {
   }
 
   public generateExam(data: any): Promise<any> {
-    return this.http.post(this.URLAPI + 'exams/', data, this.httpOptions).toPromise()
+    return this.http.post(this.URLAPI + 'exams/generate', data, this.httpOptions).toPromise()
       .then(res => res)
       .catch(error => this.errorService.throwError(error, this));
   }
