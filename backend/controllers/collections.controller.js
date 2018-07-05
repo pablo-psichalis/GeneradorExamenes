@@ -63,7 +63,7 @@ exports.getQuestionsByType = (id, type) =>
 
 // Randomly get "count" number of questions from the collection that matches the _id "id"
 exports.getNumberOfQuestionsByType = (id, type, count) =>
-  CollectionsDB.getQuestionsByType(id, type, count)
+  CollectionsDB.getNumberOfQuestionsByType(id, type, count)
     .then(response => response.map(elem => elem.questions));
 
 // this.getQuestionsByType('5b3a68abed273c24248af9cd', 'long').then(res => console.log(res));
