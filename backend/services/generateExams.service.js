@@ -67,28 +67,28 @@ exports.generateExam = (objQuery) => {
         sumDifficultyPointsTest += (elem.difficulty === 0) ? 1 : elem.difficulty;
       });
       let sumDifficultyPointsShort = 0;
-      qTest.forEach((elem) => {
+      qShort.forEach((elem) => {
         sumDifficultyPointsShort += (elem.difficulty === 0) ? 1 : elem.difficulty;
       });
       let sumDifficultyPointsLong = 0;
-      qTest.forEach((elem) => {
+      qLong.forEach((elem) => {
         sumDifficultyPointsLong += (elem.difficulty === 0) ? 1 : elem.difficulty;
       });
 
+      let k = (objQuery.test.points / sumDifficultyPointsTest);
       qTest.forEach((elem, i) => {
-        const k = (objQuery.test.points / sumDifficultyPointsTest);
         qTest[i].max_points =
           Math.round((qTest[i].difficulty * k) * 100) / 100;
       });
 
+      k = (objQuery.short.points / sumDifficultyPointsShort);
       qShort.forEach((elem, i) => {
-        const k = (objQuery.short.points / sumDifficultyPointsShort);
         qShort[i].max_points =
           Math.round((qShort[i].difficulty * k) * 100) / 100;
       });
 
+      k = (objQuery.long.points / sumDifficultyPointsLong);
       qLong.forEach((elem, i) => {
-        const k = (objQuery.long.points / sumDifficultyPointsLong);
         qLong[i].max_points =
           Math.round(((qLong[i].difficulty * k) * 100) / 100);
       });
