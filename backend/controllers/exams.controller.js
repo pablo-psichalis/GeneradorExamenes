@@ -1,4 +1,5 @@
 const ExamsDB = require('../models/exams.model');
+const generateExamsService = require('../services/generateExams.service');
 
 exports.saveExam = (req, res, next) => {
   ExamsDB.saveExam(req.body)
@@ -40,10 +41,9 @@ exports.deleteExam = (req, res, next) => {
 };
 
 exports.generateExam = (req, res, next) => {
-  // TODO: change generateExam with the proper service call
-  ExamsDB.generateExam(req.body)
-    .then((exam) => {
-      res.status(200).json(exam);
+  generateExamsService.generateExam(req.body)
+    .then((examData) => {
+      res.status(200).json(examData);
     })
     .catch(err => next(err));
 };

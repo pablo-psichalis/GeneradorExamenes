@@ -167,6 +167,7 @@ Endpoints del backend y si requieren autenticación (PROTECTED = SI) o no (PROTE
 | POST | /login | NO 
 | GET | /exams | SI | Get todas las colecciones
 | GET | /exams/:id | SI | Utilizar _id de Mongo
+| POST | /exams/generate | SI | [Ver detalles](#generación-de-exámenes)
 | POST | /exams | SI 
 | DELETE | /exams/:id | SI | Utilizar _id de Mongo
 | PUT | /exams/:id | SI | Utilizar _id de Mongo
@@ -246,4 +247,24 @@ Este JSON incluirá en el campo `collections` un array con las _ids de las colec
 * `points`: Total de puntos de ese tipo, a distribuir proporcionalmente entre todas las preguntas de dicho tipo (en función de su dificultad asignada)
 
 ### Respuesta
-Se devolverá como respuesta un [objeto de examen](#examen) junto con la puntuación calculada.
+Se devolverá como respuesta un objeto con la siguiente estructura:
+
+    {
+        "test": Array,
+        "short": Array,
+        "long": Array,
+        "count": {
+            "test": Number,
+            "short": Number,
+            "long": Number
+        }
+    }
+
+A su vez, cada una de las preguntas de los Arrays (test, short, long) tendrá la siguiente estructura:
+
+    {
+        "question": Object,
+        "points": Number
+    }
+
+El objeto pregunta en sí, junto con una posible puntuación asignada.

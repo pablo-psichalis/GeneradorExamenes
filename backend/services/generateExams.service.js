@@ -4,83 +4,101 @@ const qTest = [];
 const qShort = [];
 const qLong = [];
 
-generateExam();
+exports.generateExam = (objQuery) => {
+  return new Promise((resolve, reject) => {
+    const { collections } = objQuery;
 
-function generateExam() {
-  // Mock data
-  const collections = [
-    '5b3259f84bd13d19bc69c2ae',
-    '5b321bc4ba7376a704362f58',
-    '5b321756ba7376a704362f50',
-  ];
+    // Mock data
+    /*  {
+       "collections": [
+         "5b321756ba7376a704362f50",
+         "5b321bc4ba7376a704362f58",
+         "5b3259f84bd13d19bc69c2ae",
+         "5b3a68abed273c24248af9cd"],
+       "test":
+           {
+               "count": 5,
+               "points": 3
+           },
+       "short":
+           {
+               "count": 2,
+               "points": 3
+           },
+       "long":
+           {
+               "count": 1,
+               "points": 4
+           }
+   }
+  */
+    getQuestions(collections, objQuery).then(() => {
+      // Randomly remove excess questions from the arrays
+      while (qTest.length > objQuery.test.count) {
+        qTest.splice((Math.floor(Math.random() * qTest.length)), 1);
+      }
+      while (qShort.length > objQuery.short.count) {
+        qShort.splice((Math.floor(Math.random() * qShort.length)), 1);
+      }
+      while (qLong.length > objQuery.long.count) {
+        qLong.splice((Math.floor(Math.random() * qLong.length)), 1);
+      }
 
-  const objQuery = {
-    test: {
-      count: 5,
-      points: 2.5,
-      // 4, 3
-    },
-    short: {
-      count: 3,
-      points: 3,
-    },
-    long: {
-      count: 2,
-      points: 4,
-    },
-  };
+      // Shuffle test questions
+      qTest.forEach((elem, i) => {
+        qTest[i].options = shuffleTestQuestionOptions(qTest[i].question.options);
+      });
 
-  getQuestions(collections, objQuery).then(() => {
-    // Randomly remove excess questions from the arrays
-    while (qTest.length > objQuery.test.count) {
-      qTest.splice((Math.floor(Math.random() * qTest.length)), 1);
-    }
-    while (qShort.length > objQuery.short.count) {
-      qShort.splice((Math.floor(Math.random() * qShort.length)), 1);
-    }
-    while (qLong.length > objQuery.long.count) {
-      qLong.splice((Math.floor(Math.random() * qLong.length)), 1);
-    }
+      // Calculate points per question
+      let sumDifficultyPointsTest = 0;
+      qTest.forEach((elem) => {
+        sumDifficultyPointsTest += (elem.question.difficulty === 0) ? 1 : elem.question.difficulty;
+      });
+      let sumDifficultyPointsShort = 0;
+      qTest.forEach((elem) => {
+        sumDifficultyPointsShort += (elem.question.difficulty === 0) ? 1 : elem.question.difficulty;
+      });
+      let sumDifficultyPointsLong = 0;
+      qTest.forEach((elem) => {
+        sumDifficultyPointsLong += (elem.question.difficulty === 0) ? 1 : elem.question.difficulty;
+      });
 
-    let sumDifficultyPointsTest = 0;
-    qTest.forEach((elem) => {
-      sumDifficultyPointsTest += (elem.question.difficulty === 0) ? 1 : elem.question.difficulty; // TODO: check after BD fix
+      qTest.forEach((elem, i) => {
+        const k = (objQuery.test.points / sumDifficultyPointsTest);
+        qTest[i].points =
+          Math.round((qTest[i].question.difficulty * k) * 100) / 100;
+      });
+
+      qShort.forEach((elem, i) => {
+        const k = (objQuery.short.points / sumDifficultyPointsShort);
+        qShort[i].points =
+          Math.round((qShort[i].question.difficulty * k) * 100) / 100;
+      });
+
+      qLong.forEach((elem, i) => {
+        const k = (objQuery.long.points / sumDifficultyPointsLong);
+        qLong[i].points =
+          Math.round(((qLong[i].question.difficulty * k) * 100) / 100);
+      });
+
+      // Generated exam data
+      const examData = {
+        test: qTest,
+        short: qShort,
+        long: qLong,
+        count: {
+          test: qTest.length,
+          short: qShort.length,
+          long: qLong.length,
+        },
+      };
+      console.log(examData);
+      resolve(examData);
+    }).catch((err) => {
+      reject(err);
     });
-    let sumDifficultyPointsShort = 0;
-    qTest.forEach((elem) => {
-      sumDifficultyPointsShort += (elem.question.difficulty === 0) ? 1 : elem.question.difficulty;
-    });
-    let sumDifficultyPointsLong = 0;
-    qTest.forEach((elem) => {
-      sumDifficultyPointsLong += (elem.question.difficulty === 0) ? 1 : elem.question.difficulty;
-    });
-
-    const k = (objQuery.test.points / sumDifficultyPointsTest);
-    qTest.forEach((elem, i) => {
-      qTest[i].points =
-        ((qTest[i].question.difficulty === 0) ? 1 : qTest[i].question.difficulty) * k;
-    });
-
-    qShort.forEach((elem, i) => {
-      qShort[i].points =
-        qShort[i].question.difficulty * (objQuery.short.points / sumDifficultyPointsShort);
-    });
-
-    qLong.forEach((elem, i) => {
-      qLong[i].points =
-        qLong[i].question.difficulty * (objQuery.long.points / sumDifficultyPointsLong);
-    });
-
-
-    // Generated exam
-    const examen = {
-      test: qTest,
-      short: qShort,
-      long: qLong,
-    };
-    console.log(examen);
   });
-}
+};
 
 function getQuestions(collections, objQuery) {
   if (collections.length > 0) {
@@ -102,6 +120,20 @@ function getQuestions(collections, objQuery) {
   return null;
 }
 
+function shuffleTestQuestionOptions(options) {
+  const optionsArr = options;
+  let counter = optionsArr.length;
+  // Fisher-Yates Shuffle
+  while (counter > 0) {
+    const index = Math.floor(Math.random() * counter);
+    counter -= 1;
+    const temp = optionsArr[counter];
+    optionsArr[counter] = optionsArr[index];
+    optionsArr[index] = temp;
+  }
+
+  return optionsArr;
+}
 
 /* function generateExam() {
   getAllQuestions([
