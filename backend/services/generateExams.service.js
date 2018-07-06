@@ -1,15 +1,18 @@
 const collectionsController = require('../controllers/collections.controller');
 
-let qTest = [];
-let qShort = [];
-let qLong = [];
+let qTest;
+let qShort;
+let qLong;
 
-exports.generateExam = (objQuery) => {
-  return new Promise((resolve, reject) => {
-    const { collections } = objQuery;
+exports.generateExam = objQuery => new Promise((resolve, reject) => {
+  const { collections } = objQuery;
 
-    // Mock data
-    /*  {
+  qTest = [];
+  qShort = [];
+  qLong = [];
+
+  // Mock data
+  /*  {
        "collections": [
          "5b321756ba7376a704362f50",
          "5b321bc4ba7376a704362f58",
@@ -32,103 +35,94 @@ exports.generateExam = (objQuery) => {
            }
    }
   */
-    getQuestions(collections, objQuery).then(() => {
-      // Randomly remove excess questions from the arrays
+  getQuestions(collections, objQuery).then(() => {
+    // Randomly remove excess questions from the arrays
 
-      while (qTest.length > objQuery.test.count) {
-        qTest.splice((Math.floor(Math.random() * qTest.length)), 1);
-      }
-      while (qShort.length > objQuery.short.count) {
-        qShort.splice((Math.floor(Math.random() * qShort.length)), 1);
-      }
-      while (qLong.length > objQuery.long.count) {
-        qLong.splice((Math.floor(Math.random() * qLong.length)), 1);
-      }
+    while (qTest.length > objQuery.test.count) {
+      qTest.splice((Math.floor(Math.random() * qTest.length)), 1);
+    }
+    while (qShort.length > objQuery.short.count) {
+      qShort.splice((Math.floor(Math.random() * qShort.length)), 1);
+    }
+    while (qLong.length > objQuery.long.count) {
+      qLong.splice((Math.floor(Math.random() * qLong.length)), 1);
+    }
 
-      // Add max_points field
-      qTest.forEach((elem, i) => {
-        qTest[i].max_points = 0;
-      });
-      qShort.forEach((elem, i) => {
-        qShort[i].max_points = 0;
-      });
-      qLong.forEach((elem, i) => {
-        qLong[i].max_points = 0;
-      });
-
-      // Shuffle test questions
-      qTest.forEach((elem, i) => {
-        qTest[i].options = shuffleTestQuestionOptions(qTest[i].options);
-      });
-
-      // Calculate points per question
-      let sumDifficultyPointsTest = 0;
-      qTest.forEach((elem) => {
-        sumDifficultyPointsTest += (elem.difficulty === 0) ? 1 : elem.difficulty;
-      });
-      let sumDifficultyPointsShort = 0;
-      qShort.forEach((elem) => {
-        sumDifficultyPointsShort += (elem.difficulty === 0) ? 1 : elem.difficulty;
-      });
-      let sumDifficultyPointsLong = 0;
-      qLong.forEach((elem) => {
-        sumDifficultyPointsLong += (elem.difficulty === 0) ? 1 : elem.difficulty;
-      });
-
-      let k = (objQuery.test.points / sumDifficultyPointsTest);
-      qTest.forEach((elem, i) => {
-        qTest[i].max_points =
-          Math.round((qTest[i].difficulty * k) * 100) / 100;
-      });
-
-      k = (objQuery.short.points / sumDifficultyPointsShort);
-      qShort.forEach((elem, i) => {
-        qShort[i].max_points =
-          Math.round((qShort[i].difficulty * k) * 100) / 100;
-      });
-
-      k = (objQuery.long.points / sumDifficultyPointsLong);
-      qLong.forEach((elem, i) => {
-        qLong[i].max_points =
-          Math.round(((qLong[i].difficulty * k) * 100) / 100);
-      });
-
-      // Generated exam data
-      const examData = {
-        title: 'Nuevo examen',
-        date: new Date(),
-        description: 'Descripción',
-        subject: 'Nombre de la asignatura',
-        school_name: 'Nombre de la escuela',
-        sections: [
-          {
-            title: 'Preguntas de Test',
-            statement: 'Enunciado de las preguntas de Test',
-            questions: qTest,
-          },
-          {
-            title: 'Preguntas Cortas',
-            statement: 'Enunciado de las preguntas Cortas',
-            questions: qShort,
-          },
-          {
-            title: 'Preguntas Largas',
-            statement: 'Enunciado de las preguntas de Largas',
-            questions: qLong,
-          },
-        ],
-        count: {
-          test: qTest.length,
-          short: qShort.length,
-          long: qLong.length,
-        },
-      };
-      resolve(examData);
-    }).catch((err) => {
-      reject(err);
+    // Shuffle test questions
+    qTest.forEach((elem, i) => {
+      qTest[i].options = shuffleTestQuestionOptions(qTest[i].options);
     });
+
+    let sumDifficultyPointsTest = 0;
+    qTest.forEach((elem, i) => {
+      qTest[i].max_points = 0;
+      sumDifficultyPointsTest += (elem.difficulty === 0) ? 1 : elem.difficulty;
+    });
+    let sumDifficultyPointsShort = 0;
+    qShort.forEach((elem, i) => {
+      qShort[i].max_points = 0;
+      sumDifficultyPointsShort += (elem.difficulty === 0) ? 1 : elem.difficulty;
+    });
+    let sumDifficultyPointsLong = 0;
+    qLong.forEach((elem, i) => {
+      qLong[i].max_points = 0;
+      sumDifficultyPointsLong += (elem.difficulty === 0) ? 1 : elem.difficulty;
+    });
+
+    // Calculate points per question
+    let k = (objQuery.test.points / sumDifficultyPointsTest);
+    qTest.forEach((elem, i) => {
+      qTest[i].max_points =
+        Math.round((qTest[i].difficulty * k) * 100) / 100;
+    });
+
+    k = (objQuery.short.points / sumDifficultyPointsShort);
+    qShort.forEach((elem, i) => {
+      qShort[i].max_points =
+        Math.round((qShort[i].difficulty * k) * 100) / 100;
+    });
+
+    k = (objQuery.long.points / sumDifficultyPointsLong);
+    qLong.forEach((elem, i) => {
+      qLong[i].max_points =
+        Math.round(((qLong[i].difficulty * k) * 100) / 100);
+    });
+
+    // Generated exam data
+    const examData = {
+      title: 'Nuevo examen',
+      date: new Date(),
+      description: 'Descripción',
+      subject: 'Nombre de la asignatura',
+      school_name: 'Nombre de la escuela',
+      sections: [
+        {
+          title: 'Preguntas de Test',
+          statement: 'Enunciado de las preguntas de Test',
+          questions: qTest,
+        },
+        {
+          title: 'Preguntas Cortas',
+          statement: 'Enunciado de las preguntas Cortas',
+          questions: qShort,
+        },
+        {
+          title: 'Preguntas Largas',
+          statement: 'Enunciado de las preguntas de Largas',
+          questions: qLong,
+        },
+      ],
+      count: {
+        test: qTest.length,
+        short: qShort.length,
+        long: qLong.length,
+      },
+    };
+    resolve(examData);
+  }).catch((err) => {
+    reject(err);
   });
-};
+});
 
 function getQuestions(collections, objQuery) {
   if (collections.length > 0) {
@@ -140,7 +134,12 @@ function getQuestions(collections, objQuery) {
 
     collections.forEach((id) => {
       promises = promises.concat([
-        collectionsController.getNumberOfQuestionsByType(id, 'test', numTest).then(res => qTest = qTest.concat(res)),
+        collectionsController.getNumberOfQuestionsByType(id, 'test', numTest).then((res) => {
+          console.log('--------------- ', res);
+          console.log(qTest);
+          qTest = qTest.concat(res);
+          console.log(qTest);
+        }),
         collectionsController.getNumberOfQuestionsByType(id, 'short', numShort).then(res => qShort = qShort.concat(res)),
         collectionsController.getNumberOfQuestionsByType(id, 'long', numLong).then(res => qLong = qLong.concat(res)),
       ]);

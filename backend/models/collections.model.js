@@ -36,7 +36,7 @@ exports.getQuestionsByType = (id, type) => Collection.aggregate([
 exports.getNumberOfQuestionsByType = (id, type, num) => Collection.aggregate([
   { $match: { _id: new ObjectId(id) } },
   { $project: { questions: true } },
-  { $sample: { size: num } },
   { $unwind: '$questions' },
   { $match: { 'questions.type': type } },
+  { $sample: { size: num } },
 ]);
