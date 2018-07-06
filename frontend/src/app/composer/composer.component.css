@@ -369,3 +369,48 @@ input:checked+.slider-onoff:before {
     padding: 0 .4rem .2rem;
     font-size: 11pt;
 }
+
+.msg-generating-box {
+    display: block;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--color-blue-1);
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    padding-left: 5rem;
+    padding-right: 5rem;
+}
+
+.msg-generating {
+    display: block;
+    font-size: 17pt;
+    font-weight: 300;
+    color: var(--color-blue-1-text);
+}
+
+.paper {
+    padding: 100px;
+}
+
+.paper-section-title {
+    font-size: 18pt;
+    font-weight: bold;
+    margin-left: 32px;
+}
+
+.paper-question {
+    margin-left: 16px;
+    font-size: 14pt;
+    margin-bottom: 32px;
+}
+
+.paper-question-statement {
+    font-size: 14pt;
+    margin-bottom: 32px;
+}
+
+.paper-test-option {
+    margin-left: 32px;
+}

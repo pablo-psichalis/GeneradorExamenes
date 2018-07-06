@@ -54,6 +54,8 @@ export class ComposerComponent implements OnInit {
     },
     difficulty: number
   };
+  public generating: boolean;
+
   public exam: {
     title: string,
     date: string,
@@ -61,6 +63,16 @@ export class ComposerComponent implements OnInit {
     subject: string,
     school_name: string,
     sections: Array<any>
+  };
+
+  public editingQId: {
+    sId: number,
+    qId: number
+  };
+  public editingQ: any;
+  public deletingQId: {
+    sId: number,
+    qId: number
   };
 
   constructor(
@@ -121,6 +133,7 @@ export class ComposerComponent implements OnInit {
       },
       difficulty: 0
     };
+    this.generating = false;
 
     this.previewDimensions = {
       height: 0,
@@ -138,6 +151,16 @@ export class ComposerComponent implements OnInit {
       subject: '',
       school_name: '',
       sections: []
+    };
+
+    this.editingQId = {
+      sId: -1,
+      qId: -1
+    };
+    this.editingQ = {};
+    this.deletingQId = {
+      sId: -1,
+      qId: -1
     };
 
     this.sharedService.loginEmitted.subscribe(data => {
@@ -182,6 +205,17 @@ export class ComposerComponent implements OnInit {
       school_name: '',
       sections: []
     };
+    this.generating = false;
+
+    this.editingQId = {
+      sId: -1,
+      qId: -1
+    };
+    this.editingQ = {};
+    this.deletingQId = {
+      sId: -1,
+      qId: -1
+    };
 
     this.onResize(null);
 
@@ -204,10 +238,6 @@ export class ComposerComponent implements OnInit {
       width: this.previewDimensions.width * 0.8,
       height: this.previewDimensions.width * 0.8 * Math.sqrt(2)
     };
-  }
-
-  public expandQuestion(index: number) {
-    // this.exam[index].expanded = this.exam[index].expanded ? false : true;
   }
 
   public editCollections(action: boolean = true) {
@@ -241,6 +271,7 @@ export class ComposerComponent implements OnInit {
 
   public generateExam() {
     const collectionsArray = [];
+    this.generating = true;
     this.oCollections.filter(x => x.added).forEach(y => { collectionsArray.push(y._id); });
     this.examsService.generateExam({
       collections: collectionsArray,
@@ -248,11 +279,40 @@ export class ComposerComponent implements OnInit {
       short: this.generationOptions.short,
       long: this.generationOptions.long
     })
-      .then(res => this.exam = res);
+      .then(res => {
+        this.exam = res;
+        this.generating = false;
+      });
   }
 
   public numToLetter(x) {
     return String.fromCharCode(x + 97);
+  }
+
+  public calcTotalPoints(x) {
+    let out = 0;
+    x.forEach(y => out += y.max_points);
+    return Math.round(out * 100) / 100;
+  }
+
+  public print() {
+    const mywindow = window.open('', 'new div', 'height=400,width=600');
+    mywindow.document.write('<html><head><title></title>');
+    mywindow.document.write('<base href="/">');
+    Array.from(document.getElementsByTagName('style')).forEach(e => {
+      mywindow.document.write('<style>' + e.innerHTML + '</style>');
+    });
+    mywindow.document.write('</head><body>');
+    mywindow.document.write(document.querySelector('div.paper').innerHTML);
+    // tslint:disable:max-line-length
+    /* mywindow.document.write('<script type="text/javascript" src="runtime.js" media="print">');
+    mywindow.document.write('</script><script type="text/javascript" src="polyfills.js" media="print"></script>');
+    mywindow.document.write('<script type="text/javascript" src="styles.js" media="print"></script>');
+    mywindow.document.write('<script type="text/javascript" src="vendor.js" media="print"></script>');
+    mywindow.document.write('<script type="text/javascript" src="main.js" media="print"></script>'); */
+    mywindow.document.write('</body>');
+    mywindow.print();
+    mywindow.close();
   }
 
 }

@@ -195,3 +195,9 @@ input[type="number"], input[type="number"]::-webkit-outer-spin-button, input[typ
 .button-red:hover {
     background-color: var(--color-red-1-hover);
 }
+
+@media print {
+    @page {
+        margin: 100px;
+    }
+}
