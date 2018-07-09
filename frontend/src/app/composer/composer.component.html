@@ -7,13 +7,10 @@
       </span>
       <div class="d-flex">
         <div class="control-button button-blue2">
-          <i class="fa fa-check"></i> Guardar cambios
-        </div>
-        <div class="control-button button-blue2">
-          <i class="fa fa-save"></i> Guardar como...
+          <i class="fa fa-save"></i>&nbsp;Guardar examen
         </div>
         <div (click)="print()" class="control-button button-blue2">
-          <i class="fa fa-print"></i> Imprimir
+          <i class="fa fa-print"></i>&nbsp;Imprimir examen
         </div>
       </div>
     </div>
@@ -42,7 +39,7 @@
               <small class="collection-details">{{ collection.count.test }} test, {{ collection.count.short }} cortas, {{ collection.count.long }} largas</small>
             </div>
           </div>
-          <div *ngIf="oCollections.findIndex(isAdded) === -1">
+          <div *ngIf="oCollections ? oCollections.findIndex(isAdded) === -1 : false">
             <span class="d-flex justify-content-center">Ninguna colección seleccionada</span>
           </div>
         </div>
@@ -145,7 +142,7 @@
         </div>
         <div class="row">
           <div class="col-6">
-            <div class="fullwidth-button-small button-blue2">
+            <div (click)="editQuestion(0, exam.sections[0].questions.length, true)" class="fullwidth-button-small button-blue2">
               <i class="fa fa-plus"></i> Pregunta
             </div>
           </div>
@@ -160,8 +157,12 @@
             <div class="sec-header d-flex justify-content-between">
               <div class="sec-header-title">{{ s.title }}</div>
               <div>
-                <i class="fa fa-pencil"></i>&nbsp;
-                <i class="fa fa-times"></i>
+                <span style="cursor: pointer;">
+                  <i class="fa fa-pencil"></i>
+                </span>&nbsp;
+                <span style="cursor: pointer;" [class.delete-confirm]="deletingSId === is" (click)="deleteSection(is)">
+                  <i class="fa fa-times"></i>
+                </span>
               </div>
             </div>
             <div *ngFor="let q of s.questions; let i = index">
@@ -182,8 +183,12 @@
                   <span class="ap-header-points"> {{ q.max_points }} puntos</span>
                 </div>
                 <div class="ap-header-right">
-                  <i class="fa fa-pencil"></i>&nbsp;
-                  <i class="fa fa-times"></i>
+                  <span style="cursor: pointer;" (click)="editQuestion(is, i)">
+                    <i class="fa fa-pencil"></i>
+                  </span>&nbsp;
+                  <span style="cursor: pointer;" [class.delete-confirm]="deletingQId.sId === is && deletingQId.qId === i" (click)="deleteQuestion(is, i)">
+                    <i class="fa fa-times"></i>
+                  </span>
                 </div>
               </div>
             </div>
@@ -210,14 +215,24 @@
                 <span class="ml-1"> ({{ q.max_points }}&nbsp;puntos)</span>
               </div>
               <span *ngIf="q.type === 'test'">
-                <div class="paper-test-option" *ngFor="let o of q.options; let io = index">
+                <div [class.font-weight-bold]="showSolution && q.correct_option === io" class="paper-test-option" *ngFor="let o of q.options; let io = index">
                   <span class="d-flex float-left mr-1">{{ numToLetter(io) }})</span>
                   <span [innerHTML]="o" class="d-flex"></span>
                 </div>
               </span>
+              <span [innerHTML]="q.solution" *ngIf="q.type !== 'test' && showSolution" class="d-flex paper-test-option">
+              </span>
             </div>
           </div>
         </div>
+      </div>
+    </div>
+    <div class="showsolution-container">
+      <div class="form-check">
+        <input style="cursor: pointer;" [(ngModel)]="showSolution" class="form-check-input" type="checkbox" id="solutionChk">
+        <label style="cursor: pointer;" class="form-check-label" for="solutionChk">
+          Incluir solución
+        </label>
       </div>
     </div>
   </div>
@@ -266,38 +281,58 @@
     </div>
   </div>
 
-  <!-- Edit overlay -->
+  <!-- Question edit overlay -->
 
-  <!-- <div *ngIf="editingQId !== -1" class="edit-overlay">
+  <div *ngIf="editingQId.sId !== -1 && editingQId.qId !== -1" class="edit-overlay">
     <div class="edit-editor">
-      <div class="editor-header">Coleccion
-        <span class="font-weight-bold">{{ oCollections[selectedId].title }}</span>
+      <div class="editor-header">Sección
+        <span class="font-weight-bold">{{ exam.sections[editingQId.sId].title }}</span>
         / Pregunta
-        <span class="font-weight-bold">{{ editingQId + 1 }}</span>
+        <span class="font-weight-bold">{{ editingQId.sId + 1 }}.{{ editingQId.qId + 1 }}</span>
       </div>
-      <div class="editor-options">
-        <p class="editor-label">Tipo</p>
-        <div class="form-check">
-          <div class="btn-group btn-group-toggle" data-toggle="buttons">
-            <label class="btn btn-light" [class.active]="editingQ.type === 'test'">
-              <input (click)="editingQ.type = 'test'" type="radio" name="options" id="option1" autocomplete="off"> Test
-            </label>
-            <label class="btn btn-light" [class.active]="editingQ.type === 'short'">
-              <input (click)="editingQ.type = 'short'" type="radio" name="options" id="option2" autocomplete="off"> Ejercicio
-            </label>
-            <label class="btn btn-light" [class.active]="editingQ.type === 'long'">
-              <input (click)="editingQ.type = 'long'" type="radio" name="options" id="option3" autocomplete="off"> Problema
-            </label>
+      <div class="row">
+        <div class="editor-options col-6">
+          <p class="editor-label">Tipo</p>
+          <div class="form-check">
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+              <label class="btn btn-light" [class.active]="editingQ.type === 'test'">
+                <input (click)="editingQ.type = 'test'" type="radio" name="options" id="option1" autocomplete="off"> Test
+              </label>
+              <label class="btn btn-light" [class.active]="editingQ.type === 'short'">
+                <input (click)="editingQ.type = 'short'" type="radio" name="options" id="option2" autocomplete="off"> Ejercicio
+              </label>
+              <label class="btn btn-light" [class.active]="editingQ.type === 'long'">
+                <input (click)="editingQ.type = 'long'" type="radio" name="options" id="option3" autocomplete="off"> Problema
+              </label>
+            </div>
+          </div>
+          <br>
+          <p class="editor-label">Dificultad</p>
+          <div class="slidecontainer2">
+            <input type="range" min="1" max="3" value="2" class="slider" [(ngModel)]="editingQ.difficulty">
+            <div class="d-flex justify-content-between">
+              <span>Facil</span>
+              <span>Intermedio</span>
+              <span>Dificil</span>
+            </div>
           </div>
         </div>
-        <br>
-        <p class="editor-label">Dificultad</p>
-        <div class="slidecontainer">
-          <input type="range" min="1" max="3" value="2" class="slider" [(ngModel)]="editingQ.difficulty">
-          <div class="d-flex justify-content-between">
-            <span>Facil</span>
-            <span>Intermedio</span>
-            <span>Dificil</span>
+        <div class="col-6 editor-options">
+          <p class="editor-label">Valor</p>
+          <div class="input-group w-50 mx-auto">
+            <input [(ngModel)]="editingQ.max_points" type="number" class="form-control" aria-describedby="helpId">
+            <div class="input-group-append">
+              <span class="input-group-text">/{{ calculateAssignablePoints() }}</span>
+            </div>
+          </div>
+          <br>
+          <p class="editor-label">Sección</p>
+          <div ngbDropdown class="d-block w-50 mx-auto">
+            <button class="btn btn-light" id="dropdownBasic1" ngbDropdownToggle>{{ exam.sections[editingQParent].title }}</button>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+              <button (click)="editingQParent = i" *ngFor="let s of exam.sections; let i = index" [class.active]="i === editingQParent"
+                class="dropdown-item">{{ s.title }}</button>
+            </div>
           </div>
         </div>
       </div>
@@ -347,9 +382,10 @@
         <div (click)="saveQuestion()" class="control-button button-green">
           <i class="fa fa-check"></i> Guardar
         </div>
-        <div (click)="editQuestion(null, false)" class="control-button button-blue">
+        <div (click)="editQuestion(null, null, false)" class="control-button button-blue">
           <i class="fa fa-times"></i> Cancelar
         </div>
       </div>
     </div>
-  </div> -->
+  </div>
+</div>

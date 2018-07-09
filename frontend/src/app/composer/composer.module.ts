@@ -4,6 +4,7 @@ import { ComposerComponent } from './composer.component';
 import { PipesModule } from '../pipes/pipes.module';
 import { FormsModule } from '@angular/forms';
 import { QuillModule } from 'ngx-quill';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   imports: [
@@ -11,6 +12,7 @@ import { QuillModule } from 'ngx-quill';
     PipesModule,
     QuillModule,
     FormsModule,
+    NgbModule.forRoot(),
   ],
   declarations: [ComposerComponent]
 })

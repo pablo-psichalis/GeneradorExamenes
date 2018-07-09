@@ -57,6 +57,12 @@ export class ComposerComponent implements OnInit {
   public generating: boolean;
 
   public exam: {
+    _id: String,
+    count: {
+      test: number,
+      short: number,
+      long: number
+    }
     title: string,
     date: string,
     description: string,
@@ -70,10 +76,15 @@ export class ComposerComponent implements OnInit {
     qId: number
   };
   public editingQ: any;
+  public editingOId: any;
+  public editingQParent: number;
   public deletingQId: {
     sId: number,
     qId: number
   };
+  public deletingSId: number;
+
+  public showSolution: boolean;
 
   constructor(
     private sharedService: SharedService,
@@ -110,58 +121,6 @@ export class ComposerComponent implements OnInit {
       short: 'Ejercicio',
       long: 'Problema'
     };
-    this.addingOverlay = false;
-    this.oCollections = [];
-    this.editingCollections = [];
-    this.typesCount = {
-      test: 0,
-      short: 0,
-      long: 0
-    };
-    this.generationOptions = {
-      test: {
-        count: 0,
-        points: 0
-      },
-      short: {
-        count: 0,
-        points: 0
-      },
-      long: {
-        count: 0,
-        points: 0
-      },
-      difficulty: 0
-    };
-    this.generating = false;
-
-    this.previewDimensions = {
-      height: 0,
-      width: 0
-    };
-    this.paperDimensions = {
-      height: 0,
-      width: 0
-    };
-
-    this.exam = {
-      title: '',
-      date: '',
-      description: '',
-      subject: '',
-      school_name: '',
-      sections: []
-    };
-
-    this.editingQId = {
-      sId: -1,
-      qId: -1
-    };
-    this.editingQ = {};
-    this.deletingQId = {
-      sId: -1,
-      qId: -1
-    };
 
     this.sharedService.loginEmitted.subscribe(data => {
       if (data !== 'NOT_INIT') {
@@ -195,9 +154,15 @@ export class ComposerComponent implements OnInit {
         count: 0,
         points: 0
       },
-      difficulty: 0
+      difficulty: 2
     };
     this.exam = {
+      _id: '',
+      count: {
+        test: 0,
+        short: 0,
+        long: 0
+      },
       title: '',
       date: '',
       description: '',
@@ -212,10 +177,14 @@ export class ComposerComponent implements OnInit {
       qId: -1
     };
     this.editingQ = {};
+    this.editingQParent = 0;
+    this.editingOId = -1;
     this.deletingQId = {
       sId: -1,
       qId: -1
     };
+    this.deletingSId = -1;
+    this.showSolution = false;
 
     this.onResize(null);
 
@@ -313,6 +282,116 @@ export class ComposerComponent implements OnInit {
     mywindow.document.write('</body>');
     mywindow.print();
     mywindow.close();
+  }
+
+  public editQuestion(sId, qId, status: boolean = true) {
+    if (status) {
+      this.editingQId = {
+        qId: qId,
+        sId: sId
+      };
+      if (this.exam.sections[this.editingQId.sId].questions[this.editingQId.qId]) {
+        this.editingQ = JSON.parse(JSON.stringify(this.exam.sections[this.editingQId.sId].questions[this.editingQId.qId]));
+        this.editingQParent = sId;
+      } else {
+        this.editingQ = {
+          statement: '',
+          difficulty: 1,
+          type: 'short',
+          options: [],
+          correct_option: 0,
+          solution: '',
+        };
+        this.editingQParent = 0;
+      }
+    } else {
+      this.editingQId = {
+        qId: -1,
+        sId: -1
+      };
+      this.editingOId = -1;
+      this.editingQ = {
+        statement: '',
+        difficulty: 1,
+        type: '',
+        options: [],
+        correct_option: 0,
+        solution: '',
+      };
+      this.editingQParent = 0;
+    }
+  }
+
+  public saveQuestion() {
+    if (this.editingQId.sId === this.editingQParent) {
+      this.exam.sections[this.editingQId.sId].questions[this.editingQId.qId] = JSON.parse(JSON.stringify(this.editingQ));
+    } else {
+      this.exam.sections[this.editingQId.sId].questions.splice(this.editingQId.qId, 1);
+      this.exam.sections[this.editingQParent].questions.push(JSON.parse(JSON.stringify(this.editingQ)));
+    }
+    this.recalculateCount();
+    this.editQuestion(null, null, false);
+  }
+
+  public deleteQuestion(sId, qId) {
+    if (this.deletingQId.qId === -1 && this.deletingQId.sId === -1) {
+      this.deletingQId = {
+        qId: qId,
+        sId: sId
+      };
+      setTimeout(() => {
+        this.deletingQId = {
+          qId: -1,
+          sId: -1
+        };
+      }, 2000);
+    } else if (this.deletingQId.qId === qId && this.deletingQId.sId === sId) {
+      this.exam.sections[this.deletingQId.sId].questions.splice(this.deletingQId.qId, 1);
+      this.recalculateCount();
+      this.deletingQId = {
+        qId: -1,
+        sId: -1
+      };
+    }
+  }
+
+  public deleteSection(id) {
+    if (this.deletingSId === -1) {
+      this.deletingSId = id;
+      setTimeout(() => {
+        this.deletingSId = -1;
+      }, 2000);
+    } else if (this.deletingSId === id) {
+      this.exam.sections.splice(id, 1);
+      this.recalculateCount();
+      this.deletingSId = -1;
+    }
+  }
+
+  private recalculateCount() {
+    const out = {
+      test: 0,
+      short: 0,
+      long: 0
+    };
+    this.exam.sections.forEach(s => {
+      out.test += s.questions.filter(x => x.type === 'test').length;
+      out.short += s.questions.filter(x => x.type === 'short').length;
+      out.long += s.questions.filter(x => x.type === 'long').length;
+    });
+    this.exam.count = out;
+  }
+
+  public calculateAssignablePoints() {
+    let out = 10;
+    this.exam.sections.forEach((s, is) => {
+      s.questions.forEach((q, iq) => {
+        if (is !== this.editingQId.sId || iq !== this.editingQId.qId) {
+          out -= q.max_points;
+        }
+      });
+    });
+    return Math.round(out * 100) / 100;
   }
 
 }
