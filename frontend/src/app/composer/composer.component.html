@@ -6,7 +6,7 @@
         <span class="font-weight-bold">{{ exam.title ? exam.title : 'Examen sin título' }}</span>
       </span>
       <div class="d-flex">
-        <div class="control-button button-blue2">
+        <div (click)="editExam(true)" class="control-button button-blue2">
           <i class="fa fa-save"></i>&nbsp;Guardar examen
         </div>
         <div (click)="print()" class="control-button button-blue2">
@@ -147,7 +147,7 @@
             </div>
           </div>
           <div class="col-6">
-            <div class="fullwidth-button-small button-blue2">
+            <div (click)="editSection(exam.sections.length, true)" class="fullwidth-button-small button-blue2">
               <i class="fa fa-plus"></i> Sección
             </div>
           </div>
@@ -157,7 +157,7 @@
             <div class="sec-header d-flex justify-content-between">
               <div class="sec-header-title">{{ s.title }}</div>
               <div>
-                <span style="cursor: pointer;">
+                <span style="cursor: pointer;" (click)="editSection(is)">
                   <i class="fa fa-pencil"></i>
                 </span>&nbsp;
                 <span style="cursor: pointer;" [class.delete-confirm]="deletingSId === is" (click)="deleteSection(is)">
@@ -388,4 +388,65 @@
       </div>
     </div>
   </div>
+
+  <!-- Edit section overlay -->
+
+  <div *ngIf="editingSId !== -1" class="edit-overlay">
+    <div class="section-editor">
+      <div class="editor-header">Modificando sección
+        <span class="font-weight-bold">{{ this.exam.sections[editingSId] ? this.exam.sections[editingSId].title : 'Nueva sección' }}</span>
+      </div>
+      <div class="w-100">
+        <p class="collection-title">Titulo</p>
+        <span class="input-group">
+          <input [(ngModel)]="editingS.title" type="text" class="form-control">
+        </span>
+      </div>
+      <div class="w-100">
+        <p class="collection-title">Contenido</p>
+        <quill-editor [style]="quillStyle" [(ngModel)]="editingS.statement" [modules]="quillModules" [placeholder]="'Escribe aquí...'"></quill-editor>
+      </div>
+      <div class="editor-options d-flex justify-content-end w-100">
+        <div (click)="saveSection()" class="control-button button-green">
+          <i class="fa fa-check"></i> Guardar
+        </div>
+        <div (click)="editSection(null, false)" class="control-button button-blue">
+          <i class="fa fa-times"></i> Cancelar
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Save exam overlay -->
+
+  <div *ngIf="savingExam" class="edit-overlay">
+    <div class="section-editor">
+      <div class="editor-header">Guardando examen</div>
+      <div class="w-100">
+        <p class="collection-title">Titulo</p>
+        <span class="input-group">
+          <input [(ngModel)]="savingE.title" type="text" class="form-control">
+        </span>
+      </div>
+      <div class="w-100">
+        <p class="collection-title">Descripción</p>
+        <textarea [(ngModel)]="savingE.description" class="form-control" name="col_desc" id="col_desc" rows="3" style="resize: none"></textarea>
+      </div>
+      <div class="w-100">
+        <p class="collection-title">Asignatura</p>
+        <span class="input-group">
+          <input [(ngModel)]="savingE.subject" type="text" class="form-control">
+        </span>
+      </div>
+      <div class="editor-options d-flex justify-content-end w-100">
+        <div (click)="saveExam()" class="control-button button-green">
+          <i class="fa fa-check"></i> Guardar
+        </div>
+        <div (click)="editExam(false)" class="control-button button-blue">
+          <i class="fa fa-times"></i> Cancelar
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>

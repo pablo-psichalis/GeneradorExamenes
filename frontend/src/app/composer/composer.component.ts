@@ -84,6 +84,12 @@ export class ComposerComponent implements OnInit {
   };
   public deletingSId: number;
 
+  public editingSId: number;
+  public editingS: any;
+
+  public savingExam: boolean;
+  public savingE: any;
+
   public showSolution: boolean;
 
   constructor(
@@ -184,6 +190,12 @@ export class ComposerComponent implements OnInit {
       qId: -1
     };
     this.deletingSId = -1;
+    this.editingSId = -1;
+    this.editingS = {};
+
+    this.savingExam = false;
+    this.savingE = {};
+
     this.showSolution = false;
 
     this.onResize(null);
@@ -273,12 +285,6 @@ export class ComposerComponent implements OnInit {
     });
     mywindow.document.write('</head><body>');
     mywindow.document.write(document.querySelector('div.paper').innerHTML);
-    // tslint:disable:max-line-length
-    /* mywindow.document.write('<script type="text/javascript" src="runtime.js" media="print">');
-    mywindow.document.write('</script><script type="text/javascript" src="polyfills.js" media="print"></script>');
-    mywindow.document.write('<script type="text/javascript" src="styles.js" media="print"></script>');
-    mywindow.document.write('<script type="text/javascript" src="vendor.js" media="print"></script>');
-    mywindow.document.write('<script type="text/javascript" src="main.js" media="print"></script>'); */
     mywindow.document.write('</body>');
     mywindow.print();
     mywindow.close();
@@ -295,12 +301,12 @@ export class ComposerComponent implements OnInit {
         this.editingQParent = sId;
       } else {
         this.editingQ = {
-          statement: '',
-          difficulty: 1,
+          statement: 'Nueva pregunta',
+          difficulty: 2,
           type: 'short',
           options: [],
           correct_option: 0,
-          solution: '',
+          solution: 'Sin solución',
         };
         this.editingQParent = 0;
       }
@@ -310,14 +316,7 @@ export class ComposerComponent implements OnInit {
         sId: -1
       };
       this.editingOId = -1;
-      this.editingQ = {
-        statement: '',
-        difficulty: 1,
-        type: '',
-        options: [],
-        correct_option: 0,
-        solution: '',
-      };
+      this.editingQ = {};
       this.editingQParent = 0;
     }
   }
@@ -353,6 +352,29 @@ export class ComposerComponent implements OnInit {
         sId: -1
       };
     }
+  }
+
+  public editSection(id, status: boolean = true) {
+    if (status) {
+      this.editingSId = id;
+      if (this.exam.sections[id]) {
+        this.editingS = JSON.parse(JSON.stringify(this.exam.sections[id]));
+      } else {
+        this.editingS = {
+          title: 'Nueva seccion',
+          statement: '',
+          questions: []
+        };
+      }
+    } else {
+      this.editingSId = -1;
+      this.editingS = {};
+    }
+  }
+
+  public saveSection() {
+    this.exam.sections[this.editingSId] = JSON.parse(JSON.stringify(this.editingS));
+    this.editSection(null, false);
   }
 
   public deleteSection(id) {
@@ -392,6 +414,22 @@ export class ComposerComponent implements OnInit {
       });
     });
     return Math.round(out * 100) / 100;
+  }
+
+  public editExam(state: boolean) {
+    if (state) {
+      this.savingExam = true;
+      this.savingE = JSON.parse(JSON.stringify(this.exam));
+    } else {
+      this.savingExam = false;
+      this.savingE = {};
+    }
+  }
+
+  public saveExam() {
+    this.exam = JSON.parse(JSON.stringify(this.savingE));
+    this.editExam(false);
+    this.examsService.postExam(this.exam);
   }
 
 }
