@@ -1,13 +1,15 @@
 const express = require('express');
 
 const router = express.Router();
+const tokensMw = require('../middleware/auth.tokens');
+
 
 const collectionsController = require('../controllers/collections.controller');
 
-router.get('/', collectionsController.getAllCollections);
-router.get('/:id', collectionsController.getCollection);
-router.post('/', collectionsController.saveCollection);
-router.delete('/:id', collectionsController.deleteCollection);
-router.put('/:id', collectionsController.updateCollection);
+router.get('/', tokensMw.protected, collectionsController.getAllCollections);
+router.get('/:id', tokensMw.protected, collectionsController.getCollection);
+router.post('/', tokensMw.protected, collectionsController.saveCollection);
+router.delete('/:id', tokensMw.protected, collectionsController.deleteCollection);
+router.put('/:id', tokensMw.protected, collectionsController.updateCollection);
 
 module.exports = router;

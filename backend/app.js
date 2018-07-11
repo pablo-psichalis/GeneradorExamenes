@@ -16,6 +16,8 @@ require('dotenv').config({ path: './.env' });
 // Setup Mongoose
 require('./config/mongoose');
 
+require('./services/generateExams.service');
+
 const app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
