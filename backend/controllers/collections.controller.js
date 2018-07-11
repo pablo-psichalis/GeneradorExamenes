@@ -3,7 +3,7 @@ const CollectionsDB = require('../models/collections.model');
 exports.saveCollection = (req, res, next) => {
   const collection = req.body;
   collection.user_id = req.token.id;
-  CollectionsDB.saveCollection(req.body)
+  CollectionsDB.saveCollection(collection)
     .then((response) => {
       res.status(200).json({ success: true, data: response });
     });
@@ -12,25 +12,12 @@ exports.saveCollection = (req, res, next) => {
 exports.getAllCollections = (req, res, next) => {
   CollectionsDB.getAllCollections(req.token.id)
     .then((collections) => {
-      console.log(collections);
       res.status(200).json(collections);
     }).catch(err => next(err));
 };
 
-exports.getCollection = (req, res, next) => {
-  const user_id = req.token.id;
-
-  CollectionsDB.getCollection(req.params.id)
-    .then((collection) => {
-      res.status(200).json(collection);
-    })
-    .catch(err => next(err));
-};
-
 exports.updateCollection = (req, res, next) => {
-  const user_id = req.token.id;
-
-  CollectionsDB.updateCollection(req.params.id, req.body)
+  CollectionsDB.updateCollection(req.params.id, req.body, req.token.id)
     .then((response) => {
       res.status(200).json({ success: true, data: response });
     })
@@ -38,9 +25,7 @@ exports.updateCollection = (req, res, next) => {
 };
 
 exports.deleteCollection = (req, res, next) => {
-  const user_id = req.token.id;
-
-  CollectionsDB.deleteCollection(req.params.id)
+  CollectionsDB.deleteCollection(req.params.id, req.token.id)
     .then((response) => {
       res.status(200).json({ removedDocuments: response.n });
     })

@@ -142,7 +142,10 @@ export class ComposerComponent implements OnInit {
     this.activatedRoute.queryParams.subscribe(data => {
       if (data.load_exam) {
         this.examsService.getExam(data.load_exam)
-          .then(exam => this.exam = exam);
+          .then(exam => {
+            this.exam = exam;
+            delete this.exam['_id'];
+          });
       }
     });
   }

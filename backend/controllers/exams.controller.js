@@ -2,14 +2,16 @@ const ExamsDB = require('../models/exams.model');
 const generateExamsService = require('../services/generateExams.service');
 
 exports.saveExam = (req, res, next) => {
-  ExamsDB.saveExam(req.body)
+  const exam = req.body;
+  exam.user_id = req.token.id;
+  ExamsDB.saveExam(exam)
     .then((response) => {
       res.status(200).json({ success: true, data: response });
     }).catch(err => next(err));
 };
 
 exports.getAllExams = (req, res, next) => {
-  ExamsDB.getAllExams()
+  ExamsDB.getAllExams(req.token.id)
     .then((exams) => {
       console.log(exams);
       res.status(200).json(exams);
@@ -17,7 +19,7 @@ exports.getAllExams = (req, res, next) => {
 };
 
 exports.getExam = (req, res, next) => {
-  ExamsDB.getExam(req.params.id)
+  ExamsDB.getExam(req.params.id, req.token.id)
     .then((exam) => {
       res.status(200).json(exam);
     })
@@ -25,7 +27,7 @@ exports.getExam = (req, res, next) => {
 };
 
 exports.updateExam = (req, res, next) => {
-  ExamsDB.updateExam(req.params.id, req.body)
+  ExamsDB.updateExam(req.params.id, req.body, req.token.id)
     .then((response) => {
       res.status(200).json({ success: true, data: response });
     })
@@ -33,7 +35,7 @@ exports.updateExam = (req, res, next) => {
 };
 
 exports.deleteExam = (req, res, next) => {
-  ExamsDB.deleteExam(req.params.id)
+  ExamsDB.deleteExam(req.params.id, req.token.id)
     .then((response) => {
       res.status(200).json({ removedDocuments: response.n });
     })

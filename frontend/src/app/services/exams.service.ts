@@ -11,7 +11,6 @@ import { LoginService } from './login.service';
 export class ExamsService {
 
   private URLAPI: String;
-  private httpOptions: any;
 
   constructor(
     private http: HttpClient,
@@ -19,41 +18,40 @@ export class ExamsService {
     private loginService: LoginService,
   ) {
     this.URLAPI = `http://${environment.dbip ? environment.dbip : 'localhost'}:3000/`;
-    this.httpOptions = this.loginService.getHttpOptions();
   }
 
   public getExams(): Promise<any> {
-    return this.http.get(this.URLAPI + 'exams', this.httpOptions).toPromise()
+    return this.http.get(this.URLAPI + 'exams', this.loginService.getHttpOptions()).toPromise()
       .then(res => res)
       .catch(error => this.errorService.throwError(error, this));
   }
 
   public getExam(id: String): Promise<any> {
-    return this.http.get(this.URLAPI + 'exams/' + id, this.httpOptions).toPromise()
+    return this.http.get(this.URLAPI + 'exams/' + id, this.loginService.getHttpOptions()).toPromise()
       .then(res => res)
       .catch(error => this.errorService.throwError(error, this));
   }
 
   public postExam(exam: any): Promise<any> {
-    return this.http.post(this.URLAPI + 'exams', exam, this.httpOptions).toPromise()
+    return this.http.post(this.URLAPI + 'exams', exam, this.loginService.getHttpOptions()).toPromise()
       .then(res => res)
       .catch(error => this.errorService.throwError(error, this));
   }
 
   public putExam(id: String, exam: any): Promise<any> {
-    return this.http.put(this.URLAPI + 'exams/' + id, exam, this.httpOptions).toPromise()
+    return this.http.put(this.URLAPI + 'exams/' + id, exam, this.loginService.getHttpOptions()).toPromise()
       .then(res => res)
       .catch(error => this.errorService.throwError(error, this));
   }
 
   public deleteExam(id: String): Promise<any> {
-    return this.http.delete(this.URLAPI + 'exams/' + id, this.httpOptions).toPromise()
+    return this.http.delete(this.URLAPI + 'exams/' + id, this.loginService.getHttpOptions()).toPromise()
       .then(res => res)
       .catch(error => this.errorService.throwError(error, this));
   }
 
   public generateExam(data: any): Promise<any> {
-    return this.http.post(this.URLAPI + 'exams/generate', data, this.httpOptions).toPromise()
+    return this.http.post(this.URLAPI + 'exams/generate', data, this.loginService.getHttpOptions()).toPromise()
       .then(res => res)
       .catch(error => this.errorService.throwError(error, this));
   }

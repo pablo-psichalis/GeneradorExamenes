@@ -15,11 +15,6 @@ function protected(req, res, next) {
     if (err) return next(createError(401, 'Unable to verify - Login required'));
     req.verified = true;
     req.token = decoded;
-    // test4: 5b2251a5bd373dea1873310a
-    // test3: 5b22513abd373dea18733108
-    // test: 5b225102bd373dea18733104
-    // test2: 5b225117bd373dea18733106
-    // TODO: quitar
     next();
   });
 }

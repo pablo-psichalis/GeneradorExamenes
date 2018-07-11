@@ -13,14 +13,15 @@ const Exam = mongoose.model('exams', {
     short: Number,
     long: Number,
   },
+  user_id: String,
 });
 
-exports.saveExam = exam => Exam.create(exam);
+exports.saveExam = (exam) => Exam.create(exam);
 
-exports.getAllExams = () => Exam.find({});
+exports.getAllExams = (userId) => Exam.find({ user_id: userId });
 
-exports.getExam = id => Exam.findById(new ObjectId(id));
+exports.getExam = (id, userId) => Exam.findOne({ _id: new ObjectId(id), user_id: userId });
 
-exports.updateExam = (id, exam) => Exam.findByIdAndUpdate(new ObjectId(id), exam, { new: true });
+exports.updateExam = (id, exam, userId) => Exam.findByOneAndUpdate({ _id: new ObjectId(id), user_id: userId }, exam, { new: true });
 
-exports.deleteExam = id => Exam.remove({ _id: new ObjectId(id) });
+exports.deleteExam = (id, userId) => Exam.remove({ _id: new ObjectId(id), user_id: userId });
