@@ -23,14 +23,6 @@ exports.getCollection = (req, res, next) => {
     .catch(err => next(err));
 };
 
-/* exports.getCollectionQuestionCount = (req, res, next) => {
-  CollectionsDB.getCollectionQuestionCount(req.params.id)
-    .then((count) => {
-      res.status(200).json(count);
-    })
-    .catch(err => next(err));
-}; */
-
 exports.updateCollection = (req, res, next) => {
   CollectionsDB.updateCollection(req.params.id, req.body)
     .then((response) => {
@@ -65,5 +57,9 @@ exports.getQuestionsByType = (id, type) =>
 exports.getNumberOfQuestionsByType = (id, type, count) =>
   CollectionsDB.getNumberOfQuestionsByType(id, type, count)
     .then(response => response.map(elem => elem.questions));
+
+exports.getCollectionQuestionCount = id =>
+  CollectionsDB.getCollectionQuestionCount(id)
+    .then(count => count);
 
 // this.getQuestionsByType('5b3a68abed273c24248af9cd', 'long').then(res => console.log(res));

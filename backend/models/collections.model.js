@@ -19,8 +19,6 @@ exports.getAllCollections = () => Collection.find({});
 
 exports.getCollection = id => Collection.findById(new ObjectId(id));
 
-// exports.getCollectionQuestionCount = id => Collection.findById(new ObjectId(id), 'count');
-
 exports.updateCollection = (id, collection) =>
   Collection.findByIdAndUpdate(new ObjectId(id), collection, { new: true });
 
@@ -40,3 +38,5 @@ exports.getNumberOfQuestionsByType = (id, type, num) => Collection.aggregate([
   { $match: { 'questions.type': type } },
   { $sample: { size: num } },
 ]);
+
+exports.getCollectionQuestionCount = id => Collection.findOne({ _id: new ObjectId(id) }, 'count');

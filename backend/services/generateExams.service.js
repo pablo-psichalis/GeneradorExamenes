@@ -4,6 +4,9 @@ let qTest;
 let qShort;
 let qLong;
 
+let numQuestionPick;
+let colCounts;
+
 // Mock data
 /*
   {
@@ -29,13 +32,87 @@ let qLong;
           }
   }
 */
+
 exports.generateExam = objQuery => new Promise((resolve, reject) => {
   const { collections } = objQuery;
 
+  numQuestionPick = [];
+  colCounts = [];
+
   qTest = []; qShort = []; qLong = [];
 
-  getQuestions(collections, objQuery).then(() => {
+  getCollectionCounts(collections).then(() => {
+    console.log('COUNTS OBTENIDOS: ', colCounts);
 
+    const defaultPickTest = Math.floor(objQuery.test.count / collections.length);
+    const defaultPickShort = Math.floor(objQuery.short.count / collections.length);
+    const defaultPickLong = Math.floor(objQuery.long.count / collections.length);
+
+    let totalPickTest = 0;
+    let totalPickShort = 0;
+    let totalPickLong = 0;
+
+    for (let i = 0; i < collections.length; i += 1) {
+
+      const testPick = (defaultPickTest > colCounts[i].count.test) ? colCounts[i].count.test : defaultPickTest;
+      const shortPick = (defaultPickShort > colCounts[i].count.short) ? colCounts[i].count.short : defaultPickShort;
+      const longPick = (defaultPickLong > colCounts[i].count.long) ? colCounts[i].count.long : defaultPickLong;
+
+      numQuestionPick.push({ // Number of questions to pick from each collection
+        test: testPick,
+        short: shortPick,
+        long: longPick,
+      });
+
+      totalPickTest += testPick;
+      totalPickShort += shortPick;
+      totalPickLong += longPick;
+    }
+
+    let i = 0;
+    while (totalPickTest < objQuery.test.count) {
+      if (i >= numQuestionPick.length) {
+        i = 0;
+      }
+      if (numQuestionPick[i].test < colCounts[i].count.test) {
+        numQuestionPick[i].test += 1;
+        totalPickTest += 1;
+      }
+      i += 1;
+    }
+
+    i = 0;
+    while (totalPickShort < objQuery.short.count) {
+      if (i >= numQuestionPick.length) {
+        i = 0;
+      }
+      if (numQuestionPick[i].short < colCounts[i].count.short) {
+        numQuestionPick[i].short += 1;
+        totalPickShort += 1;
+      }
+      i += 1;
+    }
+
+    i = 0;
+    while (totalPickLong < objQuery.long.count) {
+      if (i >= numQuestionPick.length) {
+        i = 0;
+      }
+      if (numQuestionPick[i].long < colCounts[i].count.long) {
+        numQuestionPick[i].long += 1;
+        totalPickLong += 1;
+      }
+      i += 1;
+    }
+    console.log('Question pick:', numQuestionPick);
+    console.log('Total count:', colCounts);
+  }).catch((err) => {
+    console.error(err);
+  });
+
+
+
+  getQuestions(collections, objQuery).then(() => {
     qTest = removeExcessQuestions(qTest, objQuery.test.count);
     qShort = removeExcessQuestions(qShort, objQuery.short.count);
     qLong = removeExcessQuestions(qLong, objQuery.long.count);
@@ -86,9 +163,24 @@ exports.generateExam = objQuery => new Promise((resolve, reject) => {
     };
     resolve(examData);
   }).catch((err) => {
-    reject(err);
+    console.log(err);
   });
+}).catch((err) => {
+  console.error(err);
 });
+
+
+function getCollectionCounts(collections) {
+  let promises = [];
+  collections.forEach((id) => {
+    promises = promises.concat([
+      collectionsController.getCollectionQuestionCount(id)
+        .then(countObj => colCounts.push(countObj)),
+    ]);
+  });
+  return Promise.all(promises);
+}
+
 
 function getQuestions(collections, objQuery) {
   if (collections.length > 0) {
