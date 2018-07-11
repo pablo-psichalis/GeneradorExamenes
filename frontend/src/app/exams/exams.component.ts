@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../services/shared.service';
 import { ExamsService } from '../services/exams.service';
+import { Router } from '../../../node_modules/@angular/router';
 
 @Component({
   selector: 'app-exams',
@@ -17,20 +18,6 @@ export class ExamsComponent implements OnInit {
   public examsHeight: number;
 
   public oExams: Array<any>;
-  public exam: {
-    _id: String,
-    count: {
-      test: number,
-      short: number,
-      long: number
-    }
-    title: string,
-    date: string,
-    description: string,
-    subject: string,
-    school_name: string,
-    sections: Array<any>
-  };
 
   public selectedId: number;
 
@@ -49,7 +36,8 @@ export class ExamsComponent implements OnInit {
 
   constructor(
     private sharedService: SharedService,
-    private examsService: ExamsService
+    private examsService: ExamsService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -70,12 +58,25 @@ export class ExamsComponent implements OnInit {
   }
 
   private initializeValues() {
+    this.oExams = [];
     this.selectedId = -1;
+    this.deletingEId = -1;
+
+    this.showSolution = false;
+    this.previewDimensions = {
+      width: 0,
+      height: 0
+    };
+    this.paperDimensions = {
+      width: 0,
+      height: 0
+    };
   }
 
   private loadComponent() {
-    this.showSolution = true;
+    this.showSolution = false;
     this.onResize(null);
+
     this.examsService.getExams()
       .then(res => this.oExams = res)
       .then(() => this.sharedService.emitStatus('LOADED'));
@@ -86,20 +87,32 @@ export class ExamsComponent implements OnInit {
       - document.querySelector('app-header div').clientHeight
       - document.querySelector('app-footer div').clientHeight
       - document.querySelector('div.b-window-header').clientHeight;
-    this.examsHeight = this.pageHeight
-      - document.querySelector('div.searchbar').clientHeight;
+    this.examsHeight = this.pageHeight;
+
+    this.previewDimensions = {
+      height: window.innerHeight
+        - document.querySelector('app-header div').clientHeight
+        - document.querySelector('app-footer div').clientHeight
+        - document.querySelector('div.b-window-header').clientHeight,
+      width: window.innerWidth
+        - document.querySelector('div.menu-left').clientWidth
+    };
+    this.paperDimensions = {
+      width: this.previewDimensions.width * 0.8,
+      height: this.previewDimensions.width * 0.8 * Math.sqrt(2)
+    };
   }
 
   public deleteExam(id) {
     if (this.deletingEId === -1) {
       this.deletingEId = id;
-    } else if (this.deletingEId = id) {
+    } else if (this.deletingEId === id) {
       const exId = this.oExams[id]._id;
       this.initializeValues();
-      this.examsService.deleteExam(exId).then(
-        () => this.examsService.getExams()
+      this.examsService.deleteExam(exId)
+        .then(() => this.examsService.getExams()
           .then(res => this.oExams = res)
-      );
+        );
     }
   }
 
@@ -111,5 +124,9 @@ export class ExamsComponent implements OnInit {
 
   public numToLetter(x) {
     return String.fromCharCode(x + 97);
+  }
+
+  public openInComposer() {
+    this.router.navigate(['/composer'], { queryParams: { load_exam: this.oExams[this.selectedId]._id } });
   }
 }

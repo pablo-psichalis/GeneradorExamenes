@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../services/shared.service';
 import { CollectionsService } from '../services/collections.service';
 import { ExamsService } from '../services/exams.service';
+import { ActivatedRoute } from '../../../node_modules/@angular/router';
 
 @Component({
   selector: 'app-composer',
@@ -96,6 +97,7 @@ export class ComposerComponent implements OnInit {
     private sharedService: SharedService,
     private collectionsService: CollectionsService,
     private examsService: ExamsService,
+    private activatedRoute: ActivatedRoute,
   ) { }
 
   ngOnInit() {
@@ -136,9 +138,17 @@ export class ComposerComponent implements OnInit {
         this.loadComponent();
       }
     });
+
+    this.activatedRoute.queryParams.subscribe(data => {
+      if (data.load_exam) {
+        this.examsService.getExam(data.load_exam)
+          .then(exam => this.exam = exam);
+      }
+    });
   }
 
   private loadComponent() {
+
     this.addingOverlay = false;
     this.oCollections = [];
     this.editingCollections = [];

@@ -571,3 +571,8 @@ input:checked+.slider-onoff:before {
     background-color: white;
     overflow-y: auto;
 }
+
+.solution {
+    color: rgb(80, 80, 247);
+    font-weight: 500;
+}

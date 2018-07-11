@@ -108,8 +108,7 @@ export class CollectionsComponent implements OnInit {
       - document.querySelector('div.b-window-header').clientHeight;
     this.previewWidth = window.innerWidth
       - document.querySelector('div.menu-left').clientWidth;
-    this.collectionsHeight = this.pageHeight
-      - document.querySelector('div.searchbar').clientHeight;
+    this.collectionsHeight = this.pageHeight;
   }
 
   public editQuestion(id, status: boolean = true) {
@@ -220,11 +219,11 @@ export class CollectionsComponent implements OnInit {
   public deleteCollection(id) {
     if (this.deletingCId === -1) {
       this.deletingCId = id;
-    } else if (this.deletingCId = id) {
+    } else if (this.deletingCId === id) {
       const colId = this.oCollections[id]._id;
       this.initializeValues();
-      this.collectionsService.deleteCollection(colId).then(
-        () => this.collectionsService.getCollections()
+      this.collectionsService.deleteCollection(colId)
+      .then(() => this.collectionsService.getCollections()
           .then(res => this.oCollections = res)
       );
     }

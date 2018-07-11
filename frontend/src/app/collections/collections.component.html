@@ -27,14 +27,6 @@
     </div>
     <div class="page-body" [style.height.px]="pageHeight">
         <div class="menu-left">
-            <div class="input-group searchbar">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">
-                        <i class="fa fa-search"></i>
-                    </span>
-                </div>
-                <input type="text" class="form-control" name="search_col" id="search_col" placeholder="Buscar colecciones...">
-            </div>
             <div class="collections-list" [style.height.px]="collectionsHeight">
                 <div *ngFor="let collection of oCollections; let i = index" class="collection-container" (click)="selectedId = i">
                     <div class="collection-title" [class.title-selected]="selectedId === i">{{ collection.title ? collection.title : 'Coleccion sin título' }}</div>

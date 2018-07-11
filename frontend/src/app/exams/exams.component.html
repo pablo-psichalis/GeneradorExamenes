@@ -9,6 +9,11 @@
         <span *ngIf="selectedId !== -1 else viewing" class="b-window-ongoing">Viendo
           <span class="font-weight-bold">{{ oExams[selectedId].title }}</span>
         </span>
+        <div class="d-flex">
+          <div (click)="openInComposer()" class="control-button button-blue2">
+            <i class="fa fa-pencil"></i>&nbsp;Abrir en el compositor
+          </div>
+        </div>
       </div>
     </ng-template>
   </div>
@@ -16,14 +21,6 @@
   <!-- Page body -->
   <div class="page-body" [style.height.px]="pageHeight">
     <div class="menu-left">
-      <div class="input-group searchbar">
-        <div class="input-group-prepend">
-          <span class="input-group-text">
-            <i class="fa fa-search"></i>
-          </span>
-        </div>
-        <input type="text" class="form-control" name="search_col" id="search_col" placeholder="Buscar exámenes...">
-      </div>
       <div class="exams-list" [style.height.px]="examsHeight">
         <div *ngFor="let exam of oExams; let i = index" class="exam-container" (click)="selectedId = i">
           <div class="exam-title" [class.title-selected]="selectedId === i">{{ exam.title ? exam.title : 'Examen sin título' }}</div>
@@ -49,11 +46,14 @@
       </div>
     </div>
 
-    <!--     <div class="section-main" [style.width.px]="previewDimensions.width" [style.overflow-y]="previewDimensions.height ? 'auto' : 'hidden'">
+    <div class="section-main" [style.width.px]="previewDimensions.width" [style.overflow-y]="previewDimensions.height ? 'auto' : 'hidden'">
       <div class="preview-container">
         <div class="page-container" [style.zoom]="paperDimensions.width/(595*2)" [style.width.px]="595*2" [style.min-height.px]="842*2">
-          <div class="paper">
-            <div *ngFor="let s of exam.sections; let i = index">
+          <div *ngIf="selectedId === -1" class="p-2">
+            <p>Haz click en un examen para visualizarlo</p>
+          </div>
+          <div class="paper" *ngIf="selectedId !== -1">
+            <div *ngFor="let s of oExams[selectedId].sections; let i = index">
               <span class="paper-section-title">{{ s.title }}&nbsp;({{ calcTotalPoints(s.questions) }}&nbsp;puntos)</span>
               <p class="paper-question-statement" [innerHTML]="s.statement"></p>
               <div class="paper-question" *ngFor="let q of s.questions; let iq = index">
@@ -68,7 +68,9 @@
                     <span [innerHTML]="o" class="d-flex"></span>
                   </div>
                 </span>
-                <span [innerHTML]="q.solution" *ngIf="q.type !== 'test' && showSolution" class="d-flex paper-test-option">
+                <span *ngIf="q.type !== 'test' && showSolution">
+                  <span class="solution font-weight-bold">Solución:&nbsp;</span>
+                  <span [innerHTML]="q.solution" class="d-flex paper-test-option solution"></span>
                 </span>
               </div>
             </div>
@@ -83,8 +85,6 @@
           </label>
         </div>
       </div>
-    </div> -->
-
-
+    </div>
   </div>
 </div>
