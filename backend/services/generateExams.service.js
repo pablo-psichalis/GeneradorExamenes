@@ -42,7 +42,6 @@ exports.generateExam = objQuery => new Promise((resolve, reject) => {
   qTest = []; qShort = []; qLong = [];
 
   getCollectionCounts(collections).then(() => {
-    console.log('COUNTS OBTENIDOS: ', colCounts);
 
     const defaultPickTest = Math.floor(objQuery.test.count / collections.length);
     const defaultPickShort = Math.floor(objQuery.short.count / collections.length);
@@ -104,8 +103,6 @@ exports.generateExam = objQuery => new Promise((resolve, reject) => {
       }
       i += 1;
     }
-    console.log('Question pick:', numQuestionPick);
-    console.log('Total count:', colCounts);
   }).catch((err) => {
     console.error(err);
   });

@@ -5,7 +5,7 @@ import { environment } from '../../environments/environment';
 import { SharedService } from './shared.service';
 import { ErrorService } from './error.service';
 
-const URLAPI = `http://${environment.dbip ? environment.dbip : 'localhost'}:3000/`;
+const URLAPI = `http://localhost:${environment.dbport}/api/`;
 const token_key = 'genEx_tkn';
 const id_key = 'genEx_id';
 const admin_key = 'genEx_adminTkn';

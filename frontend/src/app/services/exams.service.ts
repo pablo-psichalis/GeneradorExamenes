@@ -17,7 +17,7 @@ export class ExamsService {
     private errorService: ErrorService,
     private loginService: LoginService,
   ) {
-    this.URLAPI = `http://${environment.dbip ? environment.dbip : 'localhost'}:3000/`;
+    this.URLAPI = `http://localhost:${environment.dbport}/api/`;
   }
 
   public getExams(): Promise<any> {

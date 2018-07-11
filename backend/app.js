@@ -28,6 +28,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'dist')));
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Access-Token, X-Requested-With, Content-Type, Accept');
@@ -35,11 +36,20 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/', indexRouter);
-app.use('/collections', collectionsRouter);
-app.use('/exams', examsRouter);
-app.use('/users', usersRouter);
-app.use('/login', loginRouter);
+// Angular Router
+app.use('/', express.static(path.join(__dirname, 'dist')));
+app.use('/login', express.static(path.join(__dirname, 'dist')));
+app.use('/register', express.static(path.join(__dirname, 'dist')));
+app.use('/composer', express.static(path.join(__dirname, 'dist')));
+app.use('/collections', express.static(path.join(__dirname, 'dist')));
+app.use('/exams', express.static(path.join(__dirname, 'dist')));
+
+// API Router
+app.use('/api/', indexRouter);
+app.use('/api/collections', collectionsRouter);
+app.use('/api/exams', examsRouter);
+app.use('/api/users', usersRouter);
+app.use('/api/login', loginRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

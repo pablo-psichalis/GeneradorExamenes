@@ -13,7 +13,6 @@ exports.saveExam = (req, res, next) => {
 exports.getAllExams = (req, res, next) => {
   ExamsDB.getAllExams(req.token.id)
     .then((exams) => {
-      console.log(exams);
       res.status(200).json(exams);
     }).catch(err => next(err));
 };

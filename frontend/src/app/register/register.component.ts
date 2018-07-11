@@ -78,7 +78,7 @@ export class RegisterComponent implements OnInit {
             this.error = 'Este nombre de usuario ya está registrado';
           } else if (res.status === 500) {
             this.error = 'Error de servidor';
-          } else if (res.status !== 201) {
+          } else if (!res.username) {
             this.error = 'Sin conexión';
           } else {
             this.router.navigate(['/login']);

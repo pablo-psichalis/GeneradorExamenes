@@ -14,10 +14,10 @@ export class UsersService {
     private errorService: ErrorService,
     private http: HttpClient
   ) { }
-  private urlBase = `http://${environment.dbip ? environment.dbip : 'localhost'}:3000`;
+  private urlBase = `http://localhost:${environment.dbport}/api/`;
 
   public getUser(id: String = ''): Promise<any> {
-    const url = `${this.urlBase}/users${id ? '/' + id : ''}`;
+    const url = `${this.urlBase}users${id ? '/' + id : ''}`;
     return this.http
       .get(url, this.loginService.getHttpOptions())
       .toPromise()

@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  dbip: 'localhost'
+  dbip: 'localhost',
+  dbport: 3000
 };
 
 /*
