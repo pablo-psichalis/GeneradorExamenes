@@ -37,7 +37,7 @@
             </div>
             <div class="collections-list" [style.height.px]="collectionsHeight">
                 <div *ngFor="let collection of oCollections; let i = index" class="collection-container" (click)="selectedId = i">
-                    <div class="collection-title" [class.title-selected]="selectedId === i">{{ collection.title ? collection.title : 'Coleccion sin nombre' }}</div>
+                    <div class="collection-title" [class.title-selected]="selectedId === i">{{ collection.title ? collection.title : 'Coleccion sin título' }}</div>
                     <div class="collection-body" [class.body-selected]="selectedId === i">
                         <p>{{ collection.description ? collection.description : 'Sin descripcion' }}</p>
                         <p class="collection-content">{{ collection.questions.length ? collection.questions.length + ' preguntas (' + collection.count.test
@@ -119,7 +119,7 @@
         </div>
     </div>
 
-    <!-- Edit overlay -->
+    <!-- Question edit overlay -->
 
     <div *ngIf="editingQId !== -1" class="edit-overlay">
         <div class="edit-editor">

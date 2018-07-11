@@ -1,9 +1,90 @@
 <div (window:resize)="onResize($event)">
   <div class="b-window-header d-flex">
     <span class="b-window-title">Exámenes</span>
-    <span class="b-window-ongoing">Explorando exámenes</span>
+    <div *ngIf="selectedId === -1 else viewing" class="d-flex justify-content-between w-100">
+      <span class="b-window-ongoing">Explorando exámenes</span>
+    </div>
+    <ng-template #viewing>
+      <div class="d-flex justify-content-between w-100">
+        <span *ngIf="selectedId !== -1 else viewing" class="b-window-ongoing">Viendo
+          <span class="font-weight-bold">{{ oExams[selectedId].title }}</span>
+        </span>
+      </div>
+    </ng-template>
   </div>
+
+  <!-- Page body -->
   <div class="page-body" [style.height.px]="pageHeight">
+    <div class="menu-left">
+      <div class="input-group searchbar">
+        <div class="input-group-prepend">
+          <span class="input-group-text">
+            <i class="fa fa-search"></i>
+          </span>
+        </div>
+        <input type="text" class="form-control" name="search_col" id="search_col" placeholder="Buscar exámenes...">
+      </div>
+      <div class="exams-list" [style.height.px]="examsHeight">
+        <div *ngFor="let exam of oExams; let i = index" class="exam-container" (click)="selectedId = i">
+          <div class="exam-title" [class.title-selected]="selectedId === i">{{ exam.title ? exam.title : 'Examen sin título' }}</div>
+          <div class="exam-body" [class.body-selected]="selectedId === i">
+            <!--             <p>{{ exam.description ? exam.description : 'Sin descripcion' }}</p>-->
+            <p>{{exam.subject}}</p>
+            <p>{{exam.school_name}}</p>
+            <p class="exam-content">{{ exam.sections.length ? exam.sections.length + ' apartados (' + exam.count.test + ' test, ' + exam.count.short
+              + ' ejercicios, ' + exam.count.long + ' problemas)' : 'Exámen vacío' }}</p>
+          </div>
+          <div class="pl-1" *ngIf="deletingEId !== i">
+            <button (click)="deleteExam(i)" type="button" class="btn btn-link edit-button linkbutton-red">
+              <i class="fa fa-trash"></i>&nbsp;Borrar</button>
+          </div>
+          <div class="pl-1" *ngIf="deletingEId === i">
+            <span class="deleting-msg">Estás seguro?</span>
+            <button (click)="deleteExam(i)" type="button" class="btn btn-link edit-button linkbutton-red">
+              <i class="fa fa-check"></i>&nbsp;Confirmar</button>
+            <button (click)="deletingEId = -1" type="button" class="btn btn-link edit-button linkbutton-blue">
+              <i class="fa fa-times"></i>&nbsp;Cancelar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--     <div class="section-main" [style.width.px]="previewDimensions.width" [style.overflow-y]="previewDimensions.height ? 'auto' : 'hidden'">
+      <div class="preview-container">
+        <div class="page-container" [style.zoom]="paperDimensions.width/(595*2)" [style.width.px]="595*2" [style.min-height.px]="842*2">
+          <div class="paper">
+            <div *ngFor="let s of exam.sections; let i = index">
+              <span class="paper-section-title">{{ s.title }}&nbsp;({{ calcTotalPoints(s.questions) }}&nbsp;puntos)</span>
+              <p class="paper-question-statement" [innerHTML]="s.statement"></p>
+              <div class="paper-question" *ngFor="let q of s.questions; let iq = index">
+                <span class="d-flex float-left mr-1">{{ i + 1 }}.{{ iq + 1 }}-</span>
+                <div class="d-flex justify-content-between">
+                  <span [innerHTML]="q.statement"></span>
+                  <span class="ml-1"> ({{ q.max_points }}&nbsp;puntos)</span>
+                </div>
+                <span *ngIf="q.type === 'test'">
+                  <div [class.font-weight-bold]="showSolution && q.correct_option === io" class="paper-test-option" *ngFor="let o of q.options; let io = index">
+                    <span class="d-flex float-left mr-1">{{ numToLetter(io) }})</span>
+                    <span [innerHTML]="o" class="d-flex"></span>
+                  </div>
+                </span>
+                <span [innerHTML]="q.solution" *ngIf="q.type !== 'test' && showSolution" class="d-flex paper-test-option">
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="showsolution-container">
+        <div class="form-check">
+          <input style="cursor: pointer;" [(ngModel)]="showSolution" class="form-check-input" type="checkbox" id="solutionChk">
+          <label style="cursor: pointer;" class="form-check-label" for="solutionChk">
+            Incluir solución
+          </label>
+        </div>
+      </div>
+    </div> -->
+
 
   </div>
 </div>

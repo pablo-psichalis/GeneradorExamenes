@@ -21,9 +21,9 @@
             school_name: String,
             sections: Array
             count: {
-                test: Number,   // preguntas de tipo Test
-                short: Number,  // preguntas cortas
-                long: Number,   // preguntas largas
+                test: Number,   // nº preguntas de tipo Test
+                short: Number,  // nº preguntas cortas
+                long: Number,   // nº preguntas largas
             }
         }
 

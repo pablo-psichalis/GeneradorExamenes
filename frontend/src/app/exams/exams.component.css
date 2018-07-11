@@ -1,0 +1,323 @@
+.menu-left {
+  width: 25rem;
+  height: inherit;
+  overflow: hidden;
+  position: absolute;
+  left: 0;
+  z-index: 2;
+  box-shadow: 0 0 2.5rem -1rem black;
+}
+
+.searchbar {
+  width: 100%;
+  padding: .5rem;
+  background-color: var(--color-dark-1);
+}
+
+.exams-list {
+  background-color: white;
+  overflow-y: auto;
+}
+
+.exam-container {
+  cursor: pointer;
+}
+
+.exam-title {
+  padding: .15rem .5rem;
+  background-color: var(--color-blue-1);
+  color: white;
+}
+
+.exam-body {
+  padding: .25rem .5rem;
+}
+
+.exam-content {
+  font-size: 10pt;
+}
+
+.exam-view {
+  position: absolute;
+  right: 0;
+  height: inherit;
+  overflow-y: auto;
+  background-color: var(--color-bg-global);
+  z-index: 1;
+}
+
+.title-selected {
+  background-color: var(--color-blue-1-active);
+  font-weight: 500;
+}
+
+.body-selected {
+  background-color: var(--color-blue-2);
+  color: white;
+}
+
+.button-blue2:hover {
+  background-color: var(--color-blue-2-hover);
+}
+
+.view-col-statement {
+  background-color: var(--color-blue-1);
+  color: white;
+  padding: .25rem .5rem
+}
+
+.ap-header-diff {
+  display: inline-block;
+  font-size: 7pt;
+  width: 2.3rem;
+  margin-right: .4rem;
+  text-align: end;
+}
+
+.view-col-content {
+  padding: .3rem 1rem;
+  background-color: white;
+}
+
+.edit-button {
+  text-decoration: none;
+  padding: .1rem .3rem;
+  margin: 0;
+  line-height: 1;
+}
+
+.linkbutton-blue {
+  color: var(--color-blue-1);
+}
+
+.linkbutton-blue:hover {
+  color: var(--color-blue-1-hover);
+}
+
+.linkbutton-red {
+  color: var(--color-red-1);
+}
+
+.linkbutton-red:hover {
+  color: var(--color-red-1-hover);
+}
+
+.deleting-msg {
+  color: var(--color-red-1);
+}
+
+.edit-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 1000;
+  background: linear-gradient( rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6));
+}
+
+.edit-editor {
+  margin: 2rem auto;
+  min-width: 60rem;
+  width: 50%;
+  max-height: 90%;
+  background-color: white;
+  overflow-y: auto;
+}
+
+.editor-options {
+  text-align: center;
+  padding: .5rem 1rem;
+  background-color: var(--color-blue-2);
+  color: white;
+}
+
+.editor-label {
+  font-size: 13pt;
+  font-weight: 300;
+  margin-bottom: .3rem;
+}
+
+.slidecontainer {
+  margin: 0 auto;
+  width: 20rem;
+  padding: 0 .4rem .3rem;
+  font-weight: 300;
+}
+
+.editor-header {
+  background-color: var(--color-dark-1);
+  color: var(--color-dark-1-text);
+  font-weight: 300;
+  font-size: 13pt;
+  padding: .2rem .5rem;
+}
+
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: .3rem;
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.slider:hover {
+  opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 1rem;
+  height: 1rem;
+  background: white;
+  cursor: pointer;
+  border-radius: 100%;
+}
+
+.slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  background: white;
+  cursor: pointer;
+  border-radius: 100%;
+}
+
+.editor-options-container {
+  text-align: left;
+  background-color: white;
+  color: var(--color-dark-1);
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.editor-option {
+  background-color: white;
+  color: var(--color-dark-1);
+}
+
+.option-id {
+  background-color: var(--color-blue-2-hover);
+  color: white;
+  padding: .1rem .6rem .1rem 1.2rem;
+  font-weight: 600;
+  vertical-align: middle;
+}
+
+.option-text {
+  margin-left: .4rem;
+  vertical-align: middle;
+}
+
+.option-correct {
+  margin-left: .25rem;
+  color: var(--color-green-1);
+  font-size: 10pt;
+  vertical-align: top;
+}
+
+.quill-optionedit {
+  border: 0;
+  background-color: white;
+}
+
+.button-newoption {
+  background-color: var(--color-blue-2);
+  color: var(--color-dark-1-text);
+  border-radius: 0;
+}
+
+.button-newoption:hover {
+  background-color: var(--color-blue-2-hover);
+}
+
+.button-changeoption {
+  margin-left: .25rem;
+  padding: 0;
+  border: 0;
+  color: var(--color-blue-1-text);
+  font-size: 10pt;
+}
+
+.button-changeoption:hover {
+  color: var(--color-dark-1);
+}
+
+.button-changeoption-invert {
+  margin-left: .25rem;
+  padding: 0;
+  border: 0;
+  color: var(--color-dark-1);
+  font-size: 10pt;
+}
+
+.button-changeoption-invert:hover {
+  color: var(--color-blue-1-text);
+}
+
+.option-active {
+  background-color: var(--color-dark-2);
+  color: var(--color-dark-1-text);
+  transition: background-color .3s
+}
+
+.option-id-active {
+  background-color: var(--color-blue-1);
+  color: var(--color-blue-1-text);
+  transition: background-color .3s
+}
+
+.editor-cover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient( rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35));
+}
+
+.editor-cover-text {
+  color: white;
+  positioN: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  margin: auto;
+  font-size: 14pt;
+}
+
+.option-remove {
+  margin-left: auto;
+  padding: .2rem;
+  color: var(--color-red-1);
+}
+
+.option-remove:hover {
+  color: var(--color-red-1-hover);
+}
+
+.view-options-number {
+  display: inline-block;
+  margin-right: .3rem;
+  vertical-align: top;
+}
+
+.view-options-text {
+  display: inline-block;
+}
+
+.edit-details {
+  margin: 4rem auto;
+  min-width: 30rem;
+  width: 30%;
+  background-color: var(--color-blue-1);
+}
+
+.edit-details-form {
+  color: var(--color-blue-1-text);
+  padding: .4rem;
+}
