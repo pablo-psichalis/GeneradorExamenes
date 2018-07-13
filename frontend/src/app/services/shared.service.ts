@@ -20,6 +20,10 @@ export class SharedService {
     this.emitLoginSource.next(data);
   }
 
+  public showError(message: string): void {
+    alert(message);
+  }
+
   constructor(private router: Router) {
     this.emitStatusSource.next('NOT_INIT');
     this.emitLoginSource.next('NOT_INIT');

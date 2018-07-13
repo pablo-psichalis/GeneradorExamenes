@@ -60,7 +60,7 @@
                 <th scope="row">Test</th>
                 <td>
                   <div class="input-group">
-                    <input [(ngModel)]="generationOptions.test.count" type="number" class="form-control" aria-describedby="helpId">
+                    <input [(ngModel)]="generationOptions.test.count" type="number" [max]="typesCount.test" oninput="validity.valid||(value=0)"class="form-control" aria-describedby="helpId">
                     <div class="input-group-append">
                       <span class="input-group-text">/{{ typesCount.test }}</span>
                     </div>
@@ -68,7 +68,7 @@
                 </td>
                 <td>
                   <div class="input-group">
-                    <input [(ngModel)]="generationOptions.test.points" type="number" class="form-control" aria-describedby="helpId">
+                    <input [(ngModel)]="generationOptions.test.points" type="number" step="0.01" max="10" oninput="validity.valid||(value=0)" class="form-control" aria-describedby="helpId">
                     <div class="input-group-append">
                       <span class="input-group-text">/10</span>
                     </div>
@@ -79,7 +79,7 @@
                 <th scope="row">Ejercicios</th>
                 <td>
                   <div class="input-group">
-                    <input [(ngModel)]="generationOptions.short.count" type="number" class="form-control" aria-describedby="helpId">
+                    <input [(ngModel)]="generationOptions.short.count" type="number" [max]="typesCount.short" oninput="validity.valid||(value=0)" class="form-control" aria-describedby="helpId">
                     <div class="input-group-append">
                       <span class="input-group-text">/{{ typesCount.short }}</span>
                     </div>
@@ -87,7 +87,7 @@
                 </td>
                 <td>
                   <div class="input-group">
-                    <input [(ngModel)]="generationOptions.short.points" type="number" class="form-control" aria-describedby="helpId">
+                    <input [(ngModel)]="generationOptions.short.points" type="number" step="0.01" max="10" oninput="validity.valid||(value=0)" class="form-control" aria-describedby="helpId">
                     <div class="input-group-append">
                       <span class="input-group-text">/10</span>
                     </div>
@@ -98,7 +98,7 @@
                 <th scope="row">Problemas</th>
                 <td>
                   <div class="input-group">
-                    <input [(ngModel)]="generationOptions.long.count" type="number" class="form-control" aria-describedby="helpId">
+                    <input [(ngModel)]="generationOptions.long.count" type="number" [max]="typesCount.long" oninput="validity.valid||(value=0)" class="form-control" aria-describedby="helpId">
                     <div class="input-group-append">
                       <span class="input-group-text">/{{ typesCount.long }}</span>
                     </div>
@@ -106,7 +106,7 @@
                 </td>
                 <td>
                   <div class="input-group">
-                    <input [(ngModel)]="generationOptions.long.points" type="number" class="form-control" aria-describedby="helpId">
+                    <input [(ngModel)]="generationOptions.long.points" type="number" step="0.01" max="10" oninput="validity.valid||(value=0)" class="form-control" aria-describedby="helpId">
                     <div class="input-group-append">
                       <span class="input-group-text">/10</span>
                     </div>
@@ -142,7 +142,7 @@
         </div>
         <div class="row">
           <div class="col-6">
-            <div (click)="editQuestion(0, exam.sections[0].questions.length, true)" class="fullwidth-button-small button-blue2">
+            <div (click)="exam.sections[0] ? editQuestion(0, exam.sections[0].questions.length, true) : sharedService.showError('Añada una sección para continuar')" class="fullwidth-button-small button-blue2">
               <i class="fa fa-plus"></i> Pregunta
             </div>
           </div>
@@ -284,7 +284,6 @@
   </div>
 
   <!-- Question edit overlay -->
-
   <div *ngIf="editingQId.sId !== -1 && editingQId.qId !== -1" class="edit-overlay">
     <div class="edit-editor">
       <div class="editor-header">Sección
@@ -322,7 +321,7 @@
         <div class="col-6 editor-options">
           <p class="editor-label">Valor</p>
           <div class="input-group w-50 mx-auto">
-            <input [(ngModel)]="editingQ.max_points" type="number" class="form-control" aria-describedby="helpId">
+            <input [(ngModel)]="editingQ.max_points" type="number" [max]="maxAssignablePoints" oninput="validity.valid||(value=0)" class="form-control" aria-describedby="helpId">
             <div class="input-group-append">
               <span class="input-group-text">/{{ calculateAssignablePoints() }}</span>
             </div>

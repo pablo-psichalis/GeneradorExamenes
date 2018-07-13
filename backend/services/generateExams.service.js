@@ -140,7 +140,7 @@ exports.generateExam = objQuery => new Promise((resolve, reject) => {
     if (qLong.length > 0) {
       sections.push({
         title: 'Preguntas Largas',
-        statement: 'Enunciado de las preguntas de Largas',
+        statement: 'Enunciado de las preguntas Largas',
         questions: qLong,
       });
     }

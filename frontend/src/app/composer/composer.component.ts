@@ -17,6 +17,8 @@ export class ComposerComponent implements OnInit {
   public quillModules: any;
   public quillStyle: any;
 
+  public maxAssignablePoints: any;
+
   public previewDimensions: {
     width: number,
     height: number
@@ -94,7 +96,7 @@ export class ComposerComponent implements OnInit {
   public showSolution: boolean;
 
   constructor(
-    private sharedService: SharedService,
+    public sharedService: SharedService,
     private collectionsService: CollectionsService,
     private examsService: ExamsService,
     private activatedRoute: ActivatedRoute,
@@ -265,18 +267,31 @@ export class ComposerComponent implements OnInit {
 
   public generateExam() {
     const collectionsArray = [];
-    this.generating = true;
     this.oCollections.filter(x => x.added).forEach(y => { collectionsArray.push(y._id); });
-    this.examsService.generateExam({
-      collections: collectionsArray,
-      test: this.generationOptions.test,
-      short: this.generationOptions.short,
-      long: this.generationOptions.long
-    })
-      .then(res => {
-        this.exam = res;
-        this.generating = false;
-      });
+
+    if (!this.generationOptions.test.count) { this.generationOptions.test.count = 0; }
+    if (!this.generationOptions.short.count) { this.generationOptions.short.count = 0; }
+    if (!this.generationOptions.long.count) { this.generationOptions.long.count = 0; }
+
+    if (
+      !this.generationOptions.test.count &&
+      !this.generationOptions.short.count &&
+      !this.generationOptions.long.count
+    ) {
+      this.sharedService.showError('Error: 0 preguntas seleccionadas para la generación.');
+    } else {
+      this.generating = true;
+      this.examsService.generateExam({
+        collections: collectionsArray,
+        test: this.generationOptions.test ? this.generationOptions.test : 0,
+        short: this.generationOptions.short ? this.generationOptions.short : 0,
+        long: this.generationOptions.long ? this.generationOptions.long : 0
+      })
+        .then(res => {
+          this.exam = res;
+          this.generating = false;
+        });
+    }
   }
 
   public numToLetter(x) {
@@ -304,33 +319,38 @@ export class ComposerComponent implements OnInit {
   }
 
   public editQuestion(sId, qId, status: boolean = true) {
-    if (status) {
-      this.editingQId = {
-        qId: qId,
-        sId: sId
-      };
-      if (this.exam.sections[this.editingQId.sId].questions[this.editingQId.qId]) {
-        this.editingQ = JSON.parse(JSON.stringify(this.exam.sections[this.editingQId.sId].questions[this.editingQId.qId]));
-        this.editingQParent = sId;
-      } else {
-        this.editingQ = {
-          statement: 'Nueva pregunta',
-          difficulty: 2,
-          type: 'short',
-          options: [],
-          correct_option: 0,
-          solution: 'Sin solución',
+    console.log(this.exam);
+    if (this.exam.sections.length <= 0) {
+      alert('Añada alguna sección');
+    } else {
+      if (status) {
+        this.editingQId = {
+          qId: qId,
+          sId: sId
         };
+        if (this.exam.sections[this.editingQId.sId].questions[this.editingQId.qId]) {
+          this.editingQ = JSON.parse(JSON.stringify(this.exam.sections[this.editingQId.sId].questions[this.editingQId.qId]));
+          this.editingQParent = sId;
+        } else {
+          this.editingQ = {
+            statement: 'Nueva pregunta',
+            difficulty: 2,
+            type: 'short',
+            options: [],
+            correct_option: 0,
+            solution: 'Sin solución',
+          };
+          this.editingQParent = 0;
+        }
+      } else {
+        this.editingQId = {
+          qId: -1,
+          sId: -1
+        };
+        this.editingOId = -1;
+        this.editingQ = {};
         this.editingQParent = 0;
       }
-    } else {
-      this.editingQId = {
-        qId: -1,
-        sId: -1
-      };
-      this.editingOId = -1;
-      this.editingQ = {};
-      this.editingQParent = 0;
     }
   }
 
@@ -426,7 +446,8 @@ export class ComposerComponent implements OnInit {
         }
       });
     });
-    return Math.round(out * 100) / 100;
+    this.maxAssignablePoints = Math.round(out * 100) / 100;
+    return this.maxAssignablePoints;
   }
 
   public editExam(state: boolean) {

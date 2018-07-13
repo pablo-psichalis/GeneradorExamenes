@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { RouterModule, Routes, Router } from '@angular/router';
 
 import { SharedService } from './shared.service';
 import { ErrorService } from './error.service';
@@ -20,6 +21,7 @@ export class LoginService {
   constructor(
     private http: HttpClient,
     private sharedService: SharedService,
+    private router: Router
   ) { }
 
   public login(data): Promise<any> {
@@ -53,6 +55,7 @@ export class LoginService {
       isLogged: false,
       isAdmin: false
     });
+    this.router.navigate(['/']);
   }
 
 
