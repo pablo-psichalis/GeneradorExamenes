@@ -435,6 +435,7 @@ input:checked+.slider-onoff:before {
 
 .paper-test-option {
     margin-left: 32px;
+    display: block;
 }
 
 .editor-cover {

@@ -216,13 +216,13 @@
               </div>
               <span *ngIf="q.type === 'test'">
                 <div [class.font-weight-bold]="showSolution && q.correct_option === io" class="paper-test-option" *ngFor="let o of q.options; let io = index">
-                  <span class="d-flex float-left mr-1">{{ numToLetter(io) }})</span>
-                  <span [innerHTML]="o" class="d-flex"></span>
+                  <span class="float-left mr-1">{{ numToLetter(io) }})</span>
+                  <span [innerHTML]="o"></span>
                 </div>
               </span>
               <span *ngIf="q.type !== 'test' && showSolution">
                 <span class="solution font-weight-bold">Solución:&nbsp;</span>
-                <span [innerHTML]="q.solution" class="d-flex paper-test-option solution"></span>
+                <span [innerHTML]="q.solution" class="paper-test-option solution"></span>
               </span>
             </div>
           </div>
