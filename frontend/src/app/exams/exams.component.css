@@ -365,6 +365,7 @@
 
 .paper-test-option {
   margin-left: 32px;
+  display: block;
 }
 
 .showsolution-container {
